@@ -72,7 +72,7 @@ const sidebar = [
         role: ["superAdmin, admin, user"],
     },
     {
-        id: 6,
+        id: 7,
         title: "BaholashMezonlari",
         path: "/baholash-mezonlari",
         icon: VscGraph,
