@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import { ReactComponent as arrow } from "../../assets/icons/rightArrow.svg";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as exit } from "../../assets/icons/exit.svg";
 
-const Arrow = styled(arrow)`
+const Arrow = styled.div`
+width: 12px;
+height: auto;
     display: flex;
     margin-left: auto;
     transform: ${({ $active }) => $active === "true" && `rotate(90deg)`};

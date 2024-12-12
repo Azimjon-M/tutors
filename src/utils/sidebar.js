@@ -16,6 +16,8 @@ import Baholash from "../pages/Baholash";
 import Topshiriqlar from "../pages/Topshiriqlar";
 import BaholashMezonlari from "../pages/BaholashMezonlari";
 import { VscGraph } from "react-icons/vsc";
+import { Children } from "react";
+import TopshiriqlarniKorish from "../pages/TopshiriqlarniKorish";
 const sidebar = [
     {
         id: 1,
@@ -70,6 +72,26 @@ const sidebar = [
         isPrivate: true,
         element: Topshiriqlar,
         role: ["superAdmin, admin, user"],
+        children: [
+            {
+                id: 6-1,
+                title: "Topshiriqlar",
+                path: "/topshiriqlar",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: Topshiriqlar,
+                role: ["superAdmin, admin, user"],
+            },
+            {
+                id: 6-2,
+                title: "Topshiriqlarni ko'rish",
+                path: "/topshiriqlarni-ko'rish",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: TopshiriqlarniKorish,
+                role: ["superAdmin, admin, user"],
+            },
+        ]
     },
     {
         id: 7,

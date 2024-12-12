@@ -1,8 +1,56 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const TaskForm = () => {
+    const tutors = useMemo(
+        () => [
+            { id: 1, name: "Abdulla Karimov", fak: "Fiz-Mat" },
+            { id: 2, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
+            { id: 3, name: "Saida Rasulova", fak: "Fiz-Mat" },
+            { id: 4, name: "Abdulla Karimov", fak: "Fiz-Mat" },
+            { id: 5, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
+            { id: 6, name: "Saida Rasulova", fak: "Fiz-Mat" },
+            { id: 7, name: "Abdulla Karimov", fak: "Fiz-Mat" },
+            { id: 8, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
+            { id: 9, name: "Saida Rasulova", fak: "Fiz-Mat" },
+        ],
+        []
+    );
+
+    const [selectAll, setSelectAll] = useState(false);
+    const [selectedTutors, setSelectedTutors] = useState([]);
+
+    // `tutors` ni barqaror qilish uchun useMemo
+    const stableTutors = useMemo(() => tutors, [tutors]);
+    // "Hammaga yuborish" checkbox holatini tekshirish
+    useEffect(() => {
+        if (selectedTutors.length === stableTutors.length) {
+            setSelectAll(true);
+        } else {
+            setSelectAll(false);
+        }
+    }, [selectedTutors, stableTutors]);
+
+    const handleSelectAll = (checked) => {
+        setSelectAll(checked);
+        if (checked) {
+            setSelectedTutors(stableTutors.map((tutor) => tutor.id)); // Hammasini tanlash
+        } else {
+            setSelectedTutors([]); // Hammasini bekor qilish
+        }
+    };
+
+    const handleTutorSelect = (tutorId, checked) => {
+        if (checked) {
+            setSelectedTutors([...selectedTutors, tutorId]);
+        } else {
+            setSelectedTutors(selectedTutors.filter((id) => id !== tutorId));
+        }
+    };
+
+    // ****************
+
     const formik = useFormik({
         initialValues: {
             title: "",
@@ -19,7 +67,6 @@ const TaskForm = () => {
             details: Yup.string().required(
                 "Batafsil ma'lumot kiritilishi kerak!"
             ),
-            file1: Yup.mixed().required("Birinchi faylni jo‘natish majburiy!"),
             startDate: Yup.date().required("Boshlanish sanasini kiriting!"),
             endDate: Yup.date()
                 .required("Tugash sanasini kiriting!")
@@ -36,9 +83,62 @@ const TaskForm = () => {
 
     return (
         <div className="p-6 bg-base-200 rounded shadow">
-            <h2 className="text-2xl font-bold mb-6 text-center">
-                Yangi Topshiriq
-            </h2>
+            <h1 className="text-lg font-bold mb-4">Kimlarga yuborish:</h1>
+            <div className="overflow-x-auto max-h-[30vh] border rounded-lg shadow-md">
+                <table className="table table-zebra w-full text-center select-none">
+                    <thead className="bg-base-200 sticky top-0 z-10">
+                        <tr className="">
+                            <th className="py-2">№</th>
+                            <th className="py-2">Isim Familya</th>
+                            <th className="py-2">Fakultelti</th>
+                            <th className="py-2 ">
+                                <label className="cursor-pointer flex items-center justify-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        className="checkbox checkbox-primary"
+                                        checked={selectAll}
+                                        onChange={(e) =>
+                                            handleSelectAll(e.target.checked)
+                                        }
+                                    />
+                                    Hammaga yuborish
+                                </label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tutors.map((tutor, index) => (
+                            <tr key={tutor.id} className="hover">
+                                <td className="py-2">{index + 1}</td>
+                                <td className="py-2">{tutor.name}</td>
+                                <td className="py-2">{tutor.fak}</td>
+                                <td className="py-2">
+                                    <label className="cursor-pointer flex items-center justify-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox checkbox-info"
+                                            checked={selectedTutors.includes(
+                                                tutor.id
+                                            )}
+                                            onChange={(e) =>
+                                                handleTutorSelect(
+                                                    tutor.id,
+                                                    e.target.checked
+                                                )
+                                            }
+                                        />
+                                        Shu tutorga yuborish
+                                    </label>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+
+            <h1 className="text-lg font-bold mt-8">Qanday topshiriq yuborish:</h1>
+
             <form onSubmit={formik.handleSubmit}>
                 {/* Title */}
                 <div className="form-control mb-4">
@@ -87,7 +187,6 @@ const TaskForm = () => {
                             <label htmlFor={file} className="label">
                                 <span className="label-text">
                                     Fayl {index + 1}
-                                    {index === 0 ? " (Majburiy)" : ""}
                                 </span>
                             </label>
                             <input

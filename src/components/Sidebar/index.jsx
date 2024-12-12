@@ -13,6 +13,7 @@ import {
     LogOut,
 } from "./styled.js";
 import Breadcrumb from "../Breadcrumb/index.jsx";
+import toIcon from "../../assets/icons/icons8-right-90.png"
 
 const Sidebar = () => {
     const [open, setOpen] = useState([]);
@@ -107,7 +108,9 @@ const Sidebar = () => {
                                             {parent.title}
                                         </MenuItem.Title>
                                         {parent?.children?.length && (
-                                            <Arrow $active={active.toString()} />
+                                            <Arrow $active={active.toString()}>
+                                                <img src={toIcon} alt="icon" />
+                                            </Arrow>
                                         )}
                                     </MenuItem>
                                     <ChildWrapper $active={active.toString()}>
