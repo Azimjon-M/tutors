@@ -1,8 +1,9 @@
 import React from 'react'
+import FakultetCom from "../../components/FakultetCom"
 
 const Fakultet = () => {
     return (
-        <div>Fakultet</div>
+        <div><FakultetCom/></div>
     )
 }
 
