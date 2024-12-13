@@ -16,7 +16,6 @@ import Baholash from "../pages/Baholash";
 import Topshiriqlar from "../pages/Topshiriqlar";
 import BaholashMezonlari from "../pages/BaholashMezonlari";
 import { VscGraph } from "react-icons/vsc";
-import { Children } from "react";
 import TopshiriqlarniKorish from "../pages/TopshiriqlarniKorish";
 const sidebar = [
     {
