@@ -5,15 +5,16 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { BsEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
 import APIGetToken from "../../service/getToken";
-// import APIGetUserRole from "../../service/getUserRole";
+// import APIGetUserRole from "../../service/getUserRole"
+
+import CryptoJS from "crypto-js";
+import userRole from "../../components/userRole";
 
 const Login = () => {
+
+    const encryptedRole = CryptoJS.AES.encrypt(JSON.stringify(userRole.superAdmin), "key-one").toString();
+
     const [eye, setEye] = useState(false);
-    const roleData = {
-        superAdmin: "superAdmin",
-        admin: "admin",
-        tutor: "tutor",
-    };
     const [errMessage, setErrMessage] = useState("");
     const navigate = useNavigate();
 
@@ -58,7 +59,7 @@ const Login = () => {
                         const data = JSON.stringify({
                             ...values,
                             token: res.data.access,
-                            role: roleData.superAdmin,
+                            role: encryptedRole,
                             name: "Azimjon",
                             surname: "Meliboev",
                         });

@@ -86,7 +86,7 @@ const Sidebar = () => {
                 </div>
                 <hr className="h-px mt-0 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent dark:bg-gradient-to-r dark:via-white" />
                 <div className="flex flex-col justify-between h-[calc(100%-90px)]">
-                    <Menu className="">
+                    <Menu>
                         {sidebar.map((parent) => {
                             const active = open.includes(parent.id);
                             const { icon: Icon } = parent;
