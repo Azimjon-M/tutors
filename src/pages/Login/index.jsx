@@ -4,8 +4,8 @@ import Logo from "../../assets/icons/logo_kspi.png";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { BsEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
-import APIGetToken from "../../servise/getToken";
-// import APIGetUserRole from "../../servise/getUserRole";
+import APIGetToken from "../../service/getToken";
+// import APIGetUserRole from "../../service/getUserRole";
 
 const Login = () => {
     const [eye, setEye] = useState(false);
