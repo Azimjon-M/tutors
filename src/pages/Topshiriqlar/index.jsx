@@ -82,9 +82,9 @@ const TaskForm = () => {
     });
 
     return (
-        <div className="p-6 bg-base-200 rounded shadow">
+        <div className="bg-base-200 rounded shadow p-1 md:p-2 lg:p-4">
             <h1 className="text-lg font-bold mb-4">Kimlarga yuborish:</h1>
-            <div className="overflow-x-auto max-h-[30vh] border rounded-lg shadow-md">
+            <div className="overflow-x-auto max-h-[30vh] lg:max-h-[40vh] border rounded-lg shadow-md">
                 <table className="table table-zebra w-full text-center select-none">
                     <thead className="bg-base-200 sticky top-0 z-10">
                         <tr className="">
