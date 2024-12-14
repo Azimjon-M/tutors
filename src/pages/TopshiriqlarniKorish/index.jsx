@@ -27,7 +27,7 @@ const TopshiriqlarniKorish = () => {
             finish: "04.02.2024",
         },
         {
-            id: 5,
+            id: 3,
             title: "asdas fs Tili",
             info: "s dgghfg g topshiriqlari",
             file1: {},

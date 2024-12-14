@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { BsEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
 import APIGetToken from "../../servise/getToken";
-import APIGetUserRole from "../../servise/getUserRole";
+// import APIGetUserRole from "../../servise/getUserRole";
 
 const Login = () => {
     const [eye, setEye] = useState(false);
