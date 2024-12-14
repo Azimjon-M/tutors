@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import Logo from "../../assets/icons/logo_kspi.png";
 import * as Yup from "yup";
-// import APItoken from "../../services/getToken";
 import { useNavigate } from "react-router-dom";
 import { BsEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
+import APIGetToken from "../../servise/getToken";
+import APIGetUserRole from "../../servise/getUserRole";
 
 const Login = () => {
     const [eye, setEye] = useState(false);
-    const roleData = {superAdmin: "superAdmin", admin: "admin", tutor: "tutor"}
+    const roleData = {
+        superAdmin: "superAdmin",
+        admin: "admin",
+        tutor: "tutor",
+    };
     const [errMessage, setErrMessage] = useState("");
     const navigate = useNavigate();
 
@@ -31,45 +36,62 @@ const Login = () => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            const user = values.username === "user";
-            const pass = values.password === "pass";
-            
-            if (user && pass) {
-                const data = JSON.stringify({
-                    ...values,
-                    token: "123",
-                    role: roleData.superAdmin,
-                    name: "Azimjon",
-                    surname: "Meliboev",
-                });
-                localStorage.setItem("data", data);
-                navigate("/analitka");
-            } else {
-                setErrMessage("Username or Password wrong!");
-            }
-            // await APItoken.getToken({
-            //     username: values.username,
-            //     password: values.password,
-            // })
-            //     .then((res) => {
-            //         const data = JSON.stringify({
-            //             ...values,
-            //             token: res?.data?.access,
-            //         });
-            //         localStorage.setItem("data", data);
-            //         navigate("/admin-panel/home/carousel");
-            //     })
-            //     .catch((err) => {
-            //         if (err.response.status === 401) {
-            //             setErrMessage("Username or Password wrong!");
-            //             setTimeout(() => {
-            //                 setErrMessage("");
-            //             }, 3000);
-            //         }
+            // if (user && pass) {
+            //     const data = JSON.stringify({
+            //         ...values,
+            //         token: "123",
+            //         role: roleData.superAdmin,
+            //         name: "Azimjon",
+            //         surname: "Meliboev",
             //     });
+            //     localStorage.setItem("data", data);
+            //     navigate("/analitka");
+            // } else {
+            //     setErrMessage("Username or Password wrong!");
+            // }
+            await APIGetToken.post({
+                username: values.username,
+                password: values.password,
+            })
+                .then((res) => {
+                    if (res.data) {
+                        const data = JSON.stringify({
+                            ...values,
+                            token: res.data.access,
+                            role: roleData.superAdmin,
+                            name: "Azimjon",
+                            surname: "Meliboev",
+                        });
+                        localStorage.setItem("data", data);
+                        navigate("/analitka");
+                    } else {
+                        setErrMessage("Username or Password wrong!");
+                    }
+
+                    // const data = JSON.stringify({
+                    //     ...values,
+                    //     token: res?.data?.access,
+                    // });
+                    // localStorage.setItem("data", data);
+                    // navigate("/admin-panel/home/carousel");
+
+                    // if (res.data) {
+                    //     APIGetUserRole.get()
+                    //         .then((res) => console.log(res))
+                    //         .catch((err) => console.log(err));
+                    // }
+                })
+                .catch((err) => {
+                    // if (err.response.status === 401) {
+                    //     setErrMessage("Username or Password wrong!");
+                    //     setTimeout(() => {
+                    //         setErrMessage("");
+                    //     }, 3000);
+                    // }
+                    console.log(err);
+                });
         },
     });
-
 
     const handleClickPassword = () => {
         const btn = document.getElementById("password");
@@ -80,10 +102,10 @@ const Login = () => {
     useEffect(() => {
         if (data) {
             if (data.remember) {
-                navigate('/analitka')
+                navigate("/analitka");
             }
         }
-    }, [data, navigate])
+    }, [data, navigate]);
 
     return (
         <div className="w-full h-[100vh] flex justify-center items-center ">
@@ -150,8 +172,16 @@ const Login = () => {
                         >
                             {
                                 <>
-                                    <BsFillEyeFill className={`${eye&& "hidden"} text-[1.2rem] mt-1`} />
-                                    <BsEyeSlashFill className={`${!eye && "hidden"} text-[1.2rem] mt-1`} />
+                                    <BsFillEyeFill
+                                        className={`${
+                                            eye && "hidden"
+                                        } text-[1.2rem] mt-1`}
+                                    />
+                                    <BsEyeSlashFill
+                                        className={`${
+                                            !eye && "hidden"
+                                        } text-[1.2rem] mt-1`}
+                                    />
                                 </>
                             }
                         </div>
