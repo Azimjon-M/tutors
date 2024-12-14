@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import APIInstitutHaqida from "../../services/institutHaqida";
+import APIFakultet from "../../services/fakultet";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { RiPencilFill } from "react-icons/ri";
@@ -8,19 +8,19 @@ import { MdDeleteForever } from "react-icons/md";
 const FakultetCom = () => {
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
-  const [datas, setDatas] = useState([{}]);
+  const [datas, setDatas] = useState([]);
 
   const fetchData = async () => {
-    // try {
-    //   const response = await APIInstitutHaqida.getInstitutHaqida();
-    //   setDatas(response.data);
-    // } catch (error) {
-    //   console.error("Xatolik yuz berdi!", error);
-    // }
+    try {
+      const response = await APIFakultet.get();
+      setDatas(response.data);
+    } catch (error) {
+      console.error("Xatolik yuz berdi!", error);
+    }
   };
 
   const validationSchema = Yup.object({
-    fakultet_name: Yup.string()
+    name: Yup.string()
       .max(50, "Maksimal uzunlik 50 ta belgi bo'lishi kerak")
       .required("Fakultet nomi maydoni majburiy"),
   });
@@ -31,12 +31,12 @@ const FakultetCom = () => {
   };
 
   const handleDelete = async (id) => {
-    // try {
-    //   await APIInstitutHaqida.delInstitutHaqida(id);
-    //   fetchData();
-    // } catch (error) {
-    //   console.error("Xatolik yuz berdi!", error);
-    // }
+    try {
+      await APIFakultet.del(id);
+      fetchData();
+    } catch (error) {
+      console.error("Xatolik yuz berdi!", error);
+    }
   };
 
   const handleSubmit = async (values, { resetForm }) => {
@@ -44,20 +44,20 @@ const FakultetCom = () => {
     for (let key in values) {
       formData.append(key, values[key]);
     }
-    // try {
-    //   if (!edit) {
-    //     await APIInstitutHaqida.postInstitutHaqida(formData);
-    //   } else {
-    //     await APIInstitutHaqida.patchInstitutHaqida(id, formData);
-    //     setEdit(false);
-    //     setId(null);
-    //   }
-    //   resetForm();
-    //   fetchData();
-    // } catch (error) {
-    //   console.error("Xatolik sodir bo'ldi!", error);
-    //   resetForm();
-    // }
+    try {
+      if (!edit) {
+        await APIFakultet.post(formData);
+      } else {
+        await APIFakultet.patch(id, formData);
+        setEdit(false);
+        setId(null);
+      }
+      resetForm();
+      fetchData();
+    } catch (error) {
+      console.error("Xatolik sodir bo'ldi!", error);
+      resetForm();
+    }
   };
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const FakultetCom = () => {
             {edit ? "Fakultetni tahrirlash" : "Yangi fakultet qo'shish"}
           </h2>
           <Formik
-            initialValues={{ fakultet_name: "" }}
+            initialValues={{ name: "" }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
@@ -83,19 +83,19 @@ const FakultetCom = () => {
               <Form>
                 <div className="mb-4">
                   <label
-                    htmlFor="fakultet_name"
+                    htmlFor="name"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Fakultet nomi
                   </label>
                   <Field
                     type="text"
-                    id="fakultet_name"
-                    name="fakultet_name"
+                    id="name"
+                    name="name"
                     className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
                   />
                   <ErrorMessage
-                    name="fakultet_name"
+                    name="name"
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
@@ -122,7 +122,7 @@ const FakultetCom = () => {
               className="flex justify-between items-center px-3 py-2 border rounded-lg shadow-md hover:shadow-lg"
             >
               <p className="truncate w-2/3 text-gray-700 font-medium">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                {data.name}
               </p>
               <div className="flex space-x-2">
                 <button
