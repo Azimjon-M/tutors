@@ -9,6 +9,10 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(async (request) => {
+    const data = localStorage.getItem("data");
+    if (data?.token) {
+        request.headers.Authorization = `Bearer ${data.token}`;
+    }
     return request;
 });
 
@@ -18,7 +22,7 @@ axiosInstance.interceptors.response.use(
     },
     async (error) => {
         if (error.response && error.response.status === 401) {
-            <Navigate to={"/login"} />
+            <Navigate to={"/login"} />;
         }
         return Promise.reject(error);
     }
