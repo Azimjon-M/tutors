@@ -17,6 +17,9 @@ import Topshiriqlar from "../pages/Topshiriqlar";
 import BaholashMezonlari from "../pages/BaholashMezonlari";
 import { VscGraph } from "react-icons/vsc";
 import TopshiriqlarniKorish from "../pages/TopshiriqlarniKorish";
+import NotAuthorized from "../pages/NotAuthorized";
+
+import userRole from "../components/userRole";
 
 const sidebar = [
     {
@@ -26,7 +29,7 @@ const sidebar = [
         icon: AiOutlinePieChart,
         isPrivate: true,
         element: Analitika,
-        role: ["superAdmin, admin"],
+        role: [userRole.superAdmin, userRole.admin],
     },
     {
         id: 2,
@@ -35,7 +38,7 @@ const sidebar = [
         icon: AiOutlineTeam,
         isPrivate: true,
         element: Fakultet,
-        role: ["superAdmin"],
+        role: [userRole.superAdmin],
     },
     {
         id: 3,
@@ -44,7 +47,7 @@ const sidebar = [
         icon: GrUserPolice,
         isPrivate: true,
         element: Admins,
-        role: ["superAdmin"],
+        role: [userRole.superAdmin],
     },
     {
         id: 4,
@@ -53,7 +56,7 @@ const sidebar = [
         icon: FaUserGraduate,
         isPrivate: true,
         element: Tutors,
-        role: ["superAdmin, admin"],
+        role: [userRole.superAdmin, userRole.admin],
     },
     {
         id: 5,
@@ -62,7 +65,7 @@ const sidebar = [
         icon: AiOutlineBarChart,
         isPrivate: true,
         element: Baholash,
-        role: ["superAdmin"],
+        role: [userRole.superAdmin],
     },
     {
         id: 6,
@@ -71,7 +74,7 @@ const sidebar = [
         icon: RiFileList3Line,
         isPrivate: true,
         element: Topshiriqlar,
-        role: ["superAdmin, admin, user"],
+        role: [userRole.superAdmin, userRole.admin, userRole.tutor],
         children: [
             {
                 id: 6-1,
@@ -80,7 +83,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: Topshiriqlar,
-                role: ["superAdmin, admin, user"],
+                role: [userRole.superAdmin, userRole.admin, userRole.tutor],
             },
             {
                 id: 6-2,
@@ -89,7 +92,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: TopshiriqlarniKorish,
-                role: ["superAdmin, admin, user"],
+                role: [userRole.superAdmin, userRole.admin, userRole.tutor],
             },
         ]
     },
@@ -100,7 +103,17 @@ const sidebar = [
         icon: VscGraph,
         isPrivate: true,
         element: BaholashMezonlari,
-        role: ["superAdmin, admin, user"],
+        role: [userRole.superAdmin, userRole.admin, userRole.tutor],
+    },
+    {
+        id: 8,
+        title: "Not Authorized",
+        path: "/not-authorized",
+        icon: VscGraph,
+        isPrivate: true,
+        hidden: true,
+        element: NotAuthorized,
+        role: [userRole.superAdmin, userRole.admin, userRole.tutor],
     },
 ];
 
