@@ -115,6 +115,15 @@ const sidebar = [
         element: NotAuthorized,
         role: [userRole.superAdmin, userRole.admin, userRole.tutor],
     },
+    {
+        id: 9,
+        title: "Test",
+        path: "/test",
+        icon: VscGraph,
+        isPrivate: true,
+        element: BaholashMezonlari,
+        role: [userRole.superAdmin],
+    },
 ];
 
 export default sidebar;
