@@ -1,5 +1,6 @@
 import axios from "axios";
-import { Navigate } from "react-router-dom";
+
+// Axios instance yaratish
 const axiosInstance = axios.create({
     baseURL: "https://tyutr.pythonanywhere.com/",
     headers: {
@@ -8,21 +9,26 @@ const axiosInstance = axios.create({
     },
 });
 
-axiosInstance.interceptors.request.use(async (request) => {
-    const data = localStorage.getItem("data");
+// So'rov interceptori (Request Interceptor)
+axiosInstance.interceptors.request.use((request) => {
+    const data = JSON.parse(localStorage.getItem("data"));
     if (data?.token) {
         request.headers.Authorization = `Bearer ${data.token}`;
     }
     return request;
 });
 
+// Javob interceptori (Response Interceptor)
 axiosInstance.interceptors.response.use(
     (response) => {
+        // Muvaffaqiyatli javobni o'z holida qaytarish
         return response;
     },
-    async (error) => {
+    (error) => {
+        // Agar xatolik statusi 401 bo'lsa (avtorizatsiya talab qilinadi)
         if (error.response && error.response.status === 401) {
-            <Navigate to={"/login"} />;
+            // Tizimga qayta kirish uchun login sahifasiga yo'naltirish
+            window.location.href = "/login";
         }
         return Promise.reject(error);
     }
