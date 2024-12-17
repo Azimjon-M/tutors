@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import APIInstitutHaqida from "../../services/institutHaqida";
+import APIUsers from "../../services/users";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { RiPencilFill } from "react-icons/ri";
@@ -8,19 +8,19 @@ import { MdDeleteForever } from "react-icons/md";
 const AdminsCom = () => {
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
-  const [datas, setDatas] = useState([{}]);
+  const [datas, setDatas] = useState([]);
 
   const fetchData = async () => {
-    // try {
-    //   const response = await APIInstitutHaqida.getInstitutHaqida();
-    //   setDatas(response.data);
-    // } catch (error) {
-    //   console.error("Xatolik yuz berdi!", error);
-    // }
+    try {
+      const response = await APIUsers.get();
+      setDatas(response.data);
+    } catch (error) {
+      console.error("Xatolik yuz berdi!", error);
+    }
   };
 
   const validationSchema = Yup.object({
-    fakultet_name: Yup.string()
+    name: Yup.string()
       .max(50, "Maksimal uzunlik 50 ta belgi bo'lishi kerak")
       .required("Fakultet nomi maydoni majburiy"),
   });
@@ -31,33 +31,42 @@ const AdminsCom = () => {
   };
 
   const handleDelete = async (id) => {
-    // try {
-    //   await APIInstitutHaqida.delInstitutHaqida(id);
-    //   fetchData();
-    // } catch (error) {
-    //   console.error("Xatolik yuz berdi!", error);
-    // }
+    try {
+      await APIUsers.del(id);
+      fetchData();
+    } catch (error) {
+      console.error("Xatolik yuz berdi!", error);
+    }
   };
 
   const handleSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
-    for (let key in values) {
-      formData.append(key, values[key]);
-    }
-    // try {
-    //   if (!edit) {
-    //     await APIInstitutHaqida.postInstitutHaqida(formData);
-    //   } else {
-    //     await APIInstitutHaqida.patchInstitutHaqida(id, formData);
-    //     setEdit(false);
-    //     setId(null);
-    //   }
-    //   resetForm();
-    //   fetchData();
-    // } catch (error) {
-    //   console.error("Xatolik sodir bo'ldi!", error);
-    //   resetForm();
+    formData.append("username", values.username);
+    formData.append("first_name", values.first_name);
+    formData.append("last_name", values.last_name);
+    formData.append("superadmin", values.selectedRole === "superadmin");
+    formData.append("admin", values.selectedRole === "admin");
+    formData.append("tyutr", values.selectedRole === "tyutr");
+    formData.append("fakultet", values.fakultet);
+    formData.append("password", values.password);
+    formData.append("is_active", values.is_active);
+    // for (let key in values) {
+    //   formData.append(key, values[key]);
     // }
+    try {
+      if (!edit) {
+        await APIUsers.post(formData);
+      } else {
+        await APIUsers.patch(id, formData);
+        setEdit(false);
+        setId(null);
+      }
+      resetForm();
+      fetchData();
+    } catch (error) {
+      console.error("Xatolik sodir bo'ldi!", error);
+      resetForm();
+    }
   };
 
   useEffect(() => {
@@ -75,55 +84,151 @@ const AdminsCom = () => {
             {edit ? "Zamdekanni tahrirlash" : "Yangi zamdekan qo'shish"}
           </h2>
           <Formik
-            initialValues={{ 
-                username: "",
-                first_name: "",
-                last_name: "",
-                superadmin: "",
-                admin: "",
-                tyutr: "",
-                fakultet: "",
-                password: "",
-                parol: "",
-                is_active: ""
+            initialValues={{
+              username: "",
+              first_name: "",
+              last_name: "",
+              superadmin: "",
+              admin: "",
+              tyutr: "",
+              fakultet: "",
+              password: "",
+              is_active: true,
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
             {({ values, setFieldValue }) => (
               <Form>
+                {/* faculty name */}
                 <div className="mb-4">
                   <label
                     htmlFor="fakultet_name"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Foydalanuvchi nomi
+                    Fakultitet
                   </label>
                   <Field
-                    type="text"
+                    component="select"
                     id="fakultet_name"
                     name="fakultet_name"
                     className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
-                  />
+                  >
+                    <option value="" disabled>
+                      Fakultitetni kiriting
+                    </option>
+                    <option value="NY">New York</option>
+                    <option value="SF">San Francisco</option>
+                    <option value="CH">Chicago</option>
+                    <option value="OTHER">Other</option>
+                  </Field>
                   <ErrorMessage
                     name="fakultet_name"
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
+
+                {/* First name */}
                 <div className="mb-4">
                   <label
-                    htmlFor="fakultet_name"
+                    htmlFor="first_name"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Zamdekan nomi
+                    Ismi
                   </label>
                   <Field
                     type="text"
-                    id="fakultet_name"
-                    name="fakultet_name"
+                    id="first_name"
+                    name="first_name"
                     className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
                   />
+                  <ErrorMessage
+                    name="first_name"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                {/* Last name */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="last_name"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Familiyasi
+                  </label>
+                  <Field
+                    type="text"
+                    id="last_name"
+                    name="last_name"
+                    className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
+                  />
+                  <ErrorMessage
+                    name="last_name"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                {/* Username */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="username"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Foydalanuvchi nomi
+                  </label>
+                  <Field
+                    type="text"
+                    id="username"
+                    name="username"
+                    className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
+                  />
+                  <ErrorMessage
+                    name="username"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                {/* Password */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Parol
+                  </label>
+                  <Field
+                    type="text"
+                    id="password"
+                    name="password"
+                    className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <div role="group" aria-labelledby="my-radio-group">
+                    <label>
+                      <Field type="radio" name="selectedRole" value="superadmin" />
+                      Superadmin
+                    </label>
+                    <label>
+                      <Field type="radio" name="selectedRole" value="admin" />
+                      Admin
+                    </label>
+                    <label>
+                      <Field type="radio" name="selectedRole" value="tyutr" />
+                      Tyutr
+                    </label>
+                    <div>Qiymat: {values.picked}</div>
+                  </div>
                   <ErrorMessage
                     name="fakultet_name"
                     component="div"
@@ -152,7 +257,7 @@ const AdminsCom = () => {
               className="flex justify-between items-center px-3 py-2 border rounded-lg shadow-md hover:shadow-lg"
             >
               <p className="truncate w-2/3 text-gray-700 font-medium">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Lavozim: {data.first_name}
               </p>
               <div className="flex space-x-2">
                 <button
