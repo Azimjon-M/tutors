@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import APIUsers from "../../services/users";
+import APIFakultet from "../../services/fakultet";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { RiPencilFill } from "react-icons/ri";
@@ -9,50 +10,89 @@ const AdminsCom = () => {
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
   const [datas, setDatas] = useState([]);
+  const [dataFakultet, setDataFakultet] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [initialValues, setInitialValues] = useState({
+    username: "",
+    first_name: "",
+    last_name: "",
+    rol: "",
+    fakultet: "",
+    password: "",
+    is_active: true,
+  });
 
   const fetchData = async () => {
+    setLoading(true);
+    setError("");
     try {
+      const resFakultet = await APIFakultet.get();
       const response = await APIUsers.get();
+      setDataFakultet(resFakultet.data);
       setDatas(response.data);
     } catch (error) {
+      setError("Ma'lumotni olishda xatolik yuz berdi!");
       console.error("Xatolik yuz berdi!", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string()
-      .max(50, "Maksimal uzunlik 50 ta belgi bo'lishi kerak")
-      .required("Fakultet nomi maydoni majburiy"),
+    username: Yup.string().required("Foydalanuvchi nomi majburiy"),
+    first_name: Yup.string().required("Ism majburiy"),
+    last_name: Yup.string().required("Familiya majburiy"),
+    password: Yup.string()
+      .min(6, "Parol kamida 6 ta belgi bo'lishi kerak")
+      .required("Parol majburiy"),
+    fakultet: Yup.string().required("Fakultet majburiy"),
+    rol: Yup.string()
+      .oneOf(["superadmin", "admin", "tutor"], "Noto'g'ri rol tanlangan")
+      .required("Rol majburiy"),
+    is_active: Yup.boolean(),
   });
 
   const handleEdit = (data) => {
     setEdit(true);
     setId(data.id);
+    setInitialValues({
+      username: data.username,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      rol: data.rol,
+      fakultet: data.fakultet,
+      password: data.password,
+      is_active: data.is_active,
+    });
   };
 
   const handleDelete = async (id) => {
+    setLoading(true);
+    setError("");
     try {
       await APIUsers.del(id);
       fetchData();
     } catch (error) {
+      setError("Ma'lumotni o'chirishda xatolik yuz berdi!");
       console.error("Xatolik yuz berdi!", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true);
+    setError("");
     const formData = new FormData();
-    formData.append("username", values.username);
-    formData.append("first_name", values.first_name);
-    formData.append("last_name", values.last_name);
-    formData.append("superadmin", values.selectedRole === "superadmin");
-    formData.append("admin", values.selectedRole === "admin");
-    formData.append("tyutr", values.selectedRole === "tyutr");
-    formData.append("fakultet", values.fakultet);
-    formData.append("password", values.password);
-    formData.append("is_active", values.is_active);
-    // for (let key in values) {
-    //   formData.append(key, values[key]);
-    // }
+    for (let key in values) {
+      if (key === "is_active") {
+        formData.append(key, values[key] ? "true" : "false");
+      } else {
+        formData.append(key, values[key]);
+      }
+    }
+
     try {
       if (!edit) {
         await APIUsers.post(formData);
@@ -61,11 +101,13 @@ const AdminsCom = () => {
         setEdit(false);
         setId(null);
       }
-      resetForm();
       fetchData();
-    } catch (error) {
-      console.error("Xatolik sodir bo'ldi!", error);
       resetForm();
+    } catch (error) {
+      setError("Ma'lumotni yuborishda xatolik yuz berdi!");
+      console.error("Xatolik sodir bo'ldi!", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,52 +126,42 @@ const AdminsCom = () => {
             {edit ? "Zamdekanni tahrirlash" : "Yangi zamdekan qo'shish"}
           </h2>
           <Formik
-            initialValues={{
-              username: "",
-              first_name: "",
-              last_name: "",
-              superadmin: "",
-              admin: "",
-              tyutr: "",
-              fakultet: "",
-              password: "",
-              is_active: true,
-            }}
+            enableReinitialize
+            initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ values, setFieldValue }) => (
+            {({ values }) => (
               <Form>
-                {/* faculty name */}
+                {/* Fakultet */}
                 <div className="mb-4">
                   <label
-                    htmlFor="fakultet_name"
+                    htmlFor="fakultet"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Fakultitet
                   </label>
                   <Field
                     component="select"
-                    id="fakultet_name"
-                    name="fakultet_name"
-                    className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
+                    id="fakultet"
+                    name="fakultet"
+                    className="w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300"
                   >
                     <option value="" disabled>
                       Fakultitetni kiriting
                     </option>
-                    <option value="NY">New York</option>
-                    <option value="SF">San Francisco</option>
-                    <option value="CH">Chicago</option>
-                    <option value="OTHER">Other</option>
+                    {dataFakultet.map((data) => (
+                      <option key={data.id} value={data.id}>{data.name}</option>
+                    ))}
                   </Field>
                   <ErrorMessage
-                    name="fakultet_name"
+                    name="fakultet"
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
 
-                {/* First name */}
+                {/* First Name */}
                 <div className="mb-4">
                   <label
                     htmlFor="first_name"
@@ -141,7 +173,7 @@ const AdminsCom = () => {
                     type="text"
                     id="first_name"
                     name="first_name"
-                    className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
+                    className="w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300"
                   />
                   <ErrorMessage
                     name="first_name"
@@ -213,28 +245,69 @@ const AdminsCom = () => {
                   />
                 </div>
 
+                {/* Role radio */}
                 <div className="mb-4">
                   <div role="group" aria-labelledby="my-radio-group">
-                    <label>
-                      <Field type="radio" name="selectedRole" value="superadmin" />
-                      Superadmin
+                    <p className="block text-sm font-medium text-gray-700">
+                      Foydalanuvchi ro'li
+                    </p>
+                    <label className="mr-3">
+                      <Field
+                        type="radio"
+                        name="rol"
+                        value="superadmin"
+                        className="mr-1"
+                      />
+                      superadmin
                     </label>
-                    <label>
-                      <Field type="radio" name="selectedRole" value="admin" />
-                      Admin
+                    <label className="mr-3">
+                      <Field
+                        type="radio"
+                        name="rol"
+                        value="admin"
+                        className="mr-1"
+                      />
+                      admin
                     </label>
-                    <label>
-                      <Field type="radio" name="selectedRole" value="tyutr" />
-                      Tyutr
+                    <label className="mr-3">
+                      <Field
+                        type="radio"
+                        name="rol"
+                        value="tutor"
+                        className="mr-1"
+                      />
+                      tyutr
                     </label>
-                    <div>Qiymat: {values.picked}</div>
                   </div>
                   <ErrorMessage
-                    name="fakultet_name"
+                    name="rol"
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
+                
+                {/* is active btn */}
+                <div className="mb-4">
+                  <div role="group" aria-labelledby="my-radio-group">
+                    <p className="block text-sm font-medium text-gray-700">
+                      Foydalanuvchi faolligi
+                    </p>
+                    <label className="mr-3">
+                      <Field
+                        type="checkbox"
+                        name="is_active"
+                        className="mr-1"
+                      />
+                      {values.is_active ? "faol" : "faol emas"}
+                    </label>
+                  </div>
+                  <ErrorMessage
+                    name="is_active"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
                 <button
                   type="submit"
                   className={`w-full py-2 px-4 rounded-md text-white font-semibold ${
@@ -250,7 +323,9 @@ const AdminsCom = () => {
           </Formik>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
+        {loading && <p className="text-blue-500 font-bold text-center">Yuklanmoqda...</p>}
+        {error && <p className="text-red-500 font-bold text-center">{error}</p>}
           {datas.map((data) => (
             <div
               key={data.id}
