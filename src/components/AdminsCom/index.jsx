@@ -325,32 +325,33 @@ const AdminsCom = () => {
 
         <div className="space-y-3">
         {loading && <p className="text-blue-500 font-bold text-center">Yuklanmoqda...</p>}
-        {error && <p className="text-red-500 font-bold text-center">{error}</p>}
+        {error && <p className="text-red-500 font-bold text-center">{error}</p>}      
           {datas.map((data) => (
-            <div
-              key={data.id}
-              className="flex justify-between items-center px-3 py-2 border rounded-lg shadow-md hover:shadow-lg"
-            >
+            <div className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg">
+            <input type="checkbox" name="my-accordion-2" />
+            <div className="collapse-title flex justify-between items-center">
               <p className="truncate w-2/3 text-gray-700 font-medium">
-                Lavozim: {data.first_name}
-              </p>
-              <div className="flex space-x-2">
-                <button
-                  type="button"
-                  className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
-                  onClick={() => handleEdit(data)}
-                >
-                  <RiPencilFill />
-                </button>
-                <button
-                  type="button"
-                  className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
-                  onClick={() => handleDelete(data.id)}
-                >
-                  <MdDeleteForever />
-                </button>
-              </div>
+                  Zamdekan: {data.first_name} {data.last_name}
+                </p>
+                <div className="flex space-x-2 z-10">
+                  <button
+                    type="button"
+                    className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
+                    onClick={() => handleEdit(data)}
+                  >
+                    <RiPencilFill />
+                  </button>
+                  <button
+                    type="button"
+                    className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
+                    onClick={() => handleDelete(data.id)}
+                  >
+                    <MdDeleteForever />
+                  </button>
+                </div>
             </div>
+            <div className="collapse-content"></div>
+          </div>
           ))}
         </div>
       </div>
