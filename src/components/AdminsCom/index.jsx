@@ -39,6 +39,11 @@ const AdminsCom = () => {
     }
   };
 
+  const fakultetName = (id) => {
+    const data = dataFakultet.find(item => item.id === id);
+    return data ? data.name : "Fakultet nomi kiritilmagan";
+  }
+
   const validationSchema = Yup.object({
     username: Yup.string().required("Foydalanuvchi nomi majburiy"),
     first_name: Yup.string().required("Ism majburiy"),
@@ -110,6 +115,9 @@ const AdminsCom = () => {
       setLoading(false);
     }
   };
+
+  console.log(datas);
+  
 
   useEffect(() => {
     fetchData();
@@ -327,7 +335,7 @@ const AdminsCom = () => {
         {loading && <p className="text-blue-500 font-bold text-center">Yuklanmoqda...</p>}
         {error && <p className="text-red-500 font-bold text-center">{error}</p>}      
           {datas.map((data) => (
-            <div className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg">
+            <div key={data.id} className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg">
             <input type="checkbox" name="my-accordion-2" />
             <div className="collapse-title flex justify-between items-center">
               <p className="truncate w-2/3 text-gray-700 font-medium">
@@ -350,7 +358,11 @@ const AdminsCom = () => {
                   </button>
                 </div>
             </div>
-            <div className="collapse-content"></div>
+            <div className="collapse-content">
+              <p>Fakultitet nomi: {fakultetName(data.fakultet)}</p>
+              <p>Foydalanuvchi nomi: {data.username}</p>
+              <p>Foydalanuvchi paroli: {data.password}</p>
+            </div>
           </div>
           ))}
         </div>
