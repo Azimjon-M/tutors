@@ -116,9 +116,6 @@ const AdminsCom = () => {
     }
   };
 
-  console.log(datas);
-  
-
   useEffect(() => {
     fetchData();
   }, []);
