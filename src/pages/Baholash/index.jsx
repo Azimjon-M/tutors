@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import BaholashCom from "../../components/BaholashCom";
 
 const Baholash = () => {
-    return (
-        <div>Baholash</div>
-    )
-}
+  return (
+    <div>
+      <BaholashCom />
+    </div>
+  );
+};
 
-export default Baholash
+export default Baholash;
