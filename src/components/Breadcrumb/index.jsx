@@ -67,7 +67,7 @@ const Breadcrumb = () => {
                     )}
                 </div>
                 <div>
-                    {data.surname} {data.name.slice(0, 1)}
+                    {data?.surname} {data?.name.slice(0, 1)}
                 </div>
             </div>
             {/* Togler Menu */}
@@ -94,8 +94,8 @@ const Breadcrumb = () => {
                             )}
                         </div>
                         <div className="leading-4">
-                            <div className="line-clamp-1">{data.surname}</div>
-                            <div className="line-clamp-1">{data.name}</div>
+                            <div className="line-clamp-1">{data?.surname}</div>
+                            <div className="line-clamp-1">{data?.name}</div>
                         </div>
                     </div>
                     <div
