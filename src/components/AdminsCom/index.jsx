@@ -17,7 +17,7 @@ const AdminsCom = () => {
     username: "",
     first_name: "",
     last_name: "",
-    rol: "",
+    rol: "admin",
     fakultet: "",
     password: "",
     is_active: true,
@@ -251,7 +251,7 @@ const AdminsCom = () => {
                 </div>
 
                 {/* Role radio */}
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   <div role="group" aria-labelledby="my-radio-group">
                     <p className="block text-sm font-medium text-gray-700">
                       Foydalanuvchi ro'li
@@ -289,7 +289,7 @@ const AdminsCom = () => {
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
-                </div>
+                </div> */}
                 
                 {/* is active btn */}
                 <div className="mb-4">
