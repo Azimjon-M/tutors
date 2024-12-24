@@ -115,13 +115,13 @@ const FakultetCom = () => {
           </Formik>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 max-h-[600px] overflow-y-auto">
           {datas.map((data) => (
             <div
               key={data.id}
               className="flex justify-between items-center px-3 py-2 border rounded-lg shadow-md hover:shadow-lg"
             >
-              <p className="truncate w-2/3 text-gray-700 font-medium">
+              <p className="text-gray-700 font-medium line-clamp-1">
                 {data.name}
               </p>
               <div className="flex space-x-2">
