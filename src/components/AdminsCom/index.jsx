@@ -17,7 +17,7 @@ const AdminsCom = () => {
     username: "",
     first_name: "",
     last_name: "",
-    rol: "",
+    rol: "admin",
     fakultet: "",
     password: "",
     is_active: true,
@@ -38,6 +38,11 @@ const AdminsCom = () => {
       setLoading(false);
     }
   };
+
+  const fakultetName = (id) => {
+    const data = dataFakultet.find(item => item.id === id);
+    return data ? data.name : "Fakultet nomi kiritilmagan";
+  }
 
   const validationSchema = Yup.object({
     username: Yup.string().required("Foydalanuvchi nomi majburiy"),
@@ -246,7 +251,7 @@ const AdminsCom = () => {
                 </div>
 
                 {/* Role radio */}
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   <div role="group" aria-labelledby="my-radio-group">
                     <p className="block text-sm font-medium text-gray-700">
                       Foydalanuvchi ro'li
@@ -284,7 +289,7 @@ const AdminsCom = () => {
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
-                </div>
+                </div> */}
                 
                 {/* is active btn */}
                 <div className="mb-4">
@@ -327,7 +332,7 @@ const AdminsCom = () => {
         {loading && <p className="text-blue-500 font-bold text-center">Yuklanmoqda...</p>}
         {error && <p className="text-red-500 font-bold text-center">{error}</p>}      
           {datas.map((data) => (
-            <div className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg">
+            <div key={data.id} className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg">
             <input type="checkbox" name="my-accordion-2" />
             <div className="collapse-title flex justify-between items-center">
               <p className="truncate w-2/3 text-gray-700 font-medium">
@@ -350,7 +355,11 @@ const AdminsCom = () => {
                   </button>
                 </div>
             </div>
-            <div className="collapse-content"></div>
+            <div className="collapse-content">
+              <p>Fakultitet nomi: {fakultetName(data.fakultet)}</p>
+              <p>Foydalanuvchi nomi: {data.username}</p>
+              <p>Foydalanuvchi paroli: {data.password}</p>
+            </div>
           </div>
           ))}
         </div>
