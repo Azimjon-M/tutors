@@ -52,14 +52,15 @@ const Login = () => {
                         password: values.password,
                     });
 
-                    // try {
-                    //     const resUser = await APIGetUser.get();
-                    //     console.log(resUser.data);
-                    // } catch (err) {
-                    //     console.log(err);
-                    // }
-
                     if (res.data && res.data.access) {
+
+                        // try {
+                        //     const resUser = await APIGetUser.get();
+                        //     console.log(resUser.data);
+                        // } catch (err) {
+                        //     console.log(err);
+                        // }
+
                         const data = JSON.stringify({
                             ...values,
                             token: res.data.access,

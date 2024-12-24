@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const TaskForm = () => {
+const Topshiriqlar = () => {
     const tutors = useMemo(
         () => [
             { id: 1, name: "Abdulla Karimov", fak: "Fiz-Mat" },
@@ -17,6 +17,13 @@ const TaskForm = () => {
         ],
         []
     );
+
+    const kategory = [
+        { id: 1, name: "Kategoryani tanlang!", disabled: true },
+        { id: 2, name: "Majburiy" },
+        { id: 3, name: "O‘z sohasi" },
+        { id: 4, name: "Qo‘shimcha" },
+    ];
 
     const [selectAll, setSelectAll] = useState(false);
     const [selectedTutors, setSelectedTutors] = useState([]);
@@ -55,6 +62,8 @@ const TaskForm = () => {
         initialValues: {
             title: "",
             details: "",
+            category: 1,
+            numberValue: "",
             file1: null,
             file2: null,
             file3: null,
@@ -136,8 +145,9 @@ const TaskForm = () => {
                 </table>
             </div>
 
-
-            <h1 className="text-lg font-bold mt-8">Qanday topshiriq yuborish:</h1>
+            <h1 className="text-lg font-bold mt-8">
+                Qanday topshiriq yuborish:
+            </h1>
 
             <form onSubmit={formik.handleSubmit}>
                 {/* Title */}
@@ -178,6 +188,63 @@ const TaskForm = () => {
                             {formik.errors.details}
                         </span>
                     ) : null}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                    {/* Category (Select) */}
+                    <div className="form-control mb-4">
+                        <label htmlFor="category" className="label">
+                            <span className="label-text">
+                                Kategoriyani tanlang
+                            </span>
+                        </label>
+                        <select
+                            id="category"
+                            name="category"
+                            className="select select-bordered"
+                            value={formik.values.category} // formik qiymatini ulash
+                            onChange={formik.handleChange} // qiymatni boshqarish
+                        >
+                            {kategory?.map((item) => (
+                                <option
+                                    key={item.id}
+                                    value={item.id}
+                                    selected={item.selected}
+                                    disabled={item.disabled}
+                                >
+                                    {item.name}
+                                </option>
+                            ))}
+                        </select>
+
+                        {formik.touched.category && formik.errors.category ? (
+                            <span className="text-red-500 text-sm">
+                                {formik.errors.category}
+                            </span>
+                        ) : null}
+                    </div>
+
+                    {/* Number Input */}
+                    <div className="form-control mb-4">
+                        <label htmlFor="numberValue" className="label">
+                            <span className="label-text">
+                                Qiymatni kiriting
+                            </span>
+                        </label>
+                        <input
+                            type="number"
+                            id="numberValue"
+                            name="numberValue"
+                            className="input input-bordered w-[100px]"
+                            {...formik.getFieldProps("numberValue")}
+                        />
+                        {formik.touched.numberValue &&
+                        formik.errors.numberValue ? (
+                            <span className="text-red-500 text-sm">
+                                {formik.errors.numberValue}
+                            </span>
+                        ) : null}
+                    </div>
                 </div>
 
                 {/* File Inputs in 2 Columns */}
@@ -263,4 +330,4 @@ const TaskForm = () => {
     );
 };
 
-export default TaskForm;
+export default Topshiriqlar;
