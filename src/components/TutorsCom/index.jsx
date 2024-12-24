@@ -335,8 +335,8 @@ const TutorsCom = () => {
             <div key={data.id} className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg">
             <input type="checkbox" name="my-accordion-2" />
             <div className="collapse-title flex justify-between items-center">
-              <p className="text-gray-700 font-medium line-clamp-1">
-                  Tyutor: {data.first_name} {data.last_name}
+              <p className="text-sky-700 font-medium line-clamp-1">
+                  <span className="text-sky-800 font-bold">Tyutor:</span> {data.first_name} {data.last_name}
                 </p>
                 <div className="flex space-x-2 z-10">
                   <button
@@ -355,10 +355,10 @@ const TutorsCom = () => {
                   </button>
                 </div>
             </div>
-            <div className="collapse-content">
-              <p>Fakultitet nomi: {fakultetName(data.fakultet)}</p>
-              <p>Foydalanuvchi nomi: {data.username}</p>
-              <p>Foydalanuvchi paroli: {data.password}</p>
+            <div className="collapse-content space-y-2">
+              <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Fakultitet nomi:</span> {fakultetName(data.fakultet)}</p>
+              <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi nomi:</span> {data.username}</p>
+              <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi paroli:</span> {data.password}</p>
             </div>
           </div>
           ))}

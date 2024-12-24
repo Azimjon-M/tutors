@@ -121,7 +121,7 @@ const FakultetCom = () => {
               key={data.id}
               className="flex justify-between items-center px-3 py-2 border rounded-lg shadow-md hover:shadow-lg"
             >
-              <p className="text-gray-700 font-medium line-clamp-1">
+              <p className="text-sky-700 font-medium line-clamp-1">
                 {data.name}
               </p>
               <div className="flex space-x-2">
