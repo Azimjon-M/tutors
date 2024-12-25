@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { RiPencilFill } from "react-icons/ri";
 import { MdDeleteForever } from "react-icons/md";
 
-const AdminsCom = () => {
+const TutorsCom = () => {
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
   const [datas, setDatas] = useState([]);
@@ -17,7 +17,7 @@ const AdminsCom = () => {
     username: "",
     first_name: "",
     last_name: "",
-    rol: "admin",
+    rol: "tutor",
     fakultet: "",
     password: "",
     is_active: true,
@@ -123,12 +123,12 @@ const AdminsCom = () => {
   return (
     <div className="max-w-[1600px] mx-auto">
       <h1 className="text-3xl font-medium text-gray-700 text-center my-5">
-        Zamdekanlar
+        Tyutorlar
       </h1>
       <div className="max-w-7xl px-5 mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 border rounded-lg shadow">
           <h2 className="text-lg font-semibold text-gray-600 mb-4">
-            {edit ? "Zamdekanni tahrirlash" : "Yangi zamdekan qo'shish"}
+            {edit ? "Tyutorni tahrirlash" : "Yangi tyutor qo'shish"}
           </h2>
           <Formik
             enableReinitialize
@@ -144,7 +144,7 @@ const AdminsCom = () => {
                     htmlFor="fakultet"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Fakultitet
+                    Tyutor
                   </label>
                   <Field
                     component="select"
@@ -153,7 +153,7 @@ const AdminsCom = () => {
                     className="w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300"
                   >
                     <option value="" disabled>
-                      Fakultitetni kiriting
+                      Tyutorni kiriting
                     </option>
                     {dataFakultet.map((data) => (
                       <option key={data.id} value={data.id}>{data.name}</option>
@@ -328,15 +328,15 @@ const AdminsCom = () => {
           </Formik>
         </div>
 
-        <div className="space-y-3 max-h-[600px] overflow-y-auto">
+        <div className="space-y-3 max-h-[600px] overflow-y-auto overscroll-y-auto">
         {loading && <p className="text-blue-500 font-bold text-center">Yuklanmoqda...</p>}
         {error && <p className="text-red-500 font-bold text-center">{error}</p>}      
           {datas.map((data) => (
             <div key={data.id} className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg">
             <input type="checkbox" name="my-accordion-2" />
             <div className="collapse-title flex justify-between items-center">
-              <p className="text-sky-700 font-medium line-clamp-1"><span className="text-sky-800 font-bold">
-                  Admin:</span> {data.first_name} {data.last_name}
+              <p className="text-sky-700 font-medium line-clamp-1">
+                  <span className="text-sky-800 font-bold">Tyutor:</span> {data.first_name} {data.last_name}
                 </p>
                 <div className="flex space-x-2 z-10">
                   <button
@@ -355,7 +355,7 @@ const AdminsCom = () => {
                   </button>
                 </div>
             </div>
-            <div className="collapse-content">
+            <div className="collapse-content space-y-2">
               <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Fakultitet nomi:</span> {fakultetName(data.fakultet)}</p>
               <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi nomi:</span> {data.username}</p>
               <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi paroli:</span> {data.password}</p>
@@ -368,4 +368,4 @@ const AdminsCom = () => {
   );
 };
 
-export default AdminsCom;
+export default TutorsCom;
