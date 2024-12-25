@@ -17,7 +17,7 @@ const TutorsCom = () => {
     username: "",
     first_name: "",
     last_name: "",
-    rol: "tutor",
+    role: "tutor",
     fakultet: "",
     password: "",
     is_active: true,
@@ -28,7 +28,7 @@ const TutorsCom = () => {
     setError("");
     try {
       const resFakultet = await APIFakultet.get();
-      const response = await APIUsers.get();
+      const response = await APIUsers.getRole('tutor');
       setDataFakultet(resFakultet.data);
       setDatas(response.data);
     } catch (error) {
@@ -52,7 +52,7 @@ const TutorsCom = () => {
       .min(6, "Parol kamida 6 ta belgi bo'lishi kerak")
       .required("Parol majburiy"),
     fakultet: Yup.string().required("Fakultet majburiy"),
-    rol: Yup.string()
+    role: Yup.string()
       .oneOf(["superadmin", "admin", "tutor"], "Noto'g'ri rol tanlangan")
       .required("Rol majburiy"),
     is_active: Yup.boolean(),
@@ -65,7 +65,7 @@ const TutorsCom = () => {
       username: data.username,
       first_name: data.first_name,
       last_name: data.last_name,
-      rol: data.rol,
+      role: data.role,
       fakultet: data.fakultet,
       password: data.password,
       is_active: data.is_active,

@@ -1,8 +1,10 @@
 import axiosInstance from ".";
 
-const endPoint = "/users/users/";
+const endPoint = "users/users";
 
 const get = () => axiosInstance.get(endPoint);
+
+const getRole = (role) => axiosInstance.get(`${endPoint}?role=${role}`);
 
 const getbyId = (id) => axiosInstance.get(`${endPoint}${id}/`);
 
@@ -16,6 +18,6 @@ const put = (id, item) => axiosInstance.put(`${endPoint}${id}/`, item);
 
 const del = (id) => axiosInstance.delete(`${endPoint}${id}/`);
 
-const APIUsers = {get, getbyId, post, patch, put, del};
+const APIUsers = {get, getRole, getbyId, post, patch, put, del};
 
 export default APIUsers;
