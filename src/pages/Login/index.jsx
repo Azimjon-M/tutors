@@ -5,17 +5,17 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { BsEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
 import APIGetToken from "../../services/getToken";
-// import APIGetUser from "../../services/getUser";
+import APIGetUser from "../../services/getUser";
 
 import CryptoJS from "crypto-js";
-import userRole from "../../components/userRole";
+// import userRole from "../../components/userRole";
 import LoadnigTxt from "../../components/LoadingTxt";
 
 const Login = () => {
-    const encryptedRole = CryptoJS.AES.encrypt(
-        JSON.stringify(userRole.superAdmin),
-        "key-one"
-    ).toString();
+    const ShifredTxt = (key, content) => {
+        const shifredTxt = CryptoJS.AES.encrypt(JSON.stringify(content), String(key)).toString();
+        return shifredTxt
+    }
 
     const [eye, setEye] = useState(false);
     const [isLoading, setIsLoading] = useState("");
@@ -37,12 +37,11 @@ const Login = () => {
         initialValues: {
             username: "",
             password: "",
-
             remember: false,
         },
         validationSchema: validationSchema,
-        validateOnChange: false, // Input o'zgarganda validatsiya ishlamasligi uchun
-        validateOnBlur: true, // Inputdan chiqishda validatsiya ishlamasligi uchun
+        validateOnChange: false,
+        validateOnBlur: true,
         onSubmit: async (values) => {
             if (!errMessage && !isLoading) {
                 setIsLoading(true);
@@ -54,22 +53,24 @@ const Login = () => {
 
                     if (res.data && res.data.access) {
 
-                        // try {
-                        //     const resUser = await APIGetUser.get();
-                        //     console.log(resUser.data);
-                        // } catch (err) {
-                        //     console.log(err);
-                        // }
+                        try {
+                            const resUser = await APIGetUser.get(values.username, res.data.access)
+                            const [data] = resUser.data
+                            const jsonData = JSON.stringify({
+                                username: ShifredTxt("username-001", values.username),
+                                password: ShifredTxt("password-001", values.password),
+                                remember: values.remember,
+                                first_name: ShifredTxt("first_name-001", data.first_name),
+                                last_name: ShifredTxt("last_name-001", data.last_name),
+                                token: ShifredTxt("token-001", res.data.access),
+                                role: ShifredTxt("role-001", data.role),
+                            });
+                            localStorage.setItem("data", jsonData);
+                            navigate("/analitka");
+                        } catch (err) {
+                            console.error("Admin ma'lumotlarini olishda xatolik:", err);
+                        }
 
-                        const data = JSON.stringify({
-                            ...values,
-                            token: res.data.access,
-                            role: encryptedRole,
-                            name: "Azimjon",
-                            surname: "Meliboev",
-                        });
-                        localStorage.setItem("data", data);
-                        navigate("/analitka");
                     } else {
                         setErrMessage("Username or Password wrong!");
                         setTimeout(() => {

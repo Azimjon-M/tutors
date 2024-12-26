@@ -85,7 +85,6 @@ const Topshiriqlar = () => {
                 ),
         }),
         onSubmit: (values) => {
-            console.log(values);
             alert("Topshiriq yuborildi!");
         },
     });

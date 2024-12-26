@@ -68,6 +68,7 @@ const sidebar = [
         path: "/Baholash",
         icon: AiOutlineBarChart,
         isPrivate: true,
+        role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
         children: [
             {
                 id: 5-1,
@@ -122,6 +123,7 @@ const sidebar = [
         path: "/topshiriqlar",
         icon: RiFileList3Line,
         isPrivate: true,
+        role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
         children: [
             {
                 id: 6-1,
@@ -161,15 +163,6 @@ const sidebar = [
         hidden: true,
         element: NotAuthorized,
         role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`, `"${userRole.tutor}"`],
-    },
-    {
-        id: 9,
-        title: "Test",
-        path: "/test",
-        icon: VscGraph,
-        isPrivate: true,
-        element: BaholashMezonlari,
-        role: [`"${userRole.superAdmin}"`],
     },
 ];
 
