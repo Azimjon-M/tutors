@@ -90,7 +90,7 @@ const Sidebar = () => {
 
     useEffect(() => {
         if (data) {
-            setUnShiredRole(unShifredTxt("role-001", data?.role));
+            setUnShiredRole(unShifredTxt(process.env.REACT_APP_SHIFRED_ROLE, data?.role));
         }
     }, [data]);
 

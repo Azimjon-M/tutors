@@ -71,10 +71,10 @@ const Breadcrumb = () => {
     useEffect(() => {
         if (data) {
             setUnShiredFirstname(
-                unShifredTxt("first_name-001", data?.first_name)
+                unShifredTxt(process.env.REACT_APP_SHIFRED_FIRSTNAME, data?.first_name)
             );
             setUnShiredLastname(
-                unShifredTxt("last_name-001", data?.last_name)
+                unShifredTxt(process.env.REACT_APP_SHIFRED_FIRSTNAME, data?.last_name)
             );
         }
     }, [data]);

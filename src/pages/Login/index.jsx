@@ -59,13 +59,13 @@ const Login = () => {
                             if (resUser.data) {
                                 const [data] = resUser.data
                                 const jsonData = JSON.stringify({
-                                    username: ShifredTxt("username-001", values.username),
-                                    password: ShifredTxt("password-001", values.password),
+                                    username: ShifredTxt(process.env.REACT_APP_SHIFRED_USERNAME, values.username),
+                                    password: ShifredTxt(process.env.REACT_APP_SHIFRED_PASSWORD, values.password),
                                     remember: values.remember,
-                                    first_name: ShifredTxt("first_name-001", data.first_name),
-                                    last_name: ShifredTxt("last_name-001", data.last_name),
-                                    token: ShifredTxt("token-001", res.data.access),
-                                    role: ShifredTxt("role-001", data.role),
+                                    first_name: ShifredTxt(process.env.REACT_APP_SHIFRED_FIRSTNAME, data.first_name),
+                                    last_name: ShifredTxt(process.env.REACT_APP_SHIFRED_LASTNAME, data.last_name),
+                                    token: ShifredTxt(process.env.REACT_APP_ENCRYPTION_KEY, res.data.access),
+                                    role: ShifredTxt(process.env.REACT_APP_SHIFRED_FIRSTNAME, data.role),
                                 });
                                 localStorage.setItem("data", jsonData);
                                 navigate("/analitka");
