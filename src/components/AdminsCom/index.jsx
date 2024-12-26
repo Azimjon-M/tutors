@@ -22,6 +22,7 @@ const AdminsCom = () => {
     password: "",
     is_active: true,
   });
+console.log(process.env.REACT_APP_API_ENDPOINT_USERS);
 
   const fetchData = async () => {
     setLoading(true);

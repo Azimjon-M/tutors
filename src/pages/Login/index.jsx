@@ -16,7 +16,7 @@ const Login = () => {
         const shifredTxt = CryptoJS.AES.encrypt(JSON.stringify(content), String(key)).toString();
         return shifredTxt
     }
-
+    
     const [eye, setEye] = useState(false);
     const [isLoading, setIsLoading] = useState("");
     const [errMessage, setErrMessage] = useState("");
@@ -52,21 +52,25 @@ const Login = () => {
                     });
 
                     if (res.data && res.data.access) {
-
+                        console.log("getToken", res.data);
                         try {
                             const resUser = await APIGetUser.get(values.username, res.data.access)
-                            const [data] = resUser.data
-                            const jsonData = JSON.stringify({
-                                username: ShifredTxt("username-001", values.username),
-                                password: ShifredTxt("password-001", values.password),
-                                remember: values.remember,
-                                first_name: ShifredTxt("first_name-001", data.first_name),
-                                last_name: ShifredTxt("last_name-001", data.last_name),
-                                token: ShifredTxt("token-001", res.data.access),
-                                role: ShifredTxt("role-001", data.role),
-                            });
-                            localStorage.setItem("data", jsonData);
-                            navigate("/analitka");
+                            console.log(resUser.data);
+                            if (resUser.data) {
+                                const [data] = resUser.data
+                                const jsonData = JSON.stringify({
+                                    username: ShifredTxt("username-001", values.username),
+                                    password: ShifredTxt("password-001", values.password),
+                                    remember: values.remember,
+                                    first_name: ShifredTxt("first_name-001", data.first_name),
+                                    last_name: ShifredTxt("last_name-001", data.last_name),
+                                    token: ShifredTxt("token-001", res.data.access),
+                                    role: ShifredTxt("role-001", data.role),
+                                });
+                                localStorage.setItem("data", jsonData);
+                                navigate("/analitka");
+                            }
+                            
                         } catch (err) {
                             console.error("Admin ma'lumotlarini olishda xatolik:", err);
                         }
