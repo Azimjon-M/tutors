@@ -3,26 +3,47 @@ import { useLocation } from "react-router-dom";
 // import { BsPerson } from "react-icons/bs";
 import { IoMdSettings } from "react-icons/io";
 import test4x4 from "../../assets/icons/test4x4.png";
+import CryptoJS from "crypto-js";
 
 const Breadcrumb = () => {
     const data = JSON.parse(localStorage.getItem("data"));
     const [toglerMenu, setToglerMenu] = useState(false);
     const [settingMenu, setSettingMenu] = useState(false);
     // const [image, setImage] = useState("");
+    const [unShiredfirstname, setUnShiredFirstname] = useState("");
+    const [unShiredLastname, setUnShiredLastname] = useState("");
+
     const location = useLocation();
+
+    const menuRef = useRef(null); // Menu elementiga murojaat qilish uchun
+    const buttonRef = useRef(null); // Tugma elementini kuzatish uchun
+
     const path = location.pathname.split("/").filter(Boolean).pop();
     const formattedPath = path
         ? path.charAt(0).toUpperCase() + path.slice(1)
         : "";
 
-    const menuRef = useRef(null); // Menu elementiga murojaat qilish uchun
-    const buttonRef = useRef(null); // Tugma elementini kuzatish uchun
-
+    const unShifredTxt = (key, content) => {
+        const res = CryptoJS.AES.decrypt(content, key)
+            .toString(CryptoJS.enc.Utf8)
+            .trim()
+            .replace(/^"|"$/g, "");
+        return res;
+    };
     const toggleMenu = (e) => {
         e.stopPropagation(); // Hodisa tarqalishini to'xtatamiz
         setToglerMenu((prev) => !prev); // Menyuni ochish/yopish
         setSettingMenu(false);
     };
+
+    // if (data && data.data) {
+    //     setUnShiredFirstname(
+    //         unShifredTxt("first_name-001", data?.first_name)
+    //     );
+    //     setUnShiredLastname(
+    //         unShifredTxt("last_name-001", data?.last_name)
+    //     );
+    // }
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -47,6 +68,17 @@ const Breadcrumb = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (data) {
+            setUnShiredFirstname(
+                unShifredTxt("first_name-001", data?.first_name)
+            );
+            setUnShiredLastname(
+                unShifredTxt("last_name-001", data?.last_name)
+            );
+        }
+    }, [data]);
+
     return (
         <div className="w-full flex justify-between items-center relative select-none">
             {/* Location */}
@@ -67,7 +99,7 @@ const Breadcrumb = () => {
                     )}
                 </div>
                 <div>
-                    {data?.surname} {data?.name.slice(0, 1)}
+                    {unShiredfirstname} {unShiredLastname.slice(0, 1)}
                 </div>
             </div>
             {/* Togler Menu */}
@@ -94,8 +126,12 @@ const Breadcrumb = () => {
                             )}
                         </div>
                         <div className="leading-4">
-                            <div className="line-clamp-1">{data?.surname}</div>
-                            <div className="line-clamp-1">{data?.name}</div>
+                            <div className="line-clamp-1">
+                                {unShiredfirstname}
+                            </div>
+                            <div className="line-clamp-1">
+                                {unShiredLastname}
+                            </div>
                         </div>
                     </div>
                     <div
