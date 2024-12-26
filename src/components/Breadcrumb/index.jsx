@@ -74,7 +74,7 @@ const Breadcrumb = () => {
                 unShifredTxt(process.env.REACT_APP_SHIFRED_FIRSTNAME, data?.first_name)
             );
             setUnShiredLastname(
-                unShifredTxt(process.env.REACT_APP_SHIFRED_FIRSTNAME, data?.last_name)
+                unShifredTxt(process.env.REACT_APP_SHIFRED_LASTNAME, data?.last_name)
             );
         }
     }, [data]);

@@ -65,7 +65,7 @@ const Login = () => {
                                     first_name: ShifredTxt(process.env.REACT_APP_SHIFRED_FIRSTNAME, data.first_name),
                                     last_name: ShifredTxt(process.env.REACT_APP_SHIFRED_LASTNAME, data.last_name),
                                     token: ShifredTxt(process.env.REACT_APP_ENCRYPTION_KEY, res.data.access),
-                                    role: ShifredTxt(process.env.REACT_APP_SHIFRED_FIRSTNAME, data.role),
+                                    role: ShifredTxt(process.env.REACT_APP_SHIFRED_ROLE, data.role),
                                 });
                                 localStorage.setItem("data", jsonData);
                                 navigate("/analitka");

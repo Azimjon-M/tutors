@@ -1,6 +1,6 @@
 import axiosInstance from ".";
 
-const endPoint = process.env.REACT_APP_API_ENDPOINT_USERS
+const endPoint = "users/users"
 
 const get = () => axiosInstance.get(endPoint);
 
