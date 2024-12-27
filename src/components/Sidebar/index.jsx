@@ -86,7 +86,9 @@ const Sidebar = () => {
 
     useEffect(() => {
         if (data) {
-            setUnShiredRole(unShifredTxt(process.env.REACT_APP_SHIFRED_ROLE, data?.role));
+            setUnShiredRole(
+                unShifredTxt(process.env.REACT_APP_SHIFRED_ROLE, data?.role)
+            );
         }
     }, [data]);
 
@@ -175,22 +177,35 @@ const Sidebar = () => {
                                         <ChildWrapper
                                             $active={active.toString()}
                                         >
-                                            {parent?.children?.map((child) => {
-                                                return (
-                                                    <MenuItem
-                                                        key={child?.id}
-                                                        to={child.path}
-                                                        $active={(
-                                                            location.pathname ===
-                                                            child.path
-                                                        ).toString()}
-                                                    >
-                                                        <MenuItem.Title>
-                                                            {child?.title}
-                                                        </MenuItem.Title>
-                                                    </MenuItem>
-                                                );
-                                            })}
+                                            {parent?.children
+                                                ?.filter((item) => {
+                                                    const cleanedRoles =
+                                                        item?.role.map((role) =>
+                                                            role.replace(
+                                                                /['"]/g,
+                                                                ""
+                                                            )
+                                                        );
+                                                    return cleanedRoles.includes(
+                                                        unShiredRole
+                                                    );
+                                                })
+                                                .map((child) => {
+                                                    return (
+                                                        <MenuItem
+                                                            key={child?.id}
+                                                            to={child.path}
+                                                            $active={(
+                                                                location.pathname ===
+                                                                child.path
+                                                            ).toString()}
+                                                        >
+                                                            <MenuItem.Title>
+                                                                {child?.title}
+                                                            </MenuItem.Title>
+                                                        </MenuItem>
+                                                    );
+                                                })}
                                         </ChildWrapper>
                                     </React.Fragment>
                                 ) : null;

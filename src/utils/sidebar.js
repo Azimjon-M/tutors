@@ -60,7 +60,7 @@ const sidebar = [
         icon: FaUserGraduate,
         isPrivate: true,
         element: Tutors,
-        role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
+        role: [`"${userRole.superAdmin}"`],
     },
     {
         id: 5,
@@ -77,7 +77,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: BahoMajburiy,
-                role: [`"${userRole.superAdmin}"`],
+                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
             },
             {
                 id: 5-2,
@@ -86,7 +86,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: BahoSohagaOid,
-                role: [`"${userRole.superAdmin}"`],
+                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
             },
             {
                 id: 5-3,
@@ -95,7 +95,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: BahoQoshmcha,
-                role: [`"${userRole.superAdmin}"`],
+                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
             },
             {
                 id: 5-4,
@@ -104,7 +104,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: BahoOzTashabbusi,
-                role: [`"${userRole.superAdmin}"`],
+                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
             },
             {
                 id: 5-5,
@@ -113,7 +113,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: BahoTogarak,
-                role: [`"${userRole.superAdmin}"`],
+                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
             },
         ]
     },
@@ -123,7 +123,7 @@ const sidebar = [
         path: "/topshiriqlar",
         icon: RiFileList3Line,
         isPrivate: true,
-        role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
+        role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`, `"${userRole.tutor}"`],
         children: [
             {
                 id: 6-1,
@@ -141,7 +141,17 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: TopshiriqlarniKorish,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
+                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`, `"${userRole.tutor}"`],
+            },
+            // tutor sent topshiriq
+            {
+                id: 6-2,
+                title: "Topshiriqlarni yuborish",
+                path: "/topshiriqlarni-yuborish",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: TopshiriqlarniKorish,
+                role: [`"${userRole.tutor}"`],
             },
         ]
     },
