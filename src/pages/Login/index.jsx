@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import Logo from "../../assets/icons/logo_kspi.png";
 import * as Yup from "yup";
@@ -8,18 +8,21 @@ import APIGetToken from "../../services/getToken";
 import APIGetUser from "../../services/getUser";
 
 import CryptoJS from "crypto-js";
-// import userRole from "../../components/userRole";
 import LoadnigTxt from "../../components/LoadingTxt";
 
 const Login = () => {
     const ShifredTxt = (key, content) => {
-        const shifredTxt = CryptoJS.AES.encrypt(JSON.stringify(content), String(key)).toString();
-        return shifredTxt
-    }
-    
+        const shifredTxt = CryptoJS.AES.encrypt(
+            JSON.stringify(content),
+            String(key)
+        ).toString();
+        return shifredTxt;
+    };
+
     const [eye, setEye] = useState(false);
     const [isLoading, setIsLoading] = useState("");
     const [errMessage, setErrMessage] = useState("");
+    const removeLoop = useRef(false);
     const navigate = useNavigate();
 
     const validationSchema = Yup.object({
@@ -42,6 +45,7 @@ const Login = () => {
         validationSchema: validationSchema,
         validateOnChange: false,
         validateOnBlur: true,
+        enableReinitialize: true,
         onSubmit: async (values) => {
             if (!errMessage && !isLoading) {
                 setIsLoading(true);
@@ -52,29 +56,49 @@ const Login = () => {
                     });
 
                     if (res.data && res.data.access) {
-                        console.log("getToken", res.data);
                         try {
-                            const resUser = await APIGetUser.get(values.username, res.data.access)
-                            console.log(resUser.data);
+                            const resUser = await APIGetUser.get(
+                                values.username,
+                                res.data.access
+                            );
                             if (resUser.data) {
-                                const [data] = resUser.data
+                                const [data] = resUser.data;
                                 const jsonData = JSON.stringify({
-                                    username: ShifredTxt(process.env.REACT_APP_SHIFRED_USERNAME, values.username),
-                                    password: ShifredTxt(process.env.REACT_APP_SHIFRED_PASSWORD, values.password),
+                                    username: ShifredTxt(
+                                        process.env.REACT_APP_SHIFRED_USERNAME,
+                                        values.username
+                                    ),
+                                    password: ShifredTxt(
+                                        process.env.REACT_APP_SHIFRED_PASSWORD,
+                                        values.password
+                                    ),
                                     remember: values.remember,
-                                    first_name: ShifredTxt(process.env.REACT_APP_SHIFRED_FIRSTNAME, data.first_name),
-                                    last_name: ShifredTxt(process.env.REACT_APP_SHIFRED_LASTNAME, data.last_name),
-                                    token: ShifredTxt(process.env.REACT_APP_ENCRYPTION_KEY, res.data.access),
-                                    role: ShifredTxt(process.env.REACT_APP_SHIFRED_ROLE, data.role),
+                                    first_name: ShifredTxt(
+                                        process.env.REACT_APP_SHIFRED_FIRSTNAME,
+                                        data.first_name
+                                    ),
+                                    last_name: ShifredTxt(
+                                        process.env.REACT_APP_SHIFRED_LASTNAME,
+                                        data.last_name
+                                    ),
+                                    token: ShifredTxt(
+                                        process.env.REACT_APP_ENCRYPTION_KEY,
+                                        res.data.access
+                                    ),
+                                    role: ShifredTxt(
+                                        process.env.REACT_APP_SHIFRED_ROLE,
+                                        data.role
+                                    ),
                                 });
                                 localStorage.setItem("data", jsonData);
                                 navigate("/analitka");
                             }
-                            
                         } catch (err) {
-                            console.error("Admin ma'lumotlarini olishda xatolik:", err);
+                            console.error(
+                                "Admin ma'lumotlarini olishda xatolik:",
+                                err
+                            );
                         }
-
                     } else {
                         setErrMessage("Username or Password wrong!");
                         setTimeout(() => {
@@ -94,6 +118,14 @@ const Login = () => {
         },
     });
 
+    const unShifredTxt = (key, content) => {
+        const res = CryptoJS.AES.decrypt(content, key)
+            .toString(CryptoJS.enc.Utf8)
+            .trim()
+            .replace(/^"|"$/g, "");
+        return res;
+    };
+
     const handleClickPassword = () => {
         const btn = document.getElementById("password");
         btn.type = btn.type === "text" ? "password" : "text";
@@ -101,12 +133,21 @@ const Login = () => {
     };
 
     useEffect(() => {
-        if (data) {
-            if (data.remember) {
-                navigate("/analitka");
-            }
+        if (data && data.remember && !removeLoop.current) {
+            formik.setValues({
+                username: unShifredTxt(
+                    process.env.REACT_APP_SHIFRED_USERNAME,
+                    data?.username
+                ),
+                password: unShifredTxt(
+                    process.env.REACT_APP_SHIFRED_PASSWORD,
+                    data?.password
+                ),
+                remember: false,
+            });
+            removeLoop.current = true; 
         }
-    }, [data, navigate]);
+    }, [data, navigate, formik]);
 
     return (
         <div className="w-full h-[100vh] flex justify-center items-center ">

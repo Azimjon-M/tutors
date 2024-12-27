@@ -135,11 +135,6 @@ const TopshiriqlarniKorish = () => {
         }
     };
 
-    // const onEdit = (id) => {
-    //     console.log(`Tahrirlanayotgan topshiriq IDsi: ${id}`);
-    //     // Tahrirlash jarayoniga o'tish logikasini shu yerda yozing.
-    // };
-
     const onSave = (id, updatedData) => {
         setFaceData((prev) =>
             prev.map((item) =>

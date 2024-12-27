@@ -36,10 +36,6 @@ const Sidebar = () => {
         return res;
     };
 
-    // if (data && data.data) {
-    //     setUnShiredRole(unShifredTxt("role-001", data?.role));
-    // }
-
     const onClickParent = ({ id, children, path }, e) => {
         if (open?.includes(id)) {
             let data = open.filter((val) => val !== id);
