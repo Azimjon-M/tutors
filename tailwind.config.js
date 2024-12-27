@@ -8,8 +8,9 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        digital: ['Orbitron', 'sans-serif'],
       },
     },
-  },  
+  },
   plugins: [require('daisyui'),],
 };
