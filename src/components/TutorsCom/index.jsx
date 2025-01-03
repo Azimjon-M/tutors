@@ -67,7 +67,7 @@ const TutorsCom = () => {
       last_name: data.last_name,
       role: data.role,
       fakultet: data.fakultet,
-      password: data.password,
+      password: data.parol,
       is_active: data.is_active,
     });
   };
@@ -250,47 +250,6 @@ const TutorsCom = () => {
                   />
                 </div>
 
-                {/* Role radio */}
-                {/* <div className="mb-4">
-                  <div role="group" aria-labelledby="my-radio-group">
-                    <p className="block text-sm font-medium text-gray-700">
-                      Foydalanuvchi ro'li
-                    </p>
-                    <label className="mr-3">
-                      <Field
-                        type="radio"
-                        name="rol"
-                        value="superadmin"
-                        className="mr-1"
-                      />
-                      superadmin
-                    </label>
-                    <label className="mr-3">
-                      <Field
-                        type="radio"
-                        name="rol"
-                        value="admin"
-                        className="mr-1"
-                      />
-                      admin
-                    </label>
-                    <label className="mr-3">
-                      <Field
-                        type="radio"
-                        name="rol"
-                        value="tutor"
-                        className="mr-1"
-                      />
-                      tyutr
-                    </label>
-                  </div>
-                  <ErrorMessage
-                    name="rol"
-                    component="div"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div> */}
-                
                 {/* is active btn */}
                 <div className="mb-4">
                   <div role="group" aria-labelledby="my-radio-group">
@@ -358,7 +317,7 @@ const TutorsCom = () => {
             <div className="collapse-content space-y-2">
               <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Fakultitet nomi:</span> {fakultetName(data.fakultet)}</p>
               <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi nomi:</span> {data.username}</p>
-              <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi paroli:</span> {data.password}</p>
+              <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi paroli:</span> {data.parol}</p>
             </div>
           </div>
           ))}

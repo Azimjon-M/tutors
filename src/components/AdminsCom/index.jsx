@@ -67,7 +67,7 @@ const AdminsCom = () => {
       last_name: data.last_name,
       role: data.role,
       fakultet: data.fakultet,
-      password: data.password,
+      password: data.parol,
       is_active: data.is_active,
     });
   };
@@ -358,7 +358,7 @@ const AdminsCom = () => {
             <div className="collapse-content">
               <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Fakultitet nomi:</span> {fakultetName(data.fakultet)}</p>
               <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi nomi:</span> {data.username}</p>
-              <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi paroli:</span> {data.password}</p>
+              <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi paroli:</span> {data.parol}</p>
             </div>
           </div>
           ))}
