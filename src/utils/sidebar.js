@@ -16,7 +16,7 @@ import Topshiriqlar from "../pages/Topshiriqlar";
 import BaholashMezonlari from "../pages/BaholashMezonlari";
 import { VscGraph } from "react-icons/vsc";
 import TopshiriqlarniKorish from "../pages/TopshiriqlarniKorish";
-import NotAuthorized from "../pages/NotAuthorized";
+// import NotAuthorized from "../pages/NotAuthorized";
 import BahoMajburiy from "../pages/BahoMajburiy";
 import BahoSohagaOid from "../pages/BahoSohagaOid";
 import BahoQoshmcha from "../pages/BahoQoshmcha";
@@ -77,7 +77,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: BahoMajburiy,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
+                role: [`"${userRole.superAdmin}"`],
             },
             {
                 id: 5-2,
@@ -86,7 +86,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: BahoSohagaOid,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
+                role: [`"${userRole.superAdmin}"`],
             },
             {
                 id: 5-3,
@@ -104,7 +104,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: BahoOzTashabbusi,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
+                role: [`"${userRole.superAdmin}"`],
             },
             {
                 id: 5-5,
@@ -113,7 +113,7 @@ const sidebar = [
                 icon: RiFileList3Line,
                 isPrivate: true,
                 element: BahoTogarak,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
+                role: [`"${userRole.superAdmin}"`],
             },
         ]
     },
@@ -123,10 +123,19 @@ const sidebar = [
         path: "/topshiriqlar",
         icon: RiFileList3Line,
         isPrivate: true,
-        role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`, `"${userRole.tutor}"`],
+        role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
         children: [
             {
                 id: 6-1,
+                title: "Topshiriqlar",
+                path: "/topshiriqlar",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: TopshiriqlarniKorish,
+                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`,],
+            },
+            {
+                id: 6-2,
                 title: "Topshiriq qo'shish",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
@@ -134,29 +143,128 @@ const sidebar = [
                 element: Topshiriqlar,
                 role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
             },
+        ]
+    },
+    {
+        id: 7,
+        title: "Majburiy topshiriq",
+        path: "/topshiriqlar",
+        icon: RiFileList3Line,
+        isPrivate: true,
+        role: [`"${userRole.tutor}"`],
+        children: [
             {
-                id: 6-2,
-                title: "Topshiriqlarni ko'rish",
-                path: "/topshiriqlarni-ko'rish",
+                id: 7-1,
+                title: "TTJga tashrif",
+                path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
                 isPrivate: true,
-                element: TopshiriqlarniKorish,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`, `"${userRole.tutor}"`],
+                element: Topshiriqlar,
+                role: [`"${userRole.tutor}"`],
             },
-            // tutor sent topshiriq
             {
-                id: 6-2,
-                title: "Topshiriqlarni yuborish",
-                path: "/topshiriqlarni-yuborish",
+                id: 7-2,
+                title: "Ijaraga tashrif",
+                path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
                 isPrivate: true,
-                element: TopshiriqlarniKorish,
+                element: Topshiriqlar,
+                role: [`"${userRole.tutor}"`],
+            },
+            {
+                id: 7-3,
+                title: "Tutorlik toati",
+                path: "/topshiriq-qoshish",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: Topshiriqlar,
+                role: [`"${userRole.tutor}"`],
+            },
+            {
+                id: 7-4,
+                title: "Davra suhbati",
+                path: "/topshiriq-qoshish",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: Topshiriqlar,
+                role: [`"${userRole.tutor}"`],
+            },
+            {
+                id: 7-5,
+                title: "Tadbirlar",
+                path: "/topshiriq-qoshish",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: Topshiriqlar,
+                role: [`"${userRole.tutor}"`],
+            },
+            {
+                id: 7-6,
+                title: "TTJda tadbiralr",
+                path: "/topshiriq-qoshish",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: Topshiriqlar,
+                role: [`"${userRole.tutor}"`],
+            },
+            {
+                id: 7-7,
+                title: "Iqtidorli talabam",
+                path: "/topshiriq-qoshish",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: Topshiriqlar,
+                role: [`"${userRole.tutor}"`],
+            },
+            {
+                id: 7-8,
+                title: "Oilaga xat",
+                path: "/topshiriq-qoshish",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: Topshiriqlar,
+                role: [`"${userRole.tutor}"`],
+            },
+            {
+                id: 7-8,
+                title: "Test",
+                path: "/topshiriq-qoshish",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: Topshiriqlar,
                 role: [`"${userRole.tutor}"`],
             },
         ]
     },
     {
-        id: 7,
+        id: 8,
+        title: "Qo'shimcha topshiriq",
+        path: "/baholash-mezonlari",
+        icon: VscGraph,
+        isPrivate: true,
+        element: BaholashMezonlari,
+        role: [`"${userRole.tutor}"`],
+    },
+    {
+        id: 9,
+        title: "Tutor tashabbusi",
+        path: "/baholash-mezonlari",
+        icon: VscGraph,
+        isPrivate: true,
+        element: BaholashMezonlari,
+        role: [`"${userRole.tutor}"`],
+    },
+    {
+        id: 10,
+        title: "To'garak",
+        path: "/baholash-mezonlari",
+        icon: VscGraph,
+        isPrivate: true,
+        element: BaholashMezonlari,
+        role: [`"${userRole.tutor}"`],
+    },
+    {
+        id: 11,
         title: "BaholashMezonlari",
         path: "/baholash-mezonlari",
         icon: VscGraph,
@@ -164,16 +272,16 @@ const sidebar = [
         element: BaholashMezonlari,
         role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`, `"${userRole.tutor}"`],
     },
-    {
-        id: 8,
-        title: "Not Authorized",
-        path: "/not-authorized",
-        icon: VscGraph,
-        isPrivate: true,
-        hidden: true,
-        element: NotAuthorized,
-        role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`, `"${userRole.tutor}"`],
-    },
+    // {
+    //     id: 8,
+    //     title: "Not Authorized",
+    //     path: "/not-authorized",
+    //     icon: VscGraph,
+    //     isPrivate: true,
+    //     hidden: true,
+    //     element: NotAuthorized,
+    //     role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`, `"${userRole.tutor}"`],
+    // },
 ];
 
 export default sidebar;
