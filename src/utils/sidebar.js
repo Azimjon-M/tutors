@@ -127,6 +127,15 @@ const sidebar = [
         children: [
             {
                 id: 6-1,
+                title: "Topshiriqlar",
+                path: "/topshiriqlar",
+                icon: RiFileList3Line,
+                isPrivate: true,
+                element: TopshiriqlarniKorish,
+                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`,],
+            },
+            {
+                id: 6-2,
                 title: "Topshiriq qo'shish",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
@@ -134,52 +143,6 @@ const sidebar = [
                 element: Topshiriqlar,
                 role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
             },
-            {
-                id: 6-2,
-                title: "Topshiriqlarni ko'rish",
-                path: "/topshiriqlarni-ko'rish",
-                icon: RiFileList3Line,
-                isPrivate: true,
-                element: TopshiriqlarniKorish,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`,],
-            },
-            // TUTOR
-            // {
-            //     id: 6-2,
-            //     title: "Majburiy topshiriqlar",
-            //     path: "/topshiriqlarni-yuborish",
-            //     icon: RiFileList3Line,
-            //     isPrivate: true,
-            //     element: TopshiriqlarniKorish,
-            //     role: [`"${userRole.tutor}"`],
-            // },
-            // {
-            //     id: 6-3,
-            //     title: "Qo'shimcha topshiriqlar",
-            //     path: "/topshiriqlarni-yuborish",
-            //     icon: RiFileList3Line,
-            //     isPrivate: true,
-            //     element: <>Hello</>,
-            //     role: [`"${userRole.tutor}"`],
-            // },
-            // {
-            //     id: 6-4,
-            //     title: "Tutor tashabbusi",
-            //     path: "/topshiriqlarni-yuborish",
-            //     icon: RiFileList3Line,
-            //     isPrivate: true,
-            //     element: <>Hello</>,
-            //     role: [`"${userRole.tutor}"`],
-            // },
-            // {
-            //     id: 6-7,
-            //     title: "To'garaklar",
-            //     path: "/topshiriqlarni-yuborish",
-            //     icon: RiFileList3Line,
-            //     isPrivate: true,
-            //     element: <>Hello</>,
-            //     role: [`"${userRole.tutor}"`],
-            // },
         ]
     },
     {
@@ -292,7 +255,7 @@ const sidebar = [
         role: [`"${userRole.tutor}"`],
     },
     {
-        id: 9,
+        id: 10,
         title: "To'garak",
         path: "/baholash-mezonlari",
         icon: VscGraph,
@@ -301,7 +264,7 @@ const sidebar = [
         role: [`"${userRole.tutor}"`],
     },
     {
-        id: 99,
+        id: 11,
         title: "BaholashMezonlari",
         path: "/baholash-mezonlari",
         icon: VscGraph,
