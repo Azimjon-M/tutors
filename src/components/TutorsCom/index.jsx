@@ -5,6 +5,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { RiPencilFill } from "react-icons/ri";
 import { MdDeleteForever } from "react-icons/md";
+import { FaPenToSquare } from "react-icons/fa6";
+import { BsPencilSquare } from "react-icons/bs";
+
+
+import userImage from "../../assets/fon/user2.png";
 
 const TutorsCom = () => {
   const [edit, setEdit] = useState(false);
@@ -28,7 +33,7 @@ const TutorsCom = () => {
     setError("");
     try {
       const resFakultet = await APIFakultet.get();
-      const response = await APIUsers.getRole('tutor');
+      const response = await APIUsers.getRole("tutor");
       setDataFakultet(resFakultet.data);
       setDatas(response.data);
     } catch (error) {
@@ -40,9 +45,9 @@ const TutorsCom = () => {
   };
 
   const fakultetName = (id) => {
-    const data = dataFakultet.find(item => item.id === id);
+    const data = dataFakultet.find((item) => item.id === id);
     return data ? data.name : "Fakultet nomi kiritilmagan";
-  }
+  };
 
   const validationSchema = Yup.object({
     username: Yup.string().required("Foydalanuvchi nomi majburiy"),
@@ -125,8 +130,8 @@ const TutorsCom = () => {
       <h1 className="text-3xl font-medium text-gray-700 text-center my-5">
         Tyutorlar
       </h1>
-      <div className="max-w-7xl px-5 mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-4 border rounded-lg shadow">
+      <div className="max-w-7xl px-5 mx-auto grid gap-4">
+        {/* <div className="p-4 border rounded-lg shadow">
           <h2 className="text-lg font-semibold text-gray-600 mb-4">
             {edit ? "Tyutorni tahrirlash" : "Yangi tyutor qo'shish"}
           </h2>
@@ -138,7 +143,7 @@ const TutorsCom = () => {
           >
             {({ values }) => (
               <Form>
-                {/* Fakultet */}
+                Fakultet
                 <div className="mb-4">
                   <label
                     htmlFor="fakultet"
@@ -166,7 +171,7 @@ const TutorsCom = () => {
                   />
                 </div>
 
-                {/* First Name */}
+                First Name
                 <div className="mb-4">
                   <label
                     htmlFor="first_name"
@@ -187,7 +192,7 @@ const TutorsCom = () => {
                   />
                 </div>
 
-                {/* Last name */}
+                Last name
                 <div className="mb-4">
                   <label
                     htmlFor="last_name"
@@ -208,7 +213,7 @@ const TutorsCom = () => {
                   />
                 </div>
 
-                {/* Username */}
+                Username
                 <div className="mb-4">
                   <label
                     htmlFor="username"
@@ -229,7 +234,7 @@ const TutorsCom = () => {
                   />
                 </div>
 
-                {/* Password */}
+                Password
                 <div className="mb-4">
                   <label
                     htmlFor="password"
@@ -250,7 +255,7 @@ const TutorsCom = () => {
                   />
                 </div>
 
-                {/* is active btn */}
+                is active btn
                 <div className="mb-4">
                   <div role="group" aria-labelledby="my-radio-group">
                     <p className="block text-sm font-medium text-gray-700">
@@ -285,17 +290,102 @@ const TutorsCom = () => {
               </Form>
             )}
           </Formik>
+        </div> */}
+
+        <div class="rounded-md shadow-md">
+          <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-900">
+            <h3 className="text-xl font-medium">Tyutorlar ro'yxati</h3>
+            <button className="bg-purple-200 text-purple-500 rounded-xl border border-purple-500 text-base font-semibold px-4 py-1 active:scale-95 text-center">
+              Tyutor qo'shing
+            </button>
+          </div>
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" class="px-6 py-3">
+                  Ism
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Foydalanuvchi nomi
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Foydalanuvchi paroli
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Holati
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                  Harakatlar
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th
+                  scope="row"
+                  class="flex items-center px-6 py-2 text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  <span className="w-9 h-9 bg-indigo-200 text-indigo-500 rounded-full text-center leading-9 text-base font-medium">
+                    BA
+                  </span>
+                  <div class="ps-3">
+                    <div class="text-base font-semibold">Botir Anvarov</div>
+                    <div class="font-normal text-gray-500">+998905863595</div>
+                  </div>
+                </th>
+                <td class="px-6 py-2">Userjon</td>
+                <td class="px-6 py-2">
+                  User123
+                  {/* <div class="flex items-center">
+                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Online
+                    </div> */}
+                </td>
+                <td class="px-6 py-2">
+                  <span className="font-medium rounded bg-green-200 text-green-600 px-3 py-[2px]">
+                    faol
+                  </span>
+                </td>
+                <td class="px-6 py-2 space-x-2 text-center">
+                  <button
+                    type="button"
+                    className="px-2 py-2 text-xl hover:bg-slate-200 active:bg-slate-400 active:text-slate-100 rounded-full"
+                    // onClick={() => handleEdit(data)}
+                  >
+                    <FaPenToSquare />
+                    {/* <RiPencilFill /> */}
+                  </button>
+                  <button
+                    type="button"
+                    className="px-2 py-2 text-xl hover:bg-slate-200 active:bg-slate-400 active:text-slate-100 rounded-full"
+                    // onClick={() => handleDelete(data.id)}
+                  >
+                    <MdDeleteForever />
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <div className="space-y-3 max-h-[600px] overflow-y-auto overscroll-y-auto">
-        {loading && <p className="text-blue-500 font-bold text-center">Yuklanmoqda...</p>}
-        {error && <p className="text-red-500 font-bold text-center">{error}</p>}      
+          {loading && (
+            <p className="text-blue-500 font-bold text-center">
+              Yuklanmoqda...
+            </p>
+          )}
+          {error && (
+            <p className="text-red-500 font-bold text-center">{error}</p>
+          )}
           {datas.map((data) => (
-            <div key={data.id} className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg">
-            <input type="checkbox" name="my-accordion-2" />
-            <div className="collapse-title flex justify-between items-center">
-              <p className="text-sky-700 font-medium line-clamp-1">
-                  <span className="text-sky-800 font-bold">Tyutor:</span> {data.first_name} {data.last_name}
+            <div
+              key={data.id}
+              className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg"
+            >
+              <input type="checkbox" name="my-accordion-2" />
+              <div className="collapse-title flex justify-between items-center">
+                <p className="text-sky-700 font-medium line-clamp-1">
+                  <span className="text-sky-800 font-bold">Tyutor:</span>{" "}
+                  {data.first_name} {data.last_name}
                 </p>
                 <div className="flex space-x-2 z-10">
                   <button
@@ -313,13 +403,28 @@ const TutorsCom = () => {
                     <MdDeleteForever />
                   </button>
                 </div>
+              </div>
+              <div className="collapse-content space-y-2">
+                <p className="text-sky-700 font-medium">
+                  <span className="text-sky-800 font-bold">
+                    Fakultitet nomi:
+                  </span>{" "}
+                  {fakultetName(data.fakultet)}
+                </p>
+                <p className="text-sky-700 font-medium">
+                  <span className="text-sky-800 font-bold">
+                    Foydalanuvchi nomi:
+                  </span>{" "}
+                  {data.username}
+                </p>
+                <p className="text-sky-700 font-medium">
+                  <span className="text-sky-800 font-bold">
+                    Foydalanuvchi paroli:
+                  </span>{" "}
+                  {data.parol}
+                </p>
+              </div>
             </div>
-            <div className="collapse-content space-y-2">
-              <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Fakultitet nomi:</span> {fakultetName(data.fakultet)}</p>
-              <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi nomi:</span> {data.username}</p>
-              <p className="text-sky-700 font-medium"><span className="text-sky-800 font-bold">Foydalanuvchi paroli:</span> {data.parol}</p>
-            </div>
-          </div>
           ))}
         </div>
       </div>
