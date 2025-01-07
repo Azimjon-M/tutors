@@ -3,7 +3,9 @@ import TutorsCom from '../../components/TutorsCom'
 
 const Tutors = () => {
     return (
-        <div><TutorsCom/></div>
+        <div>
+            <TutorsCom/>
+        </div>
     )
 }
 
