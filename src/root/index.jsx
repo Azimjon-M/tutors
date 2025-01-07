@@ -48,7 +48,7 @@ const Root = () => {
                         );
                 })}
             </Route>
-            <Route path="/" element={<Navigate to={"/login"} />} />
+            <Route path="/" element={<Navigate to="/login" />} />
             <Route path="/login" element={<Login />} />
             <Route path="/not-authorized" element={<Error401 />} />
             <Route path="*" element={<Error404 />} />
