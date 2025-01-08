@@ -177,35 +177,25 @@ const Sidebar = () => {
                                         <ChildWrapper
                                             $active={active.toString()}
                                         >
-                                            {parent?.children
-                                                ?.filter((item) => {
-                                                    const cleanedRoles =
-                                                        item?.role.map((role) =>
-                                                            role.replace(
-                                                                /['"]/g,
-                                                                ""
-                                                            )
-                                                        );
-                                                    return cleanedRoles.includes(
-                                                        unShiredRole
-                                                    );
-                                                })
-                                                .map((child) => {
-                                                    return (
-                                                        <MenuItem
-                                                            key={child?.id}
-                                                            to={child.path}
-                                                            $active={(
-                                                                location.pathname ===
-                                                                child.path
-                                                            ).toString()}
-                                                        >
-                                                            <MenuItem.Title>
-                                                                {child?.title}
-                                                            </MenuItem.Title>
-                                                        </MenuItem>
-                                                    );
-                                                })}
+                                            {parent?.children?.map(
+                                                (child, index) => (
+                                                    <MenuItem
+                                                        key={
+                                                            child?.id ||
+                                                            `child-${parent.id}-${index}`
+                                                        }
+                                                        to={child.path}
+                                                        $active={(
+                                                            location.pathname ===
+                                                            child.path
+                                                        ).toString()}
+                                                    >
+                                                        <MenuItem.Title>
+                                                            {child?.title}
+                                                        </MenuItem.Title>
+                                                    </MenuItem>
+                                                )
+                                            )}
                                         </ChildWrapper>
                                     </React.Fragment>
                                 ) : null;

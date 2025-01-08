@@ -8,7 +8,10 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
         return <Navigate to="/not-authorized" />;
     }
 
-    const decryptedRole = CryptoJS.AES.decrypt(data?.role, process.env.REACT_APP_SHIFRED_ROLE)
+    const decryptedRole = CryptoJS.AES.decrypt(
+        data?.role,
+        process.env.REACT_APP_SHIFRED_ROLE
+    )
         .toString(CryptoJS.enc.Utf8)
         .trim();
 
