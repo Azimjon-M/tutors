@@ -130,7 +130,7 @@ const sidebar = [
         role: [`"${userRole.tutor}"`],
         children: [
             {
-                id: 7-1,
+                id: 7 - 1,
                 title: "TTJga tashrif",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
@@ -138,7 +138,7 @@ const sidebar = [
                 role: [`"${userRole.tutor}"`],
             },
             {
-                id: 7-2,
+                id: 7 - 2,
                 title: "Ijaraga tashrif",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
@@ -146,7 +146,7 @@ const sidebar = [
                 role: [`"${userRole.tutor}"`],
             },
             {
-                id: 7-3,
+                id: 7 - 3,
                 title: "Tutorlik toati",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
@@ -154,7 +154,7 @@ const sidebar = [
                 role: [`"${userRole.tutor}"`],
             },
             {
-                id: 7-4,
+                id: 7 - 4,
                 title: "Davra suhbati",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
@@ -162,7 +162,7 @@ const sidebar = [
                 role: [`"${userRole.tutor}"`],
             },
             {
-                id: 7-5,
+                id: 7 - 5,
                 title: "Tadbirlar",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
@@ -170,7 +170,7 @@ const sidebar = [
                 role: [`"${userRole.tutor}"`],
             },
             {
-                id: 7-6,
+                id: 7 - 6,
                 title: "TTJda tadbiralr",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
@@ -178,7 +178,7 @@ const sidebar = [
                 role: [`"${userRole.tutor}"`],
             },
             {
-                id: 7-7,
+                id: 7 - 7,
                 title: "Iqtidorli talabam",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
