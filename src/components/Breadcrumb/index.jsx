@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 // import { BsPerson } from "react-icons/bs";
 import { IoMdSettings } from "react-icons/io";
 import test4x4 from "../../assets/icons/test4x4.png";
 import CryptoJS from "crypto-js";
+import { FaBars, FaBarsStaggered } from "react-icons/fa6";
+import { SidebarContext } from "../../utils/context/SidebarProvider";
 
 const Breadcrumb = () => {
     const data = JSON.parse(localStorage.getItem("data"));
@@ -14,6 +16,7 @@ const Breadcrumb = () => {
     const [unShiredLastname, setUnShiredLastname] = useState("");
 
     const location = useLocation();
+    const { isOpen, changeOpen } = useContext(SidebarContext);
 
     const menuRef = useRef(null); // Menu elementiga murojaat qilish uchun
     const buttonRef = useRef(null); // Tugma elementini kuzatish uchun
@@ -30,9 +33,9 @@ const Breadcrumb = () => {
             .replace(/^"|"$/g, "");
         return res;
     };
-    const toggleMenu = (e) => {
+    const toggleMenu = e => {
         e.stopPropagation(); // Hodisa tarqalishini to'xtatamiz
-        setToglerMenu((prev) => !prev); // Menyuni ochish/yopish
+        setToglerMenu(prev => !prev); // Menyuni ochish/yopish
         setSettingMenu(false);
     };
 
@@ -46,7 +49,7 @@ const Breadcrumb = () => {
     // }
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
+        const handleClickOutside = event => {
             // Agar klik Menu yoki Button ichida bo'lmasa, Menu ni yopamiz
             if (
                 menuRef.current &&
@@ -71,16 +74,22 @@ const Breadcrumb = () => {
     useEffect(() => {
         if (data) {
             setUnShiredFirstname(
-                unShifredTxt(process.env.REACT_APP_SHIFRED_FIRSTNAME, data?.first_name)
+                unShifredTxt(
+                    process.env.REACT_APP_SHIFRED_FIRSTNAME,
+                    data?.first_name
+                )
             );
             setUnShiredLastname(
-                unShifredTxt(process.env.REACT_APP_SHIFRED_LASTNAME, data?.last_name)
+                unShifredTxt(
+                    process.env.REACT_APP_SHIFRED_LASTNAME,
+                    data?.last_name
+                )
             );
         }
     }, [data]);
 
     return (
-        <div className="w-full flex justify-between items-center relative select-none">
+        <div className="w-full flex justify-between items-center relative select-none max-md:pr-12">
             {/* Location */}
             <div className="font-medium">{formattedPath}</div>
             {/* Account */}
@@ -165,6 +174,13 @@ const Breadcrumb = () => {
                         </button>
                     </div>
                 </div>
+            </div>
+
+            <div
+                onClick={changeOpen}
+                className={`md:hidden absolute bg-[#fff4] right-3 p-2 rounded-full`}
+            >
+                {isOpen ? <FaBarsStaggered /> : <FaBars />}
             </div>
         </div>
     );
