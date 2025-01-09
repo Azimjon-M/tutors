@@ -3,11 +3,9 @@ import APIUsers from "../../services/users";
 import APIFakultet from "../../services/fakultet";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { MdDeleteForever } from "react-icons/md";
-import { FaPenToSquare } from "react-icons/fa6";
 
 const UsersFormCom = ({ isOpen, onClose }) => {
-  // if(!isOpen) return null;
+  const [showModal, setShowModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
   const [datas, setDatas] = useState([]);
@@ -120,26 +118,29 @@ const UsersFormCom = ({ isOpen, onClose }) => {
   useEffect(() => {
     fetchData();
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      setShowModal(true);
+      const timer = setTimeout(() => setShowModal(true), 300);
+      return () => clearTimeout(timer);
     } else {
-      document.body.style.overflow = "auto";
+      const timer = setTimeout(() => setShowModal(false), 300);
+      return () => clearTimeout(timer);
     }
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!showModal) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 transition-transform">
-      <div className="bg-white rounded-lg p-6 w-[450px]">
+    <div className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 px-5 transition-opacity duration-300 ${
+      isOpen ? "opacity-100" : "opacity-0"
+    }`}>
+      <div className={`bg-white rounded-lg shadow-lg p-6 w-[450px] transform transition-transform duration-700 ease-out relative ${
+          isOpen ? "scale-100" : "scale-90"
+        }`}>
+          <button className="w-8 h-8 bg-white absolute -top-2 -right-2 hover:-top-1 hover:-right-1 hover:duration-150 font-medium shadow-md rounded" onClick={onClose}>x</button>
         <div className="flex items-start justify-between">
           <h2 className="text-lg font-semibold text-gray-600 mb-4">
             {edit ? "Tyutorni tahrirlash" : "Yangi tyutor qo'shish"}
           </h2>
-          <button onClick={onClose}>x</button>
         </div>
         <Formik
           enableReinitialize
@@ -283,6 +284,7 @@ const UsersFormCom = ({ isOpen, onClose }) => {
 
               <button
                 type="submit"
+                onClick={onClose}
                 className={`w-full py-2 px-4 rounded-md text-white font-semibold ${
                   edit
                     ? "border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"

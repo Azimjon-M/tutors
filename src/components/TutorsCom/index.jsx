@@ -3,6 +3,7 @@ import APIUsers from "../../services/users";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { MdDeleteForever } from "react-icons/md";
 import { FaPenToSquare } from "react-icons/fa6";
+import { BsExclamationCircle } from "react-icons/bs";
 import UsersFormCom from "../UsersFormCom";
 
 
@@ -12,7 +13,8 @@ const TutorsCom = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [initialValues, setInitialValues] = useState({
     username: "",
     first_name: "",
@@ -42,6 +44,7 @@ const TutorsCom = () => {
 
 
   const handleEdit = (data) => {
+    handleOpenModal()
     setEdit(true);
     setId(data.id);
     setInitialValues({
@@ -54,6 +57,10 @@ const TutorsCom = () => {
       is_active: data.is_active,
     });
   };
+  
+  const deleteModalOpen = () => {
+    setIsDeleteModal(true)
+  }
 
   const handleDelete = async (id) => {
     setLoading(true);
@@ -73,8 +80,6 @@ const TutorsCom = () => {
     fetchData();
   }, []);
 
-  console.log(datas);
-
   return (
     <div className="max-w-[1600px] mx-auto">
       <h1 className="text-xl md:text-3xl font-medium text-gray-700 text-center my-5">
@@ -85,7 +90,7 @@ const TutorsCom = () => {
           <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-900">
             <h3 className="text-base md:text-xl font-medium">Tyutorlar ro'yxati</h3>
             <button className="text-sm md:text-base font-semibold text-center bg-purple-200 text-purple-500 rounded-xl border border-purple-500 px-4 py-1 active:scale-95" onClick={handleOpenModal}>
-              + Yangi Tyutor Qo'shing
+              + Yangi tyutor qo'shish
             </button>
           </div>
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -152,7 +157,7 @@ const TutorsCom = () => {
                     <button
                       type="button"
                       className="px-2 py-2 ml-1 text-xl hover:bg-slate-200 active:bg-slate-400 active:text-slate-100 rounded-full"
-                      // onClick={() => handleDelete(data.id)}
+                      onClick={() => deleteModalOpen(true)}
                     >
                       <MdDeleteForever />
                     </button>
@@ -172,6 +177,19 @@ const TutorsCom = () => {
         </div>
       </div>
       <UsersFormCom isOpen={isModalOpen} onClose={handleCloseModal}/>.
+      <div className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 px-5 ${isDeleteModal ? '' : "hidden"}`}>
+        <div className="bg-white rounded-lg shadow-lg p-6 w-[400px]">
+          <div className="flex items-center justify-center">
+              <BsExclamationCircle className="text-5xl text-red-500" />
+            </div>
+            <h1 className="text-2xl font-semibold text-slate-600 text-center mt-4">Ishonchingiz komilmi?</h1>
+            <p className="text-center mt-4">Haqiqatan ham bu foydalanuvchini o'chirib tashlamoqchimisiz? Bu ma'lumotni ortga qaytarib bo'lmaydi!</p>
+            <div className="flex items-center justify-center gap-4 mt-10">
+              <button className="px-4 py-2 rounded-md text-white bg-gray-400 hover:bg-gray-500 active:scale-95">Bekor qilish</button>
+              <button className="px-4 py-2 rounded-md text-white bg-red-500 hover:bg-red-600 active:scale-95">Ha, o'chirish</button>
+            </div>
+        </div>
+      </div>
     </div>
   );
 };
