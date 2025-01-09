@@ -4,7 +4,7 @@ import APIFakultet from "../../services/fakultet";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-const UsersFormCom = ({ isOpen, onClose }) => {
+const UsersFormCom = ({ isOpen, onClose, info }) => {
   const [showModal, setShowModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
@@ -21,7 +21,7 @@ const UsersFormCom = ({ isOpen, onClose }) => {
     password: "",
     is_active: true,
   });
-
+  
   const fetchData = async () => {
     setLoading(true);
     setError("");
@@ -38,10 +38,10 @@ const UsersFormCom = ({ isOpen, onClose }) => {
     }
   };
 
-  const fakultetName = (id) => {
-    const data = dataFakultet.find((item) => item.id === id);
-    return data ? data.name : "Fakultet nomi kiritilmagan";
-  };
+  // const fakultetName = (id) => {
+  //   const data = dataFakultet.find((item) => item.id === id);
+  //   return data ? data.name : "Fakultet nomi kiritilmagan";
+  // };
 
   const validationSchema = Yup.object({
     username: Yup.string().required("Foydalanuvchi nomi majburiy"),
@@ -56,9 +56,8 @@ const UsersFormCom = ({ isOpen, onClose }) => {
       .required("Rol majburiy"),
     is_active: Yup.boolean(),
   });
-
-  const handleEdit = (data) => {
-    setEdit(true);
+  
+  const handleEdit = (data) => {    
     setId(data.id);
     setInitialValues({
       username: data.username,
@@ -96,13 +95,11 @@ const UsersFormCom = ({ isOpen, onClose }) => {
         formData.append(key, values[key]);
       }
     }
-
     try {
       if (!edit) {
         await APIUsers.post(formData);
       } else {
         await APIUsers.patch(id, formData);
-        setEdit(false);
         setId(null);
       }
       fetchData();
@@ -116,6 +113,10 @@ const UsersFormCom = ({ isOpen, onClose }) => {
   };
 
   useEffect(() => {
+    handleEdit(info)
+  }, [info])
+
+  useEffect(() => {
     fetchData();
     if (isOpen) {
       setShowModal(true);
@@ -127,16 +128,28 @@ const UsersFormCom = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
+  console.log(edit);
+  
+
   if (!showModal) return null;
 
   return (
-    <div className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 px-5 transition-opacity duration-300 ${
-      isOpen ? "opacity-100" : "opacity-0"
-    }`}>
-      <div className={`bg-white rounded-lg shadow-lg p-6 w-[450px] transform transition-transform duration-700 ease-out relative ${
+    <div
+      className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 px-5 transition-opacity duration-300 ${
+        isOpen ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      <div
+        className={`bg-white rounded-lg shadow-lg p-6 w-[450px] transform transition-transform duration-700 ease-out relative ${
           isOpen ? "scale-100" : "scale-90"
-        }`}>
-          <button className="w-8 h-8 bg-white absolute -top-2 -right-2 hover:-top-1 hover:-right-1 hover:duration-150 font-medium shadow-md rounded" onClick={onClose}>x</button>
+        }`}
+      >
+        <button
+          className="w-8 h-8 bg-white absolute -top-2 -right-2 hover:-translate-x-1 hover:translate-y-1 font-medium shadow-md rounded transition-all focus:bg-slate-100"
+          onClick={onClose}
+        >
+          X
+        </button>
         <div className="flex items-start justify-between">
           <h2 className="text-lg font-semibold text-gray-600 mb-4">
             {edit ? "Tyutorni tahrirlash" : "Yangi tyutor qo'shish"}
