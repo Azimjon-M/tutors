@@ -1,27 +1,31 @@
-import React, { useMemo } from "react";
-import { IoNotificationsOutline } from "react-icons/io5";
+import React from "react";
+// import { IoNotificationsOutline } from "react-icons/io5";
 
 const BahMajburiyTTJTashrif = () => {
-  const tutors = useMemo(
-    () => [
-      { id: 1, name: "Abdulla Karimov", fak: "Fiz-Mat" },
-      { id: 2, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
-      { id: 3, name: "Saida Rasulova", fak: "Tabiiy fanlar" },
-      { id: 4, name: "Abdulla Karimov", fak: "Tabiiy fanlar" },
-      { id: 5, name: "Muhammad Aliyev", fak: "Tabiiy fanlar" },
-      { id: 6, name: "Saida Rasulova", fak: "Aniq fanlar" },
-      { id: 7, name: "Abdulla Karimov", fak: "Jismoniy madaniyat" },
-      { id: 8, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
-      { id: 9, name: "Saida Rasulova", fak: "Fiz-Mat" },
-    ],
-    []
-  );
+
+  // const tutors = useMemo(
+  //   () => [
+  //     { id: 1, name: "Abdulla Karimov", fak: "Fiz-Mat" },
+  //     { id: 2, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
+  //     { id: 3, name: "Saida Rasulova", fak: "Tabiiy fanlar" },
+  //     { id: 4, name: "Abdulla Karimov", fak: "Tabiiy fanlar" },
+  //     { id: 5, name: "Muhammad Aliyev", fak: "Tabiiy fanlar" },
+  //     { id: 6, name: "Saida Rasulova", fak: "Aniq fanlar" },
+  //     { id: 7, name: "Abdulla Karimov", fak: "Jismoniy madaniyat" },
+  //     { id: 8, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
+  //     { id: 9, name: "Saida Rasulova", fak: "Fiz-Mat" },
+  //   ],
+  //   []
+  // );
+
+
   return (
     <div>
-      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+      <h3 className="text-center text-lg font-bold text-gray-900 dark:text-white mb-2">
         TTJga tashrif
       </h3>
-      {tutors.map((tutor, index) => (
+      
+      {/* {tutors.map((tutor, index) => (
         <div
           key={tutor.id}
           className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg mb-3"
@@ -56,7 +60,7 @@ const BahMajburiyTTJTashrif = () => {
             </p>
           </div>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 };
