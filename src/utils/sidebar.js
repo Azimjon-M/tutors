@@ -12,7 +12,7 @@ import Analitika from "../pages/Analitika";
 import Fakultet from "../pages/Fakultet";
 import Admins from "../pages/Admins";
 import Tutors from "../pages/Tutors";
-import Topshiriqlar from "../pages/Topshiriqlar";
+import TopshiriqlarQoshish from "../pages/Topshiriqlar";
 import BaholashMezonlari from "../pages/BaholashMezonlari";
 import { VscGraph } from "react-icons/vsc";
 import TopshiriqlarniKorish from "../pages/TopshiriqlarniKorish";
@@ -75,7 +75,7 @@ const sidebar = [
                 title: "Topshiriq qo'shish",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: Topshiriqlar,
+                element: TopshiriqlarQoshish,
                 role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
             },
         ]
@@ -134,7 +134,7 @@ const sidebar = [
                 title: "TTJga tashrif",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: Topshiriqlar,
+                element: TopshiriqlarQoshish,
                 role: [`"${userRole.tutor}"`],
             },
             {
@@ -142,7 +142,7 @@ const sidebar = [
                 title: "Ijaraga tashrif",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: Topshiriqlar,
+                element: TopshiriqlarQoshish,
                 role: [`"${userRole.tutor}"`],
             },
             {
@@ -150,7 +150,7 @@ const sidebar = [
                 title: "Tutorlik toati",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: Topshiriqlar,
+                element: TopshiriqlarQoshish,
                 role: [`"${userRole.tutor}"`],
             },
             {
@@ -158,7 +158,7 @@ const sidebar = [
                 title: "Davra suhbati",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: Topshiriqlar,
+                element: TopshiriqlarQoshish,
                 role: [`"${userRole.tutor}"`],
             },
             {
@@ -166,7 +166,7 @@ const sidebar = [
                 title: "Tadbirlar",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: Topshiriqlar,
+                element: TopshiriqlarQoshish,
                 role: [`"${userRole.tutor}"`],
             },
             {
@@ -174,7 +174,7 @@ const sidebar = [
                 title: "TTJda tadbiralr",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: Topshiriqlar,
+                element: TopshiriqlarQoshish,
                 role: [`"${userRole.tutor}"`],
             },
             {
@@ -182,7 +182,7 @@ const sidebar = [
                 title: "Iqtidorli talabam",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: Topshiriqlar,
+                element: TopshiriqlarQoshish,
                 role: [`"${userRole.tutor}"`],
             },
             {
@@ -190,7 +190,7 @@ const sidebar = [
                 title: "Test",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: Topshiriqlar,
+                element: TopshiriqlarQoshish,
                 role: [`"${userRole.tutor}"`],
             },
             {
@@ -206,7 +206,7 @@ const sidebar = [
                 title: "Oilaga xat",
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: Topshiriqlar,
+                element: TopshiriqlarQoshish,
                 role: [`"${userRole.tutor}"`],
             },
         ]

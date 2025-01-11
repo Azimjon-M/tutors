@@ -2,52 +2,55 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const Topshiriqlar = () => {
+const TopshiriqlarQoshish = () => {
+    const [selectAll, setSelectAll] = useState(false);
+    const [selectedTutors, setSelectedTutors] = useState([]);
+    const [filterFak, setFilterFak] = useState("");
+
     const tutors = useMemo(
         () => [
             { id: 1, name: "Abdulla Karimov", fak: "Fiz-Mat" },
             { id: 2, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
-            { id: 3, name: "Saida Rasulova", fak: "Fiz-Mat" },
-            { id: 4, name: "Abdulla Karimov", fak: "Fiz-Mat" },
-            { id: 5, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
-            { id: 6, name: "Saida Rasulova", fak: "Fiz-Mat" },
-            { id: 7, name: "Abdulla Karimov", fak: "Fiz-Mat" },
-            { id: 8, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
-            { id: 9, name: "Saida Rasulova", fak: "Fiz-Mat" },
+            { id: 3, name: "Saida Rasulova", fak: "Ona-tili" },
+            { id: 4, name: "Abdulla Karimov", fak: "Ona-tili" },
+            { id: 5, name: "Muhammad Aliyev", fak: "Ximya" },
+            { id: 6, name: "Saida Rasulova", fak: "Ximya" },
+            { id: 7, name: "Abdulla Karimov", fak: "Sanat" },
+            { id: 8, name: "Muhammad Aliyev", fak: "Sanat" },
+            { id: 9, name: "Saida Rasulova", fak: "Kimyo" },
         ],
         []
     );
 
-    const kategory = [
-        { id: 1, name: "Kategoryani tanlang!", disabled: true },
-        { id: 2, name: "Majburiy" },
-        { id: 3, name: "O‘z sohasi" },
-        { id: 4, name: "Qo‘shimcha" },
-    ];
+    const faculties = useMemo(() => {
+        const facultiesSet = new Set();
+        tutors.forEach((tutor) => facultiesSet.add(tutor.fak));
+        return Array.from(facultiesSet);
+    }, [tutors]);
 
-    const [selectAll, setSelectAll] = useState(false);
-    const [selectedTutors, setSelectedTutors] = useState([]);
-
-    // `tutors` ni barqaror qilish uchun useMemo
-    const stableTutors = useMemo(() => tutors, [tutors]);
-    // "Hammaga yuborish" checkbox holatini tekshirish
-    useEffect(() => {
-        if (selectedTutors.length === stableTutors.length) {
-            setSelectAll(true);
-        } else {
-            setSelectAll(false);
+    // Fakultet Select orqali filtrlangan tutor
+    const filteredTutors = useMemo(() => {
+        setSelectAll(false);
+        setSelectedTutors([]);
+        if (filterFak === "Hammasi") {
+            return tutors;
         }
-    }, [selectedTutors, stableTutors]);
+        return filterFak
+            ? tutors.filter((tutor) => tutor.fak === filterFak)
+            : tutors;
+    }, [filterFak, tutors]);
 
+    // Checkbox Hammasini tanlash
     const handleSelectAll = (checked) => {
         setSelectAll(checked);
         if (checked) {
-            setSelectedTutors(stableTutors.map((tutor) => tutor.id)); // Hammasini tanlash
+            setSelectedTutors(filteredTutors.map((tutor) => tutor.id));
         } else {
-            setSelectedTutors([]); // Hammasini bekor qilish
+            setSelectedTutors([]);
         }
     };
 
+    // Aloxida tanlash
     const handleTutorSelect = (tutorId, checked) => {
         if (checked) {
             setSelectedTutors([...selectedTutors, tutorId]);
@@ -56,7 +59,31 @@ const Topshiriqlar = () => {
         }
     };
 
-    // ****************
+    useEffect(() => {
+        let filtredTutorIdArray = [];
+        filteredTutors.forEach(
+            (item) => (filtredTutorIdArray = [...filtredTutorIdArray, item.id])
+        );
+        if (
+            selectedTutors.length === filtredTutorIdArray.length &&
+            selectedTutors.every((value) => filtredTutorIdArray.includes(value))
+        ) {
+            if (!selectAll) {
+                setSelectAll(true);
+            }
+        } else {
+            if (selectAll) {
+                setSelectAll(false);
+            }
+        }
+    }, [filteredTutors, selectedTutors, selectAll]);
+
+    // ************* topshiriq Forma ******************
+    const kategory = [
+        { id: 1, name: "Kategoryani tanlang!", disabled: true },
+        { id: 3, name: "O‘z sohasi" },
+        { id: 4, name: "Qo‘shimcha" },
+    ];
 
     const formik = useFormik({
         initialValues: {
@@ -85,21 +112,47 @@ const Topshiriqlar = () => {
                 ),
         }),
         onSubmit: (values) => {
-            alert("Topshiriq yuborildi!");
+            console.log(values);
         },
     });
+    
 
     return (
         <div className="bg-base-200 rounded shadow p-1 md:p-2 lg:p-4">
-            <h1 className="text-lg font-bold mb-4">Kimlarga yuborish:</h1>
+            <h1 className="text-lg font-bold mb-4">Qaysi tutorlarga yuborish:</h1>
+            <div className="flex flex-col justify-end items-end mb-4">
+                <label
+                    htmlFor="facultyFilter"
+                    className="block text-sm font-bold mb-2"
+                >
+                    Fakultet bo'yicha tanlash:
+                </label>
+                <select
+                    id="facultyFilter"
+                    className="select select-bordered min-w-[300px]"
+                    value={filterFak}
+                    onChange={(e) => setFilterFak(e.target.value)}
+                >
+                    <option key={0} value="Hammasi">
+                        Hammasi
+                    </option>
+                    {faculties.map((faculty, index) => (
+                        <option key={index} value={faculty}>
+                            {faculty}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Jadval */}
             <div className="overflow-x-auto max-h-[30vh] lg:max-h-[40vh] border rounded-lg shadow-md">
                 <table className="table table-zebra w-full text-center select-none">
                     <thead className="bg-base-200 sticky top-0 z-10">
-                        <tr className="">
-                            <th className="py-2">№</th>
-                            <th className="py-2">Isim Familya</th>
-                            <th className="py-2">Fakultelti</th>
-                            <th className="py-2 ">
+                        <tr>
+                            <th>№</th>
+                            <th>Isim Familya</th>
+                            <th>Fakulteti</th>
+                            <th>
                                 <label className="cursor-pointer flex items-center justify-center gap-2">
                                     <input
                                         type="checkbox"
@@ -115,7 +168,7 @@ const Topshiriqlar = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {tutors.map((tutor, index) => (
+                        {filteredTutors.map((tutor, index) => (
                             <tr key={tutor.id} className="hover">
                                 <td className="py-2">{index + 1}</td>
                                 <td className="py-2">{tutor.name}</td>
@@ -145,11 +198,10 @@ const Topshiriqlar = () => {
             </div>
 
             <h1 className="text-lg font-bold mt-8">
-                Qanday topshiriq yuborish:
+                Topshiriq yuborish:
             </h1>
 
             <form onSubmit={formik.handleSubmit}>
-                {/* Title */}
                 <div className="form-control mb-4">
                     <label htmlFor="title" className="label">
                         <span className="label-text">Sarlavha</span>
@@ -168,8 +220,6 @@ const Topshiriqlar = () => {
                         </span>
                     ) : null}
                 </div>
-
-                {/* Details */}
                 <div className="form-control mb-4">
                     <label htmlFor="details" className="label">
                         <span className="label-text">Batafsil</span>
@@ -188,9 +238,7 @@ const Topshiriqlar = () => {
                         </span>
                     ) : null}
                 </div>
-
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                    {/* Category (Select) */}
                     <div className="form-control mb-4">
                         <label htmlFor="category" className="label">
                             <span className="label-text">
@@ -201,8 +249,8 @@ const Topshiriqlar = () => {
                             id="category"
                             name="category"
                             className="select select-bordered"
-                            value={formik.values.category} // formik qiymatini ulash
-                            onChange={formik.handleChange} // qiymatni boshqarish
+                            value={formik.values.category}
+                            onChange={formik.handleChange}
                         >
                             {kategory?.map((item) => (
                                 <option
@@ -222,12 +270,10 @@ const Topshiriqlar = () => {
                             </span>
                         ) : null}
                     </div>
-
-                    {/* Number Input */}
                     <div className="form-control mb-4">
                         <label htmlFor="numberValue" className="label">
                             <span className="label-text">
-                                Qiymatni kiriting
+                                Max ball
                             </span>
                         </label>
                         <input
@@ -245,8 +291,6 @@ const Topshiriqlar = () => {
                         ) : null}
                     </div>
                 </div>
-
-                {/* File Inputs in 2 Columns */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                     {["file1", "file2", "file3", "file4"].map((file, index) => (
                         <div key={file} className="form-control">
@@ -277,8 +321,6 @@ const Topshiriqlar = () => {
                         </div>
                     ))}
                 </div>
-
-                {/* Start and End Date */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                     <div className="form-control">
                         <label htmlFor="startDate" className="label">
@@ -317,8 +359,6 @@ const Topshiriqlar = () => {
                         ) : null}
                     </div>
                 </div>
-
-                {/* Submit Button */}
                 <div className="form-control mt-6">
                     <button type="submit" className="btn btn-info w-full">
                         Yuborish
@@ -329,4 +369,4 @@ const Topshiriqlar = () => {
     );
 };
 
-export default Topshiriqlar;
+export default TopshiriqlarQoshish;
