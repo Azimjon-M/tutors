@@ -53,3 +53,11 @@ code {
         transform: rotate(0deg) translate(0px, 0px);
     }
 }
+
+aside {
+    scrollbar-width: none;
+}
+
+aside::-webkit-scrollbar {
+    display: none;
+}

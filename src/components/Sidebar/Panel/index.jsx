@@ -27,7 +27,7 @@ const Panel = () => {
     }, [data]);
 
     return (
-        <div
+        <aside
             className={`${
                 isOpen
                     ? "w-1/4 md:max-xl:w-2/6 max-md:w-[250px]"
@@ -51,7 +51,7 @@ const Panel = () => {
                         />
                     );
                 })}
-        </div>
+        </aside>
     );
 };
 
