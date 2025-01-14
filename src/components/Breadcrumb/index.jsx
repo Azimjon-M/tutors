@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // import { BsPerson } from "react-icons/bs";
 import { IoMdSettings } from "react-icons/io";
 import test4x4 from "../../assets/icons/test4x4.png";
 import CryptoJS from "crypto-js";
 import { FaBars, FaBarsStaggered } from "react-icons/fa6";
 import { SidebarContext } from "../../utils/context/SidebarProvider";
+import { FiLogOut } from "react-icons/fi";
 
 const Breadcrumb = () => {
     const data = JSON.parse(localStorage.getItem("data"));
@@ -16,7 +17,8 @@ const Breadcrumb = () => {
     const [unShiredLastname, setUnShiredLastname] = useState("");
 
     const location = useLocation();
-    const { isOpen, changeOpen } = useContext(SidebarContext);
+    const navigate = useNavigate();
+    const { isOpen, changeOpen, logOut } = useContext(SidebarContext);
 
     const menuRef = useRef(null); // Menu elementiga murojaat qilish uchun
     const buttonRef = useRef(null); // Tugma elementini kuzatish uchun
@@ -88,6 +90,12 @@ const Breadcrumb = () => {
         }
     }, [data]);
 
+    //chiqish funksiyasi
+    const exit = () => {
+        navigate("/login");
+        logOut();
+    };
+
     return (
         <div className="w-full flex justify-between items-center relative select-none max-md:pr-12">
             {/* Location */}
@@ -145,7 +153,7 @@ const Breadcrumb = () => {
                     </div>
                     <div
                         className={`flex flex-col gap-2 overflow-hidden transition-[height] ease-linear duration-[0.3s] ${
-                            settingMenu ? "h-[160px]" : "h-0"
+                            settingMenu ? "h-[200px]" : "h-0"
                         }`}
                     >
                         <hr className="mt-2" />
@@ -171,6 +179,13 @@ const Breadcrumb = () => {
                             className="py-2 px-5 bg-blue-400 text-white font-semibold rounded-full shadow-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-75"
                         >
                             Jo'natish
+                        </button>
+                        <button
+                            onClick={exit}
+                            className="w-full flex items-center justify-center gap-2 bg-red-600 text-white font-bold py-2 rounded-full transition-transform duration-300 ease-out hover:bg-red-700 active:scale-95 active:bg-red-800 shadow-lg hover:shadow-red-500/50"
+                        >
+                            <FiLogOut className="text-xl" />
+                            Chiqish
                         </button>
                     </div>
                 </div>
