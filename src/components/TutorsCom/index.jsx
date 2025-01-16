@@ -85,11 +85,12 @@ const TutorsCom = () => {
             queryClient.invalidateQueries(["tutorList"])
         }
     })
-
+    
     const handleDelete = async () => {
         console.log(deleteId);
-
+        
         deleteMutation.mutate(deleteId)
+        deleteModalOpen(false)
 
         // setLoading(true);
         // setError("");
