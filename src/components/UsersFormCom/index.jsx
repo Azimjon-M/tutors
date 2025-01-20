@@ -10,8 +10,6 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
   const [id, setId] = useState(null);
   const [datas, setDatas] = useState([]);
   const [dataFakultet, setDataFakultet] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [initialValues, setInitialValues] = useState({
     username: "",
     first_name: "",
@@ -23,18 +21,14 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
   });
   
   const fetchData = async () => {
-    setLoading(true);
-    setError("");
     try {
       const resFakultet = await APIFakultet.get();
       const response = await APIUsers.getRole("tutor");
       setDataFakultet(resFakultet.data);
       setDatas(response.data);
     } catch (error) {
-      setError("Ma'lumotni olishda xatolik yuz berdi!");
       console.error("Xatolik yuz berdi!", error);
     } finally {
-      setLoading(false);
     }
   };
 
@@ -71,22 +65,16 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
   };
 
   const handleDelete = async (id) => {
-    setLoading(true);
-    setError("");
     try {
       await APIUsers.del(id);
       fetchData();
     } catch (error) {
-      setError("Ma'lumotni o'chirishda xatolik yuz berdi!");
       console.error("Xatolik yuz berdi!", error);
     } finally {
-      setLoading(false);
     }
   };
 
   const handleSubmit = async (values, { resetForm }) => {
-    setLoading(true);
-    setError("");
     const formData = new FormData();
     for (let key in values) {
       if (key === "is_active") {
@@ -105,10 +93,8 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
       fetchData();
       resetForm();
     } catch (error) {
-      setError("Ma'lumotni yuborishda xatolik yuz berdi!");
       console.error("Xatolik sodir bo'ldi!", error);
     } finally {
-      setLoading(false);
     }
   };
 
