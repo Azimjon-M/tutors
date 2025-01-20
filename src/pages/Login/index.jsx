@@ -161,7 +161,7 @@ const Login = () => {
                         />
                     </div>
                     <h1 className="text-center font-bold text-[1.3rem] lg:text-[1.4rem]">
-                        Konference
+                        Tutor KPI
                     </h1>
                 </div>
                 <form

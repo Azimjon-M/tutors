@@ -77,6 +77,14 @@ const TopshiriqlarniKorish = () => {
         },
     });
 
+    const onDelete = (id) => {
+        const confrim = window.confirm("O'chirishni istaysizmi ?");
+        if (confrim) {
+            console.log(id);
+        }
+        
+    }
+
     return (
         <div className="relative z-0">
             <div
@@ -266,6 +274,7 @@ const TopshiriqlarniKorish = () => {
                                 <th className="">Boshlanish</th>
                                 <th className="">Tugash</th>
                                 <th className="">Tahrirlash</th>
+                                <th className="">O'chirish</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -301,12 +310,20 @@ const TopshiriqlarniKorish = () => {
                                     </td>
                                     <td className=" text-center">
                                         <button
-                                            className="bg-blue-500 text-white px-3 py-1 rounded"
+                                            className="btn btn-sm btn-info"
                                             onClick={() =>
                                                 setIsOpenModal(true)
                                             }
                                         >
                                             Tahrirlash
+                                        </button>
+                                    </td>
+                                    <td className=" text-center">
+                                        <button
+                                            className="btn btn-sm btn-error"
+                                            onClick={() => onDelete(item.id)}                                           
+                                        >
+                                            O'chirish
                                         </button>
                                     </td>
                                 </tr>

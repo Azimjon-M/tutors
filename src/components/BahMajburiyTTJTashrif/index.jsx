@@ -1,21 +1,10 @@
-import { useFormik } from "formik";
 import React, { useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
-import * as Yup from "yup";
 
 const BahMajburiyTTJTashrif = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
 
-    // const status = { green: "green", yellow: "yellow", red: "red" };
-
-    const stat = { succes: "succes", process: "process", unrated: "unrated" };
-
-    const kategory = [
-        { id: 1, name: "Kategoryani tanlang!", disabled: true },
-        { id: 3, name: "O‘z sohasi" },
-        { id: 4, name: "Qo‘shimcha" },
-    ];
     const data = [
         {
             id: 1,
@@ -28,6 +17,7 @@ const BahMajburiyTTJTashrif = () => {
             status: true,
             isRated: true,
             maxScore: 10,
+            gradingTime: true,
         },
         {
             id: 2,
@@ -40,6 +30,7 @@ const BahMajburiyTTJTashrif = () => {
             status: false,
             isRated: false,
             maxScore: 10,
+            gradingTime: false,
         },
         {
             id: 3,
@@ -52,6 +43,7 @@ const BahMajburiyTTJTashrif = () => {
             status: true,
             isRated: true,
             maxScore: 10,
+            gradingTime: true,
         },
         {
             id: 4,
@@ -64,6 +56,7 @@ const BahMajburiyTTJTashrif = () => {
             status: true,
             isRated: false,
             maxScore: 10,
+            gradingTime: true,
         },
         {
             id: 5,
@@ -76,6 +69,7 @@ const BahMajburiyTTJTashrif = () => {
             status: true,
             isRated: true,
             maxScore: 10,
+            gradingTime: true,
         },
         {
             id: 6,
@@ -88,6 +82,7 @@ const BahMajburiyTTJTashrif = () => {
             status: true,
             isRated: false,
             maxScore: 10,
+            gradingTime: true,
         },
         {
             id: 7,
@@ -100,6 +95,7 @@ const BahMajburiyTTJTashrif = () => {
             status: false,
             isRated: true,
             maxScore: 0,
+            gradingTime: true,
         },
         {
             id: 8,
@@ -112,6 +108,7 @@ const BahMajburiyTTJTashrif = () => {
             status: false,
             isRated: true,
             maxScore: 0,
+            gradingTime: true,
         },
         {
             id: 9,
@@ -124,8 +121,119 @@ const BahMajburiyTTJTashrif = () => {
             status: false,
             isRated: true,
             maxScore: 0,
+            gradingTime: true,
+        },
+        {
+            id: 10,
+            rasm: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9llpRZyBsTqxGX7JSr3rw65FcUWdmVLVtiw&s",
+            name: "Axtamov Ravshan",
+            fakultet: "Ona-tili",
+            taskCompleted: 2,
+            taskTotal: 2,
+            deadline: "1 hafta",
+            status: false,
+            isRated: true,
+            maxScore: 0,
+            gradingTime: true,
+        },
+        {
+            id: 11,
+            rasm: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9llpRZyBsTqxGX7JSr3rw65FcUWdmVLVtiw&s",
+            name: "Axtamov Ravshan",
+            fakultet: "Ona-tili",
+            taskCompleted: 2,
+            taskTotal: 2,
+            deadline: "1 hafta",
+            status: false,
+            isRated: true,
+            maxScore: 0,
+            gradingTime: true,
+        },
+        {
+            id: 12,
+            rasm: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9llpRZyBsTqxGX7JSr3rw65FcUWdmVLVtiw&s",
+            name: "Axtamov Ravshan",
+            fakultet: "Ona-tili",
+            taskCompleted: 2,
+            taskTotal: 2,
+            deadline: "1 hafta",
+            status: false,
+            isRated: true,
+            maxScore: 0,
+            gradingTime: true,
         },
     ];
+
+    const getByIdData = [
+        {
+            tasks: [
+                {
+                    id: 1,
+                    title: "Afkksd akkmdoikjasidodj ijsio sapioj",
+                    batafsil:
+                        "OKOKoaskoa okasoadkdpaokdp idjjsf iniusda iaus diauhsdiuiuh hjuhauihdsuiahsuih iasoida a;lihjjkj",
+                    file_1: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_2: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_3: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_4: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                },
+                {
+                    id: 2,
+                    title: "Afkksd akkmdoikjasidodj ijsio sapioj",
+                    batafsil:
+                        "OKOKoaskoa okasoadkdpaokdp idjjsf iniusda iaus diauhsdiuiuh hjuhauihdsuiahsuih iasoida",
+                    file_1: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_2: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_3: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_4: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                },
+            ],
+            startTime: "01-01-2025",
+            endTime: "06-01-2025",
+            maxBal: 16,
+            grade: 6,
+        },
+    ];
+
+    const getMaxGreade = () => {
+        return getByIdData[0]?.maxBal;
+    };
+
+    const handleChangeMaxBal = (e) => {
+        const btn = document.getElementById("numberValue");
+        let value = e.target.value;
+
+        if (value > getMaxGreade()) {
+            btn.value = getMaxGreade();
+        }
+    };
+
+    const handleDownload = async (fileUrl) => {
+        try {
+            // Fetch yordamida faylni olish
+            const response = await fetch(fileUrl);
+            if (!response.ok) {
+                throw new Error("Faylni olishda xatolik yuz berdi");
+            }
+
+            // Faylni Blob formatida olish
+            const blob = await response.blob();
+
+            // Fayl uchun URL yaratish
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = fileUrl.split("/").pop(); // Fayl nomini URL'dan olish
+            document.body.appendChild(link);
+
+            // Linkni bosish
+            link.click();
+
+            // Linkni sahifadan olib tashlash
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error("Faylni yuklab olishda xatolik:", error);
+        }
+    };
 
     const getStatusColor = (taskTotal, taskCompleted) => {
         if (taskTotal === taskCompleted) {
@@ -140,56 +248,27 @@ const BahMajburiyTTJTashrif = () => {
     const getStatus = (isRated, status) => {
         if (isRated && status) {
             return (
-                <div>
-                    <MdCheckCircle className="text-green-500 text-lg mx-auto" />
+                <div className="text-green-500">
+                    <MdCheckCircle className="mx-auto" />
                     <span>Baholandi</span>
                 </div>
             );
         } else if (isRated && !status) {
             return (
-                <div>
-                    <MdErrorOutline className="text-red-500 text-lg mx-auto" />
+                <div className="text-red-500">
+                    <MdErrorOutline className="mx-auto" />
                     <span>Baholanmagan!</span>
                 </div>
             );
         } else if (!isRated) {
             return (
-                <div>
-                    <MdErrorOutline className="text-yellow-500 text-lg mx-auto" />
+                <div className="text-yellow-500">
+                    <MdErrorOutline className="mx-auto" />
                     <span>Jarayonda</span>
                 </div>
             );
         }
     };
-
-    const formik = useFormik({
-        initialValues: {
-            title: "",
-            details: "",
-            category: 1,
-            numberValue: "",
-            file1: null,
-            file2: null,
-            file3: null,
-            file4: null,
-            endDate: "",
-        },
-        validationSchema: Yup.object({
-            title: Yup.string().required("Sarlavha kiritilishi shart!"),
-            details: Yup.string().required(
-                "Batafsil ma'lumot kiritilishi kerak!"
-            ),
-            endDate: Yup.date()
-                .required("Tugash sanasini kiriting!")
-                .min(
-                    Yup.ref("startDate"),
-                    "Tugash sanasi boshlanish sanasidan keyin bo‘lishi kerak!"
-                ),
-        }),
-        onSubmit: (values) => {
-            console.log(values);
-        },
-    });
 
     return (
         <div className="relative z-0">
@@ -203,257 +282,189 @@ const BahMajburiyTTJTashrif = () => {
                         onClick={() => setIsOpenModal(false)}
                         className="btn btn-sm btn-error text-xl text-white"
                     >
-                        X
+                        ✖
                     </button>
                 </div>
                 <div className="p-4">
-                    <form
-                        className="bg-white p-4 rounded-lg"
-                        onSubmit={formik.handleSubmit}
-                    >
-                        <div className="form-control mb-4">
-                            <label htmlFor="title" className="label">
-                                <span className="label-text">Sarlavha</span>
-                            </label>
-                            <input
-                                type="text"
-                                id="title"
-                                name="title"
-                                className="input input-bordered"
-                                placeholder="Sarlavha kiriting"
-                                {...formik.getFieldProps("title")}
-                            />
-                            {formik.touched.title && formik.errors.title ? (
-                                <span className="text-red-500 text-sm">
-                                    {formik.errors.title}
-                                </span>
-                            ) : null}
-                        </div>
-                        <div className="form-control mb-4">
-                            <label htmlFor="details" className="label">
-                                <span className="label-text">Batafsil</span>
-                            </label>
-                            <textarea
-                                id="details"
-                                name="details"
-                                rows="4"
-                                className="textarea textarea-bordered"
-                                placeholder="Batafsil ma'lumot kiriting"
-                                {...formik.getFieldProps("details")}
-                            />
-                            {formik.touched.details && formik.errors.details ? (
-                                <span className="text-red-500 text-sm">
-                                    {formik.errors.details}
-                                </span>
-                            ) : null}
-                        </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                            <div className="form-control mb-4">
-                                <label htmlFor="category" className="label">
-                                    <span className="label-text">
-                                        Kategoriyani tanlang
-                                    </span>
-                                </label>
-                                <select
-                                    id="category"
-                                    name="category"
-                                    className="select select-bordered"
-                                    value={formik.values.category}
-                                    onChange={formik.handleChange}
+                    <div className="flex flex-wrap items-center p-6 bg-white rounded-lg shadow-lg gap-8">
+                        <div className="max-h-[700px] overflow-auto flex-1 space-y-6">
+                            {getByIdData[0]?.tasks?.map((item) => (
+                                <div
+                                    key={item.id}
+                                    className="p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-200"
                                 >
-                                    {kategory?.map((item) => (
-                                        <option
-                                            key={item.id}
-                                            value={item.id}
-                                            selected={item.selected}
-                                            disabled={item.disabled}
-                                        >
-                                            {item.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                    <h3 className="text-lg font-bold text-gray-800">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-sm text-gray-600 mt-2">
+                                        Batafsil: {item.batafsil}
+                                    </p>
+                                    <table className="table-auto border-collapse mt-4 text-sm">
+                                        <tbody>
+                                            {[
+                                                item.file_1,
+                                                item.file_2,
+                                                item.file_3,
+                                                item.file_4,
+                                            ].map(
+                                                (file, index) =>
+                                                    file && (
+                                                        <tr
+                                                            key={index}
+                                                            className="hover:bg-gray-50"
+                                                        >
+                                                            <td className="px-2 py-1 text-center">
+                                                                {index + 1}
+                                                            </td>
+                                                            <td className="px-2 py-1">
+                                                                <a
+                                                                    href={file}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="text-blue-600 hover:text-blue-800 underline"
+                                                                >
+                                                                    Faylni
+                                                                    ko'rish
+                                                                </a>
+                                                            </td>
+                                                            <td className="px-2 py-1 text-center">
+                                                                <button
+                                                                    onClick={() =>
+                                                                        handleDownload(
+                                                                            file
+                                                                        )
+                                                                    }
+                                                                    className="px-2 py-1 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 focus:outline-none"
+                                                                >
+                                                                    Yuklab olish
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ))}
+                        </div>
 
-                                {formik.touched.category &&
-                                formik.errors.category ? (
-                                    <span className="text-red-500 text-sm">
-                                        {formik.errors.category}
-                                    </span>
-                                ) : null}
+                        <div className="w-[40%] bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
+                            <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">
+                                Baholash
+                            </h2>
+                            <div className="text-sm text-gray-600 mb-4">
+                                <p>
+                                    <strong>Boshlangan vaqti:</strong>{" "}
+                                    {getByIdData[0].startTime}
+                                </p>
+                                <p>
+                                    <strong>Tugagan vaqti:</strong>{" "}
+                                    {getByIdData[0].endTime}
+                                </p>
                             </div>
-                            <div className="form-control mb-4">
-                                <label htmlFor="numberValue" className="label">
-                                    <span className="label-text">Max ball</span>
-                                </label>
-                                <input
-                                    type="number"
-                                    id="numberValue"
-                                    name="numberValue"
-                                    className="input input-bordered w-[100px]"
-                                    {...formik.getFieldProps("numberValue")}
-                                />
-                                {formik.touched.numberValue &&
-                                formik.errors.numberValue ? (
-                                    <span className="text-red-500 text-sm">
-                                        {formik.errors.numberValue}
-                                    </span>
-                                ) : null}
-                            </div>
+                            <form className="space-y-4">
+                                <div className="flex flex-col">
+                                    <label
+                                        htmlFor="numberValue"
+                                        className="text-gray-700 font-medium"
+                                    >
+                                        <div className="flex justify-between">
+                                            <div>Baholash:</div>
+                                            <div>Max bal: {getMaxGreade()}</div>
+                                        </div>
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="numberValue"
+                                        name="numberValue"
+                                        min="0"
+                                        onChange={handleChangeMaxBal}
+                                        className="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 active:bg-blue-700 transition duration-150"
+                                >
+                                    Yuborish
+                                </button>
+                            </form>
                         </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                            {["file1", "file2", "file3", "file4"].map(
-                                (file, index) => (
-                                    <div key={file} className="form-control">
-                                        <label htmlFor={file} className="label">
-                                            <span className="label-text">
-                                                Fayl {index + 1}
-                                            </span>
-                                        </label>
-                                        <input
-                                            type="file"
-                                            id={file}
-                                            name={file}
-                                            className="file-input file-input-bordered"
-                                            onChange={(event) =>
-                                                formik.setFieldValue(
-                                                    file,
-                                                    event.target.files[0]
-                                                )
-                                            }
-                                        />
-                                        {formik.touched[file] &&
-                                        formik.errors[file] &&
-                                        index === 0 ? (
-                                            <span className="text-red-500 text-sm">
-                                                {formik.errors[file]}
-                                            </span>
-                                        ) : null}
-                                    </div>
-                                )
-                            )}
-                        </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                            <div className="form-control">
-                                <label htmlFor="endDate" className="label">
-                                    <span className="label-text">
-                                        Tugash sanasi
-                                    </span>
-                                </label>
-                                <input
-                                    type="date"
-                                    id="endDate"
-                                    name="endDate"
-                                    className="input input-bordered"
-                                    {...formik.getFieldProps("endDate")}
-                                />
-                                {formik.touched.endDate &&
-                                formik.errors.endDate ? (
-                                    <span className="text-red-500 text-sm">
-                                        {formik.errors.endDate}
-                                    </span>
-                                ) : null}
-                            </div>
-                        </div>
-                        <div className="form-control mt-6">
-                            <button
-                                type="submit"
-                                className="btn btn-info w-full"
-                            >
-                                Yuborish
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
             <h3 className="text-center text-lg font-bold text-gray-900 dark:text-white mb-2">
                 TTJga tashrif
             </h3>
-            <div className="overflow-x-auto p-4">
-                <table className="text-center table w-full border border-gray-300">
-                    <thead className="bg-gray-200 border-b border-gray-300">
+            <div className="h-[770px] overflow-auto">
+                <table className="relative w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse">
+                    <thead className="sticky top-0 bg-gray-100">
                         <tr>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                №
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Isim Familya
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Fakulteti
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Topshiriq / Bajargani
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Muddati
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Baholangani
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Baholash
-                            </th>
+                            {[
+                                "№",
+                                "Isim Familya",
+                                "Fakulteti",
+                                "Topshiriq/Bajargani",
+                                "Muddati",
+                                "Baholangani",
+                                "Baholash",
+                            ].map((header, index) => (
+                                <th
+                                    key={index}
+                                    className="py-3 px-4 text-sm font-medium text-gray-600 text-left text-center"
+                                >
+                                    {header}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-gray-200">
                         {data.map((item, index) => (
-                            <tr
-                                key={item.id}
-                                className="hover:bg-gray-100 border-b border-gray-300"
-                            >
-                                <td className="py-2 px-4 border-r border-gray-300">
-                                    {index + 1}
-                                </td>
-                                <td className="py-2 px-4 border-r border-gray-300 relative">
-                                    <div className="flex items-center space-x-2">
-                                        <div className="w-[30px] h-[30px] border rounded-full flex items-center justify-center overflow-hidden">
-                                            {item.rasm ? (
-                                                <img
-                                                    src={item.rasm}
-                                                    alt="person"
-                                                />
-                                            ) : (
-                                                <FaUserAlt className="text-sm" />
-                                            )}
-                                        </div>
-                                        <span>{item.name}</span>
+                            <tr key={item.id} className="hover:bg-gray-50">
+                                <td className="py-3 px-4">{index + 1}</td>
+                                <td className="py-3 px-4 flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full overflow-hidden">
+                                        {item.rasm ? (
+                                            <img src={item.rasm} alt="person" />
+                                        ) : (
+                                            <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                                                👤
+                                            </div>
+                                        )}
                                     </div>
+                                    <span>{item.name}</span>
                                 </td>
-                                <td className="py-2 px-4 border-r border-gray-300">
-                                    {item.fakultet}
-                                </td>
-                                <td className="border-r border-gray-300">
-                                    <div
-                                        className={`rounded-lg text-center p-1 ${getStatusColor(
+                                <td className="py-3 px-4">{item.fakultet}</td>
+                                <td className="py-3 px-4 text-center">
+                                    <span
+                                        className={`px-2 py-1 rounded text-sm ${getStatusColor(
                                             item.taskTotal,
                                             item.taskCompleted
                                         )}`}
                                     >
                                         {item.taskTotal}/{item.taskCompleted}
-                                    </div>
+                                    </span>
                                 </td>
-                                <td className="py-2 px-4 border-r border-gray-300">
-                                    {item.deadline}
-                                </td>
-                                <td className="py-2 px-4 border-r border-gray-300">
+                                <td className="py-3 px-4">{item.deadline}</td>
+                                <td className="py-3 px-4 text-center">
                                     {getStatus(item.isRated, item.status)}
                                 </td>
-                                <td className="py-2 px-4 border-r border-gray-300">
+                                <td className="py-3 px-4">
                                     {item.isRated && item.status ? (
-                                        <div>
-                                            <strong>Bahosi: </strong>
-                                            {item.maxScore}
-                                        </div>
-                                    ) : !item.isRated ? (
+                                        <span className="font-bold text-green-600">
+                                            Bahosi: {item.maxScore}
+                                        </span>
+                                    ) : !item.isRated && item.gradingTime ? (
                                         <button
                                             onClick={() => setIsOpenModal(true)}
-                                            className={`btn btn-sm bg-green-500 hover:bg-green-600 active:bg-green-500  text-white rounded-lg`}
+                                            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
                                         >
                                             Baholash
                                         </button>
                                     ) : (
                                         <button
                                             disabled
-                                            className={`btn btn-sm rounded-lg`}
+                                            className="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg"
                                         >
                                             Baholash
                                         </button>
