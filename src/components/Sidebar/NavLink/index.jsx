@@ -9,18 +9,24 @@ const NavLink = ({ data, unShiredRole }) => {
     const navigate = useNavigate();
     const [isSubOpen, setisSubOpen] = useState(false);
     const [isActive, setIsActive] = useState(false);
+    const [isChildActive, setIsChildActive] = useState(false);
     const { isOpen, setOpen } = useContext(SidebarContext);
 
+    // link bosilganda unga yo'naltrish va/yoki children panelini ochish
     const handleClickItem = childPath => {
         if (!children) {
             navigate(data.path);
         } else {
             setOpen();
-            if (typeof childPath !== "string") setisSubOpen(prev => !prev);
-            else navigate(childPath);
+            if (typeof childPath !== "string") {
+                setisSubOpen(prev => !prev);
+            } else {
+                navigate(childPath);
+            }
         }
     };
 
+    // link ochiqligiga qarab active effectni alishtrish uchun
     useEffect(() => {
         if (location.pathname === data.path) {
             setIsActive(true);
@@ -30,7 +36,9 @@ const NavLink = ({ data, unShiredRole }) => {
 
         if (data.children?.map(e => e.path).includes(location.pathname)) {
             setisSubOpen(true);
+            setIsChildActive(true);
         } else {
+            setIsChildActive(false);
             setisSubOpen(false);
         }
     }, [location, data.children, data.path]);
@@ -40,14 +48,17 @@ const NavLink = ({ data, unShiredRole }) => {
             {/* navlink */}
             <div
                 onClick={handleClickItem}
-                className={`${(isActive || isSubOpen) && "border-sky-700"} ${
+                className={`${
+                    (isActive || isChildActive) && "border-sky-700"
+                } ${
                     !isOpen ? "border-none px-2" : "border-r-4 pr-4 px-4"
                 } w-full  my-3 cursor-pointer`}
             >
                 {/* blue area */}
                 <div
                     className={`${
-                        (isActive || isSubOpen) && "bg-[#0000aa40] text-sky-600"
+                        (isActive || isChildActive) &&
+                        "bg-[#0000aa40] text-sky-600"
                     } ${
                         !isOpen ? "justify-center" : "justify-between"
                     }  py-1 px-2 rounded flex items-center`}
@@ -62,7 +73,11 @@ const NavLink = ({ data, unShiredRole }) => {
                         </span>
                     </div>
                     {/* ochish icon */}
-                    <span className={`${(!children || !isOpen) && "hidden"}`}>
+                    <span
+                        className={`${(!children || !isOpen) && "hidden"} ${
+                            isSubOpen && "rotate-90"
+                        }`}
+                    >
                         <BiCaretRight />
                     </span>
                 </div>
@@ -93,10 +108,14 @@ const NavLink = ({ data, unShiredRole }) => {
                                     style={{
                                         boxShadow:
                                             location.pathname === element.path
-                                                ? "0 0 10px 10px rgba(0, 0, 255, 0.5)"
+                                                ? "0 0 20px 5px rgba(0, 0, 255, 0.5)"
                                                 : "none",
                                     }}
-                                    className="icon w-2 h-2 rounded-full bg-sky-700"
+                                    className={`icon w-2 h-2 rounded-full ${
+                                        location.pathname === element.path
+                                            ? "bg-blue-600"
+                                            : "bg-gray-500"
+                                    }`}
                                 ></div>
                                 <span>{element.title}</span>
                             </div>

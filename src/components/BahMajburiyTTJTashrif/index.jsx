@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
 
 const BahMajburiyTTJTashrif = () => {
-    const status = { green: "green", yellow: "yellow", red: "red" };
+    const [isOpenModal, setIsOpenModal] = useState(false);
 
     const data = [
         {
@@ -14,9 +14,10 @@ const BahMajburiyTTJTashrif = () => {
             taskCompleted: 0,
             taskTotal: 2,
             deadline: "1 hafta",
-            status: status.red,
-            isRated: status.yellow,
-            score: 10,
+            status: true,
+            isRated: true,
+            maxScore: 10,
+            gradingTime: true,
         },
         {
             id: 2,
@@ -26,9 +27,10 @@ const BahMajburiyTTJTashrif = () => {
             taskCompleted: 0,
             taskTotal: 2,
             deadline: "1 hafta",
-            status: status.red,
-            isRated: status.green,
-            score: 10,
+            status: false,
+            isRated: false,
+            maxScore: 10,
+            gradingTime: false,
         },
         {
             id: 3,
@@ -38,9 +40,10 @@ const BahMajburiyTTJTashrif = () => {
             taskCompleted: 1,
             taskTotal: 2,
             deadline: "1 hafta",
-            status: status.yellow,
-            isRated: status.yellow,
-            score: 10,
+            status: true,
+            isRated: true,
+            maxScore: 10,
+            gradingTime: true,
         },
         {
             id: 4,
@@ -50,9 +53,10 @@ const BahMajburiyTTJTashrif = () => {
             taskCompleted: 1,
             taskTotal: 2,
             deadline: "1 hafta",
-            status: status.yellow,
-            isRated: status.green,
-            score: 10,
+            status: true,
+            isRated: false,
+            maxScore: 10,
+            gradingTime: true,
         },
         {
             id: 5,
@@ -62,9 +66,10 @@ const BahMajburiyTTJTashrif = () => {
             taskCompleted: 2,
             taskTotal: 2,
             deadline: "1 hafta",
-            status: status.green,
-            isRated: status.yellow,
-            score: 10,
+            status: true,
+            isRated: true,
+            maxScore: 10,
+            gradingTime: true,
         },
         {
             id: 6,
@@ -74,9 +79,10 @@ const BahMajburiyTTJTashrif = () => {
             taskCompleted: 2,
             taskTotal: 2,
             deadline: "1 hafta",
-            status: status.green,
-            isRated: status.green,
-            score: 10,
+            status: true,
+            isRated: false,
+            maxScore: 10,
+            gradingTime: true,
         },
         {
             id: 7,
@@ -86,9 +92,10 @@ const BahMajburiyTTJTashrif = () => {
             taskCompleted: 0,
             taskTotal: 2,
             deadline: "1 hafta",
-            status: status.red,
-            isRated: status.red,
-            score: 0,
+            status: false,
+            isRated: true,
+            maxScore: 0,
+            gradingTime: true,
         },
         {
             id: 8,
@@ -98,9 +105,10 @@ const BahMajburiyTTJTashrif = () => {
             taskCompleted: 1,
             taskTotal: 2,
             deadline: "1 hafta",
-            status: status.yellow,
-            isRated: status.red,
-            score: 0,
+            status: false,
+            isRated: true,
+            maxScore: 0,
+            gradingTime: true,
         },
         {
             id: 9,
@@ -110,129 +118,356 @@ const BahMajburiyTTJTashrif = () => {
             taskCompleted: 2,
             taskTotal: 2,
             deadline: "1 hafta",
-            status: status.green,
-            isRated: status.red,
-            score: 0,
+            status: false,
+            isRated: true,
+            maxScore: 0,
+            gradingTime: true,
+        },
+        {
+            id: 10,
+            rasm: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9llpRZyBsTqxGX7JSr3rw65FcUWdmVLVtiw&s",
+            name: "Axtamov Ravshan",
+            fakultet: "Ona-tili",
+            taskCompleted: 2,
+            taskTotal: 2,
+            deadline: "1 hafta",
+            status: false,
+            isRated: true,
+            maxScore: 0,
+            gradingTime: true,
+        },
+        {
+            id: 11,
+            rasm: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9llpRZyBsTqxGX7JSr3rw65FcUWdmVLVtiw&s",
+            name: "Axtamov Ravshan",
+            fakultet: "Ona-tili",
+            taskCompleted: 2,
+            taskTotal: 2,
+            deadline: "1 hafta",
+            status: false,
+            isRated: true,
+            maxScore: 0,
+            gradingTime: true,
+        },
+        {
+            id: 12,
+            rasm: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9llpRZyBsTqxGX7JSr3rw65FcUWdmVLVtiw&s",
+            name: "Axtamov Ravshan",
+            fakultet: "Ona-tili",
+            taskCompleted: 2,
+            taskTotal: 2,
+            deadline: "1 hafta",
+            status: false,
+            isRated: true,
+            maxScore: 0,
+            gradingTime: true,
         },
     ];
 
-    const getStatusColor = (status) => {
-        switch (status) {
-            case "green":
-                return "bg-green-500 text-white";
-            case "yellow":
-                return "bg-yellow-500 text-white";
-            case "red":
-                return "bg-red-500 text-white";
-            default:
-                return "bg-gray-300 text-black";
+    const getByIdData = [
+        {
+            tasks: [
+                {
+                    id: 1,
+                    title: "Afkksd akkmdoikjasidodj ijsio sapioj",
+                    batafsil:
+                        "OKOKoaskoa okasoadkdpaokdp idjjsf iniusda iaus diauhsdiuiuh hjuhauihdsuiahsuih iasoida a;lihjjkj",
+                    file_1: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_2: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_3: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_4: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                },
+                {
+                    id: 2,
+                    title: "Afkksd akkmdoikjasidodj ijsio sapioj",
+                    batafsil:
+                        "OKOKoaskoa okasoadkdpaokdp idjjsf iniusda iaus diauhsdiuiuh hjuhauihdsuiahsuih iasoida",
+                    file_1: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_2: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_3: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                    file_4: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
+                },
+            ],
+            startTime: "01-01-2025",
+            endTime: "06-01-2025",
+            maxBal: 16,
+            grade: 6,
+        },
+    ];
+
+    const getMaxGreade = () => {
+        return getByIdData[0]?.maxBal;
+    };
+
+    const handleChangeMaxBal = (e) => {
+        const btn = document.getElementById("numberValue");
+        let value = e.target.value;
+
+        if (value > getMaxGreade()) {
+            btn.value = getMaxGreade();
+        }
+    };
+
+    const handleDownload = async (fileUrl) => {
+        try {
+            // Fetch yordamida faylni olish
+            const response = await fetch(fileUrl);
+            if (!response.ok) {
+                throw new Error("Faylni olishda xatolik yuz berdi");
+            }
+
+            // Faylni Blob formatida olish
+            const blob = await response.blob();
+
+            // Fayl uchun URL yaratish
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = fileUrl.split("/").pop(); // Fayl nomini URL'dan olish
+            document.body.appendChild(link);
+
+            // Linkni bosish
+            link.click();
+
+            // Linkni sahifadan olib tashlash
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error("Faylni yuklab olishda xatolik:", error);
+        }
+    };
+
+    const getStatusColor = (taskTotal, taskCompleted) => {
+        if (taskTotal === taskCompleted) {
+            return "bg-green-500 text-white";
+        } else if (taskCompleted === 0) {
+            return "bg-red-500 text-white";
+        } else {
+            return "bg-yellow-500 text-white";
+        }
+    };
+
+    const getStatus = (isRated, status) => {
+        if (isRated && status) {
+            return (
+                <div className="text-green-500">
+                    <MdCheckCircle className="mx-auto" />
+                    <span>Baholandi</span>
+                </div>
+            );
+        } else if (isRated && !status) {
+            return (
+                <div className="text-red-500">
+                    <MdErrorOutline className="mx-auto" />
+                    <span>Baholanmagan!</span>
+                </div>
+            );
+        } else if (!isRated) {
+            return (
+                <div className="text-yellow-500">
+                    <MdErrorOutline className="mx-auto" />
+                    <span>Jarayonda</span>
+                </div>
+            );
         }
     };
 
     return (
-        <div>
+        <div className="relative z-0">
+            <div
+                className={`${
+                    isOpenModal ? "z-20 opacity-100" : "-z-10 opacity-0"
+                } w-[calc(100%+205px)] h-[calc(100vh-54px)] absolute top-[-2rem] right-[-2rem] bg-[#00000093] transition-[opacity] ease-linear duration-150`}
+            >
+                <div className="flex justify-end pl-4 pt-4 pr-4">
+                    <button
+                        onClick={() => setIsOpenModal(false)}
+                        className="btn btn-sm btn-error text-xl text-white"
+                    >
+                        ✖
+                    </button>
+                </div>
+                <div className="p-4">
+                    <div className="flex flex-wrap items-center p-6 bg-white rounded-lg shadow-lg gap-8">
+                        <div className="max-h-[700px] overflow-auto flex-1 space-y-6">
+                            {getByIdData[0]?.tasks?.map((item) => (
+                                <div
+                                    key={item.id}
+                                    className="p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-200"
+                                >
+                                    <h3 className="text-lg font-bold text-gray-800">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-sm text-gray-600 mt-2">
+                                        Batafsil: {item.batafsil}
+                                    </p>
+                                    <table className="table-auto border-collapse mt-4 text-sm">
+                                        <tbody>
+                                            {[
+                                                item.file_1,
+                                                item.file_2,
+                                                item.file_3,
+                                                item.file_4,
+                                            ].map(
+                                                (file, index) =>
+                                                    file && (
+                                                        <tr
+                                                            key={index}
+                                                            className="hover:bg-gray-50"
+                                                        >
+                                                            <td className="px-2 py-1 text-center">
+                                                                {index + 1}
+                                                            </td>
+                                                            <td className="px-2 py-1">
+                                                                <a
+                                                                    href={file}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="text-blue-600 hover:text-blue-800 underline"
+                                                                >
+                                                                    Faylni
+                                                                    ko'rish
+                                                                </a>
+                                                            </td>
+                                                            <td className="px-2 py-1 text-center">
+                                                                <button
+                                                                    onClick={() =>
+                                                                        handleDownload(
+                                                                            file
+                                                                        )
+                                                                    }
+                                                                    className="px-2 py-1 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 focus:outline-none"
+                                                                >
+                                                                    Yuklab olish
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="w-[40%] bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
+                            <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">
+                                Baholash
+                            </h2>
+                            <div className="text-sm text-gray-600 mb-4">
+                                <p>
+                                    <strong>Boshlangan vaqti:</strong>{" "}
+                                    {getByIdData[0].startTime}
+                                </p>
+                                <p>
+                                    <strong>Tugagan vaqti:</strong>{" "}
+                                    {getByIdData[0].endTime}
+                                </p>
+                            </div>
+                            <form className="space-y-4">
+                                <div className="flex flex-col">
+                                    <label
+                                        htmlFor="numberValue"
+                                        className="text-gray-700 font-medium"
+                                    >
+                                        <div className="flex justify-between">
+                                            <div>Baholash:</div>
+                                            <div>Max bal: {getMaxGreade()}</div>
+                                        </div>
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="numberValue"
+                                        name="numberValue"
+                                        min="0"
+                                        onChange={handleChangeMaxBal}
+                                        className="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 active:bg-blue-700 transition duration-150"
+                                >
+                                    Yuborish
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <h3 className="text-center text-lg font-bold text-gray-900 dark:text-white mb-2">
                 TTJga tashrif
             </h3>
-            <div className="overflow-x-auto p-4">
-                <table className="text-center table w-full border border-gray-300">
-                    <thead className="bg-gray-200 border-b border-gray-300">
+            <div className="h-[770px] overflow-auto">
+                <table className="relative w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse">
+                    <thead className="sticky top-0 bg-gray-100">
                         <tr>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                №
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Isim Familya
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Fakulteti
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Topshiriq / Bajargani
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Muddati
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Baholangani
-                            </th>
-                            <th className="py-2 px-4 border-r border-gray-300">
-                                Baholash
-                            </th>
+                            {[
+                                "№",
+                                "Isim Familya",
+                                "Fakulteti",
+                                "Topshiriq/Bajargani",
+                                "Muddati",
+                                "Baholangani",
+                                "Baholash",
+                            ].map((header, index) => (
+                                <th
+                                    key={index}
+                                    className="py-3 px-4 text-sm font-medium text-gray-600 text-left text-center"
+                                >
+                                    {header}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-gray-200">
                         {data.map((item, index) => (
-                            <tr
-                                key={item.id}
-                                className="hover:bg-gray-100 border-b border-gray-300"
-                            >
-                                <td className="py-2 px-4 border-r border-gray-300">
-                                    {index + 1}
-                                </td>
-                                <td className="py-2 px-4 border-r border-gray-300 relative">
-                                    <div className="flex items-center space-x-2">
-                                        <div className="w-[30px] h-[30px] border rounded-full flex items-center justify-center overflow-hidden">
-                                            {item.rasm ? (
-                                                <img
-                                                    src={item.rasm}
-                                                    alt="person"
-                                                />
-                                            ) : (
-                                                <FaUserAlt className="text-sm" />
-                                            )}
-                                        </div>
-                                        <span>{item.name}</span>
+                            <tr key={item.id} className="hover:bg-gray-50">
+                                <td className="py-3 px-4">{index + 1}</td>
+                                <td className="py-3 px-4 flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full overflow-hidden">
+                                        {item.rasm ? (
+                                            <img src={item.rasm} alt="person" />
+                                        ) : (
+                                            <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                                                👤
+                                            </div>
+                                        )}
                                     </div>
+                                    <span>{item.name}</span>
                                 </td>
-                                <td className="py-2 px-4 border-r border-gray-300">
-                                    {item.fakultet}
-                                </td>
-                                <td className="border-r border-gray-300">
-                                    <div
-                                        className={`rounded-lg text-center p-1 ${getStatusColor(
-                                            item.status
+                                <td className="py-3 px-4">{item.fakultet}</td>
+                                <td className="py-3 px-4 text-center">
+                                    <span
+                                        className={`px-2 py-1 rounded text-sm ${getStatusColor(
+                                            item.taskTotal,
+                                            item.taskCompleted
                                         )}`}
                                     >
                                         {item.taskTotal}/{item.taskCompleted}
-                                    </div>
+                                    </span>
                                 </td>
-                                <td className="py-2 px-4 border-r border-gray-300">
-                                    {item.deadline}
+                                <td className="py-3 px-4">{item.deadline}</td>
+                                <td className="py-3 px-4 text-center">
+                                    {getStatus(item.isRated, item.status)}
                                 </td>
-                                <td className="py-2 px-4 border-r border-gray-300">
-                                    {item.isRated === "green" ? (
-                                        <div>
-                                            <MdCheckCircle className="text-green-500 text-lg mx-auto" />
-                                            <span>Baholandi</span>
-                                        </div>
-                                    ) : item.isRated === "yellow" ? (
-                                        <div>
-                                            <MdErrorOutline className="text-yellow-500 text-lg mx-auto" />
-                                            <span>Jarayonda</span>
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            <MdErrorOutline className="text-red-500 text-lg mx-auto" />
-                                            <span>Baholanmagan!</span>
-                                        </div>
-                                    )}
-                                </td>
-                                <td className="py-2 px-4 border-r border-gray-300">
-                                    {item.isRated === "yellow" ? (
+                                <td className="py-3 px-4">
+                                    {item.isRated && item.status ? (
+                                        <span className="font-bold text-green-600">
+                                            Bahosi: {item.maxScore}
+                                        </span>
+                                    ) : !item.isRated && item.gradingTime ? (
                                         <button
-                                            disabled={
-                                                item.isRated === "green" && true
-                                            }
-                                            className={`btn btn-sm bg-green-500 hover:bg-green-600 active:bg-green-500  text-white rounded-lg`}
+                                            onClick={() => setIsOpenModal(true)}
+                                            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
                                         >
                                             Baholash
                                         </button>
                                     ) : (
-                                        <div>
-                                            <strong>Bahosi: </strong>
-                                            {item.score}
-                                        </div>
+                                        <button
+                                            disabled
+                                            className="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg"
+                                        >
+                                            Baholash
+                                        </button>
                                     )}
                                 </td>
                             </tr>

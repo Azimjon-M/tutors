@@ -1,0 +1,21 @@
+import { lazy } from "react";
+
+export const Admins = lazy(() => import("./Admins"));
+export const AdminStatistika = lazy(() => import("./AdminStatistika"));
+export const Analitika = lazy(() => import("./Analitika"));
+export const BaholashMezonlari = lazy(() => import("./BaholashMezonlari"));
+export const BahoMajburiy = lazy(() => import("./BahoMajburiy"));
+export const BahoOzTashabbusi = lazy(() => import("./BahoOzTashabbusi"));
+export const BahoQoshmcha = lazy(() => import("./BahoQoshmcha"));
+export const BahoSohagaOid = lazy(() => import("./BahoSohagaOid"));
+export const BahoTogarak = lazy(() => import("./BahoTogarak"));
+export const Error401 = lazy(() => import("./Error/Error401"));
+export const Error404 = lazy(() => import("./Error/Error404"));
+export const Fakultet = lazy(() => import("./Fakultet"));
+export const Login = lazy(() => import("./Login"));
+export const NotAuthorized = lazy(() => import("./NotAuthorized"));
+export const SuperAdminStatistika = lazy(() => import("./SuperAdminStatistika"));
+export const Topshiriqlar = lazy(() => import("./Topshiriqlar"));
+export const TopshiriqlarniKorish = lazy(() => import("./TopshiriqlarniKorish"));
+export const Tutors = lazy(() => import("./Tutors"));
+export const TutorStatistika = lazy(() => import("./TutorStatistika"));

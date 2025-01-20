@@ -95,7 +95,7 @@ const BahoMajburiy = () => {
     ];
 
     return (
-        <div className="p-4">
+        <div className="p-4 z-20">
             {/* Asosiy konteyner */}
             <div className="md:flex">
                 {/* Chap menyu */}
