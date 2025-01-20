@@ -1,11 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import sidebar from "../utils/sidebar";
 import Sidebar from "../components/Sidebar";
-import Login from "../pages/Login";
+import { Login, Error401, Error404 } from "../pages";
 import "./style.css";
 import ProtectedRoute from "../components/ProtectedRoute";
-import Error401 from "../pages/Error/Error401";
-import Error404 from "../pages/Error/Error404";
 
 const Root = () => {
     return (

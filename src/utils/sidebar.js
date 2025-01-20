@@ -7,19 +7,10 @@ import {
 } from "react-icons/ai";
 import { GrUserPolice } from "react-icons/gr";
 import { RiFileList3Line } from "react-icons/ri";
-// Components
-import Analitika from "../pages/Analitika";
-import Fakultet from "../pages/Fakultet";
-import Admins from "../pages/Admins";
-import Tutors from "../pages/Tutors";
-import TopshiriqlarQoshish from "../pages/Topshiriqlar";
-import BaholashMezonlari from "../pages/BaholashMezonlari";
 import { VscGraph } from "react-icons/vsc";
-import TopshiriqlarniKorish from "../pages/TopshiriqlarniKorish";
-import BahoMajburiy from "../pages/BahoMajburiy";
-import BahoSohagaOid from "../pages/BahoSohagaOid";
-import BahoQoshmcha from "../pages/BahoQoshmcha";
-import BahoOzTashabbusi from "../pages/BahoOzTashabbusi";
+// Components
+import { Admins, Analitika, BaholashMezonlari, BahoMajburiy, BahoOzTashabbusi, BahoQoshmcha, BahoSohagaOid, Fakultet, TopshiriqlarniKorish, Tutors } from "../pages";
+import TopshiriqlarQoshish from "../pages/Topshiriqlar";
 import userRole from "../components/userRole";
 
 const sidebar = [
