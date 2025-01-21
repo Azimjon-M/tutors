@@ -64,15 +64,15 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
     });
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await APIUsers.del(id);
-      fetchData();
-    } catch (error) {
-      console.error("Xatolik yuz berdi!", error);
-    } finally {
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   try {
+  //     await APIUsers.del(id);
+  //     fetchData();
+  //   } catch (error) {
+  //     console.error("Xatolik yuz berdi!", error);
+  //   } finally {
+  //   }
+  // };
 
   const handleSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
@@ -99,6 +99,9 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
   };
 
   useEffect(() => {
+    // if (info) {
+    //   setEdit(true)
+    // }
     handleEdit(info)
   }, [info])
 
@@ -138,7 +141,7 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
         </button>
         <div className="flex items-start justify-between">
           <h2 className="text-lg font-semibold text-gray-600 mb-4">
-            {edit ? "Tyutorni tahrirlash" : "Yangi tyutor qo'shish"}
+            {false ? "Tyutorni tahrirlash" : "Yangi tyutor qo'shish"}
           </h2>
         </div>
         <Formik
@@ -163,8 +166,8 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
                   name="fakultet"
                   className="w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300"
                 >
-                  <option value="" disabled>
-                    Tyutorni kiriting
+                  <option value="" disabled selected>
+                    Fakultetni kiriting
                   </option>
                   {dataFakultet.map((data) => (
                     <option key={data.id} value={data.id}>
