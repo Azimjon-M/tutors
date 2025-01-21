@@ -43,7 +43,7 @@ const AdminsCom = () => {
     });
 
     const {
-        data: dataFakultet,
+        data: dataFakultet = [],
         isLoading: isLoadingFaculties,
         error: facultiesError,
         refetch: refetchFaculties,
