@@ -1,9 +1,21 @@
 import React, { useState } from "react";
-import { FaUserAlt } from "react-icons/fa";
 import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
+import Pagination from "../Pagination";
 
 const BahMajburiyTTJTashrif = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
+    // Pagination
+    const [paginationData, setPaginationData] = useState({
+        totalPages: 10,
+        currentPage: 1,
+    });
+
+    const handlePageChange = (page) => {
+        setPaginationData((prev) => ({ ...prev, currentPage: page }));
+        // Bu yerda API chaqiruv amalga oshirilishi mumkin
+        console.log(`Page changed to: ${page}`);
+    };
+    // /Pagination
 
     const data = [
         {
@@ -274,8 +286,8 @@ const BahMajburiyTTJTashrif = () => {
         <div className="relative z-0">
             <div
                 className={`${
-                    isOpenModal ? "z-20 opacity-100" : "-z-10 opacity-0"
-                } w-[calc(100%+205px)] h-[calc(100vh-54px)] absolute top-[-2rem] right-[-2rem] bg-[#00000093] transition-[opacity] ease-linear duration-150`}
+                    isOpenModal ? "z-20 opacity-100" : "-z-20 opacity-0"
+                } w-[calc(100%+50px)] h-[calc(100vh-54px)] absolute top-[-2rem] right-[-2rem] bg-[#00000093] transition-[opacity] ease-linear duration-200`}
             >
                 <div className="flex justify-end pl-4 pt-4 pr-4">
                     <button
@@ -396,33 +408,37 @@ const BahMajburiyTTJTashrif = () => {
             <h3 className="text-center text-lg font-bold text-gray-900 dark:text-white mb-2">
                 TTJga tashrif
             </h3>
-            <div className="h-[770px] overflow-auto">
-                <table className="relative w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse">
-                    <thead className="sticky top-0 bg-gray-100">
-                        <tr>
-                            {[
-                                "№",
-                                "Isim Familya",
-                                "Fakulteti",
-                                "Topshiriq/Bajargani",
-                                "Muddati",
-                                "Baholangani",
-                                "Baholash",
-                            ].map((header, index) => (
-                                <th
-                                    key={index}
-                                    className="py-3 px-4 text-sm font-medium text-gray-600 text-left text-center"
-                                >
-                                    {header}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-gray-200">
+            <div className="relative w-full bg-white shadow-md rounded-lg">
+                <div className="overflow-y-auto max-h-[740px]">
+                    {/* Thead */}
+                    <div className="sticky top-0 bg-gray-100 grid grid-cols-7 text-center shadow-[0_6px_6px_-2px_rgba(0,0,0,0.1)]">
+                        {[
+                            "№",
+                            "Isim Familya",
+                            "Fakulteti",
+                            "Topshiriq/Bajargani",
+                            "Muddati",
+                            "Baholangani",
+                            "Baholash",
+                        ].map((header, index) => (
+                            <div
+                                key={index}
+                                className="py-3 px-4 text-sm font-medium text-gray-600 border-b"
+                            >
+                                {header}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Tbody */}
+                    <div>
                         {data.map((item, index) => (
-                            <tr key={item.id} className="hover:bg-gray-50">
-                                <td className="py-3 px-4">{index + 1}</td>
-                                <td className="py-3 px-4 flex items-center gap-3">
+                            <div
+                                key={item.id}
+                                className="grid grid-cols-7 text-center hover:bg-gray-50 border-b"
+                            >
+                                <div className="py-3 px-4">{index + 1}</div>
+                                <div className="py-3 px-4 flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-full overflow-hidden">
                                         {item.rasm ? (
                                             <img src={item.rasm} alt="person" />
@@ -433,9 +449,9 @@ const BahMajburiyTTJTashrif = () => {
                                         )}
                                     </div>
                                     <span>{item.name}</span>
-                                </td>
-                                <td className="py-3 px-4">{item.fakultet}</td>
-                                <td className="py-3 px-4 text-center">
+                                </div>
+                                <div className="py-3 px-4">{item.fakultet}</div>
+                                <div className="py-3 px-4">
                                     <span
                                         className={`px-2 py-1 rounded text-sm ${getStatusColor(
                                             item.taskTotal,
@@ -444,12 +460,12 @@ const BahMajburiyTTJTashrif = () => {
                                     >
                                         {item.taskTotal}/{item.taskCompleted}
                                     </span>
-                                </td>
-                                <td className="py-3 px-4">{item.deadline}</td>
-                                <td className="py-3 px-4 text-center">
+                                </div>
+                                <div className="py-3 px-4">{item.deadline}</div>
+                                <div className="py-3 px-4">
                                     {getStatus(item.isRated, item.status)}
-                                </td>
-                                <td className="py-3 px-4">
+                                </div>
+                                <div className="py-3 px-4">
                                     {item.isRated && item.status ? (
                                         <span className="font-bold text-green-600">
                                             Bahosi: {item.maxScore}
@@ -469,11 +485,19 @@ const BahMajburiyTTJTashrif = () => {
                                             Baholash
                                         </button>
                                     )}
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
                         ))}
-                    </tbody>
-                </table>
+                    </div>
+                </div>
+            </div>
+            {/* Pagination */}
+            <div className="py-4">
+                <Pagination
+                    currentPage={paginationData.currentPage}
+                    totalPages={paginationData.totalPages}
+                    onPageChange={handlePageChange}
+                />
             </div>
         </div>
     );

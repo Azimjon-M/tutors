@@ -95,7 +95,7 @@ const BahoMajburiy = () => {
     ];
 
     return (
-        <div className="p-4 z-20">
+        <div>
             {/* Asosiy konteyner */}
             <div className="md:flex">
                 {/* Chap menyu */}
@@ -116,7 +116,7 @@ const BahoMajburiy = () => {
                     ))}
                 </ul>
                 {/* O'ng qism */}
-                <div className="p-4 bg-gray-50 text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full custom-scrollbar h-[89vh]">
+                <div className="w-full h-[calc(100vh-72px)] bg-gray-50 text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg custom-scrollbar p-2">
                     {renderContent()}
                 </div>
             </div>
