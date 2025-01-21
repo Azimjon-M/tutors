@@ -8,7 +8,6 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
   const [showModal, setShowModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
-  const [datas, setDatas] = useState([]);
   const [dataFakultet, setDataFakultet] = useState([]);
   const [initialValues, setInitialValues] = useState({
     username: "",
@@ -19,23 +18,16 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
     password: "",
     is_active: true,
   });
-  
+
   const fetchData = async () => {
     try {
       const resFakultet = await APIFakultet.get();
-      const response = await APIUsers.getRole("tutor");
       setDataFakultet(resFakultet.data);
-      setDatas(response.data);
     } catch (error) {
       console.error("Xatolik yuz berdi!", error);
     } finally {
     }
   };
-
-  // const fakultetName = (id) => {
-  //   const data = dataFakultet.find((item) => item.id === id);
-  //   return data ? data.name : "Fakultet nomi kiritilmagan";
-  // };
 
   const validationSchema = Yup.object({
     username: Yup.string().required("Foydalanuvchi nomi majburiy"),
@@ -50,29 +42,24 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
       .required("Rol majburiy"),
     is_active: Yup.boolean(),
   });
-  
-  const handleEdit = (data) => {    
+
+  const handleEdit = (data) => {
     setId(data.id);
     setInitialValues({
       username: data.username,
       first_name: data.first_name,
       last_name: data.last_name,
       role: data.role,
-      fakultet: data.fakultet,
+      fakultet: data.fakultet ? data.fakultet.name : data.fakultet,
       password: data.parol,
       is_active: data.is_active,
     });
   };
 
-  // const handleDelete = async (id) => {
-  //   try {
-  //     await APIUsers.del(id);
-  //     fetchData();
-  //   } catch (error) {
-  //     console.error("Xatolik yuz berdi!", error);
-  //   } finally {
-  //   }
-  // };
+  const handleClose = () => {
+    onClose();
+    setEdit(false);
+  };
 
   const handleSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
@@ -90,20 +77,22 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
         await APIUsers.patch(id, formData);
         setId(null);
       }
-      fetchData();
       resetForm();
+      fetchData();
+      setEdit(false);
     } catch (error) {
       console.error("Xatolik sodir bo'ldi!", error);
     } finally {
+      onClose();
     }
   };
 
   useEffect(() => {
-    // if (info) {
-    //   setEdit(true)
-    // }
-    handleEdit(info)
-  }, [info])
+    if (info) {
+      setEdit(true);
+      handleEdit(info);
+    }
+  }, [info]);
 
   useEffect(() => {
     fetchData();
@@ -116,9 +105,6 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
-
-  console.log(edit);
-  
 
   if (!showModal) return null;
 
@@ -135,7 +121,7 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
       >
         <button
           className="w-8 h-8 bg-white absolute -top-2 -right-2 hover:-translate-x-1 hover:translate-y-1 font-medium shadow-md rounded transition-all focus:bg-slate-100"
-          onClick={onClose}
+          onClick={handleClose}
         >
           X
         </button>
