@@ -57,7 +57,7 @@ const TutorsCom = () => {
     setTimeout(() => {
       refetch();
     }, 1000);
-  }, [isModalOpen]);
+  }, [isModalOpen, refetch]);
 
   return (
     <div className="max-w-[1600px] mx-auto">
@@ -198,6 +198,7 @@ const TutorsCom = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         info={editData}
+        roleUser={"tutor"}
       />
     </div>
   );

@@ -1,231 +1,206 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import APIUsers from "../../services/users";
-import APIFakultet from "../../services/fakultet";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { RiPencilFill } from "react-icons/ri";
 import { MdDeleteForever } from "react-icons/md";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { FaPenToSquare } from "react-icons/fa6";
+import { BsExclamationCircle } from "react-icons/bs";
+import UsersFormCom from "../UsersFormCom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const AdminsCom = () => {
-    // TanStack Query to fetch users
-    const fetchUsers = async () => {
-        const response = await APIUsers.getRole("admin");
-        return response.data;
-    };
+  const queryClient = useQueryClient();
+  const [editData, setEditData] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
 
-    // TanStack Query to fetch faculties
-    const fetchFaculties = async () => {
-        const resFakultet = await APIFakultet.get();
-        return resFakultet.data;
-    };
-    const [edit, setEdit] = useState(false);
-    const [id, setId] = useState(null);
-    const [initialValues, setInitialValues] = useState({
-        username: "",
-        first_name: "",
-        last_name: "",
-        role: "admin",
-        fakultet: "",
-        password: "",
-        is_active: true,
-    });
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
-    // Use TanStack Query hooks to fetch data
-    const {
-        data: datas,
-        isLoading: isLoadingUsers,
-        error: usersError,
-        refetch: refetchUsers,
-    } = useQuery({
-        queryKey: ["users"],
-        queryFn: fetchUsers,
-    });
+  const {
+    data: datas = [],
+    isLoading: loading,
+    isError: error,
+    refetch,
+  } = useQuery({
+    queryKey: ["adminList"],
+    queryFn: async () => {
+      const response = await APIUsers.getRole("admin");
+      return response.data;
+    },
+  });
 
-    const {
-        data: dataFakultet,
-        isLoading: isLoadingFaculties,
-        error: facultiesError,
-        refetch: refetchFaculties,
-    } = useQuery({
-        queryKey: ["faculties"],
-        queryFn: fetchFaculties,
-    });
+  const editModalOpen = (data) => {
+    setEditData(data);
+    handleOpenModal();
+  };
 
-    // Mutation for delete action
-    const { mutateAsync: deleteUser, isLoading: isDeleting } = useMutation({
-        mutationFn: id => APIUsers.del(id),
-        onSuccess: () => {
-            refetchUsers();
-        },
-        onError: error => {
-            console.error("Delete Error:", error);
-        },
-    });
+  const deleteModalOpen = (aaa, id) => {
+    setIsDeleteModal(aaa);
+    setDeleteId(id);
+  };
 
-    // Mutation for adding/editing user
-    const { mutateAsync: createOrUpdateUser, isLoading: isSubmitting } =
-        useMutation({
-            mutationFn: formData => {
-                if (edit) {
-                    return APIUsers.patch(id, formData);
-                } else {
-                    return APIUsers.post(formData);
-                }
-            },
-            onSuccess: () => {
-                refetchUsers();
-                setEdit(false);
-                setId(null);
-            },
-            onError: error => {
-                console.error("Submit Error:", error);
-            },
-        });
+  const deleteMutation = useMutation({
+    mutationFn: (id) => APIUsers.del(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["adminList"]);
+    },
+  });
 
-    const fakultetName = id => {
-        const data = dataFakultet.find(item => item.id === id);
-        return data ? data.name : "Fakultet nomi kiritilmagan";
-    };
+  const handleDelete = async () => {
+    console.log(deleteId);
+    deleteMutation.mutate(deleteId);
+    deleteModalOpen(false);
+  };
 
-    const validationSchema = Yup.object({
-        username: Yup.string().required("Foydalanuvchi nomi majburiy"),
-        first_name: Yup.string().required("Ism majburiy"),
-        last_name: Yup.string().required("Familiya majburiy"),
-        password: Yup.string()
-            .min(6, "Parol kamida 6 ta belgi bo'lishi kerak")
-            .required("Parol majburiy"),
-        fakultet: Yup.string().required("Fakultet majburiy"),
-        role: Yup.string()
-            .oneOf(["superadmin", "admin", "tutor"], "Noto'g'ri ro'l tanlangan")
-            .required("Ro'l majburiy"),
-        is_active: Yup.boolean(),
-    });
+  useEffect(() => {
+    setTimeout(() => {
+      refetch();
+    }, 1000);
+  }, [isModalOpen, refetch]);
 
-    const handleEdit = data => {
-        setEdit(true);
-        setId(data.id);
-        setInitialValues({
-            username: data.username,
-            first_name: data.first_name,
-            last_name: data.last_name,
-            role: data.role,
-            fakultet: data.fakultet,
-            password: data.parol,
-            is_active: data.is_active,
-        });
-    };
-
-    const handleDelete = async id => {
-        await deleteUser(id);
-    };
-
-    const handleSubmit = async (values, { resetForm }) => {
-        const formData = new FormData();
-        for (let key in values) {
-            if (key === "is_active") {
-                formData.append(key, values[key] ? "true" : "false");
-            } else {
-                formData.append(key, values[key]);
-            }
-        }
-
-        await createOrUpdateUser(formData);
-        resetForm();
-    };
-
-    return (
-        <div className="max-w-[1600px] mx-auto">
-            <h1 className="text-3xl font-medium text-gray-700 text-center my-5">
-                Zamdekanlar
-            </h1>
-            <div className="max-w-7xl px-5 mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 border rounded-lg shadow">
-                    <h2 className="text-lg font-semibold text-gray-600 mb-4">
-                        {edit
-                            ? "Zamdekanni tahrirlash"
-                            : "Yangi zamdekan qo'shish"}
-                    </h2>
-                    <Formik
-                        enableReinitialize
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        onSubmit={handleSubmit}
+  return (
+    <div className="max-w-[1600px] mx-auto">
+      <h1 className="text-xl md:text-3xl font-medium text-gray-700 text-center my-5">
+        Tyutorlar
+      </h1>
+      <div className="max-w-7xl px-5 mx-auto grid gap-4">
+        <div className="rounded-md shadow-md  overflow-x-auto">
+          <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-900">
+            <h3 className="text-base md:text-xl font-medium">
+              Tyutorlar ro'yxati
+            </h3>
+            <button
+              className="text-sm md:text-base font-semibold text-center bg-purple-200 text-purple-500 rounded-xl border border-purple-500 px-4 py-1 active:scale-95"
+              onClick={handleOpenModal}
+            >
+              + Yangi tyutor qo'shish
+            </button>
+          </div>
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  Ism
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Foydalanuvchi nomi
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Foydalanuvchi paroli
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Holati
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Harakatlar
+                </th>
+              </tr>
+            </thead>
+            {datas.map((data) => (
+              <tbody key={data.id}>
+                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <th
+                    scope="row"
+                    className="flex items-center px-6 py-2 text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    <span className="w-9 h-9 bg-indigo-200 text-indigo-500 rounded-full text-center leading-9 text-base font-medium uppercase">
+                      {data.first_name.charAt(0)}
+                      {data.last_name.charAt(0)}
+                    </span>
+                    <div className="ps-3">
+                      <div className="text-base font-semibold capitalize">
+                        {data.first_name} {data.last_name}
+                      </div>
+                      <div className="font-normal text-gray-500">
+                        +998905863595
+                      </div>
+                    </div>
+                  </th>
+                  <td className="px-6 py-2">{data.username}</td>
+                  <td className="px-6 py-2">{data.parol}</td>
+                  <td className="px-6 py-2">
+                    <span
+                      className={`font-medium rounded px-3 py-[2px] ${
+                        data.is_active
+                          ? "bg-green-200 text-green-600"
+                          : "bg-red-200 text-red-600"
+                      }`}
                     >
-                        {({ values }) => (
-                            <Form>
-                                {/* Form fields here */}
-                                {/* Facultet, first_name, last_name, username, password, is_active */}
-                                <button
-                                    type="submit"
-                                    className={`w-full py-2 px-4 rounded-md text-white font-semibold ${
-                                        edit ? "bg-teal-500" : "bg-blue-500"
-                                    }`}
-                                    disabled={isSubmitting}
-                                >
-                                    {edit ? "Saqlash" : "Yuborish"}
-                                </button>
-                            </Form>
-                        )}
-                    </Formik>
-                </div>
-
-                <div className="space-y-3 max-h-[600px] overflow-y-auto">
-                    {isLoadingUsers && (
-                        <p className="text-blue-500 font-bold text-center">
-                            Yuklanmoqda...
-                        </p>
-                    )}
-                    {usersError && (
-                        <p className="text-red-500 font-bold text-center">
-                            {usersError.message}
-                        </p>
-                    )}
-                    {datas &&
-                        datas.map(data => (
-                            <div
-                                key={data.id}
-                                className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg"
-                            >
-                                <input type="checkbox" name="my-accordion-2" />
-                                <div className="collapse-title flex justify-between items-center">
-                                    <p className="text-sky-700 font-medium">
-                                        {data.first_name} {data.last_name}
-                                    </p>
-                                    <div className="flex space-x-2 z-10">
-                                        <button
-                                            type="button"
-                                            className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600"
-                                            onClick={() => handleEdit(data)}
-                                        >
-                                            <RiPencilFill />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600"
-                                            onClick={() =>
-                                                handleDelete(data.id)
-                                            }
-                                        >
-                                            <MdDeleteForever />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="collapse-content">
-                                    <p className="text-sky-700 font-medium">
-                                        Fakultitet:{" "}
-                                        {fakultetName(data.fakultet)}
-                                    </p>
-                                    <p className="text-sky-700 font-medium">
-                                        Foydalanuvchi nomi: {data.username}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
-                </div>
-            </div>
+                      {data.is_active ? "faol" : "faol emas"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-2 text-center">
+                    <button
+                      type="button"
+                      className="px-2 py-2 text-xl hover:bg-slate-200 active:bg-slate-400 active:text-slate-100 rounded-full"
+                      onClick={() => editModalOpen(data)}
+                    >
+                      <FaPenToSquare />
+                    </button>
+                    <button
+                      type="button"
+                      className="px-2 py-2 ml-1 text-xl hover:bg-slate-200 active:bg-slate-400 active:text-slate-100 rounded-full"
+                      onClick={() => deleteModalOpen(true, data.id)}
+                    >
+                      <MdDeleteForever />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            ))}
+          </table>
+          {loading && (
+            <p className="text-blue-500 font-bold text-center">
+              Yuklanmoqda...
+            </p>
+          )}
+          {error && (
+            <p className="text-red-500 font-bold text-center">
+              Xatolik yuz berdi!
+            </p>
+          )}
         </div>
-    );
+      </div>
+      <div
+        className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 px-5 ${
+          isDeleteModal ? "" : "hidden"
+        }`}
+      >
+        <div className="bg-white rounded-lg shadow-lg p-6 w-[400px]">
+          <div className="flex items-center justify-center">
+            <BsExclamationCircle className="text-5xl text-red-500" />
+          </div>
+          <h1 className="text-2xl font-semibold text-slate-600 text-center mt-4">
+            Ishonchingiz komilmi?
+          </h1>
+          <p className="text-center mt-4">
+            Siz haqiqatan ham ushbu foydalanuvchini o'chirmoqchimisiz? Bu
+            ma'lumotni ortga qaytarib bo'lmaydi!
+          </p>
+          <div className="flex items-center justify-center gap-4 mt-10">
+            <button
+              className="px-4 py-2 rounded-md text-white bg-gray-400 hover:bg-gray-500 active:scale-95"
+              onClick={() => deleteModalOpen(false)}
+            >
+              Bekor qilish
+            </button>
+            <button
+              className="px-4 py-2 rounded-md text-white bg-red-500 hover:bg-red-600 active:scale-95"
+              onClick={() => handleDelete()}
+            >
+              Ha, o'chirish
+            </button>
+          </div>
+        </div>
+      </div>
+      <UsersFormCom
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        info={editData}
+        roleUser={"admin"}
+      />
+    </div>
+  );
 };
 
 export default AdminsCom;

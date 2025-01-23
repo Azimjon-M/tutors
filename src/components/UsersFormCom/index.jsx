@@ -4,7 +4,7 @@ import APIFakultet from "../../services/fakultet";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-const UsersFormCom = ({ isOpen, onClose, info }) => {
+const UsersFormCom = ({ isOpen, onClose, info, roleUser }) => {
   const [showModal, setShowModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
@@ -13,7 +13,7 @@ const UsersFormCom = ({ isOpen, onClose, info }) => {
     username: "",
     first_name: "",
     last_name: "",
-    role: "tutor",
+    role: roleUser,
     fakultet: "",
     password: "",
     is_active: true,
