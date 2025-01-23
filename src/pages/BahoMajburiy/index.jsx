@@ -99,7 +99,7 @@ const BahoMajburiy = () => {
             {/* Asosiy konteyner */}
             <div className="md:flex">
                 {/* Chap menyu */}
-                <ul className="flex-column space-y-4 text-sm font-medium text-gray-500 dark:text-gray-400 md:me-4 mb-4 md:mb-0">
+                <ul className="flex-column space-y-4 text-sm font-medium text-gray-500 dark:text-gray-400 md:me-4 mb-4 md:mb-0 p-3">
                     {toglerButton.map((item) => (
                         <li key={item.id}>
                             <button
