@@ -16,18 +16,26 @@ const AdminsCom = () => {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const {
-    data: datas = [],
-    isLoading: loading,
-    isError: error,
-    refetch,
-  } = useQuery({
-    queryKey: ["adminList"],
-    queryFn: async () => {
-      const response = await APIUsers.getRole("admin");
-      return response.data;
-    },
-  });
+    const {
+        data: dataFakultet,
+        isLoading: isLoadingFaculties,
+        error: facultiesError,
+        refetch: refetchFaculties,
+    } = useQuery({
+        queryKey: ["faculties"],
+        queryFn: fetchFaculties,
+    });
+
+    // Mutation for delete action
+    const { mutateAsync: deleteUser, isLoading: isDeleting } = useMutation({
+        mutationFn: id => APIUsers.del(id),
+        onSuccess: () => {
+            refetchUsers();
+        },
+        onError: error => {
+            console.error("Delete Error:", error);
+        },
+    });
 
   const editModalOpen = (data) => {
     setEditData(data);
