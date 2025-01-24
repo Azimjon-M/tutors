@@ -459,7 +459,7 @@ const BahoQoshmcha = () => {
                                         {item.taskTotal}/{item.taskCompleted}
                                     </span>
                                 </div>
-                                <div className="py-3 px-4">{item.endTime}</div>
+                                <div className="py-3 px-4">{item.deadline}</div>
                                 <div className="py-3 px-4">
                                     {getStatus(item.isRated, item.status)}
                                 </div>
