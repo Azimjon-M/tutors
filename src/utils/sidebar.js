@@ -35,6 +35,7 @@ import IqtidorliTalabalar from "../pages/MajburiyTopshiriqlar/IqtidorliTalabalar
 import TestTutor from "../pages/MajburiyTopshiriqlar/TestTutor";
 import Togarak from "../pages/MajburiyTopshiriqlar/Togarak";
 import OilagaXat from "../pages/MajburiyTopshiriqlar/OilagaXat";
+import MajTopQoshish from "../pages/MajTopQoshish/inde";
 
 const sidebar = [
     {
@@ -117,7 +118,7 @@ const sidebar = [
                 title: "Majburiy topshiriq qo'shish",
                 path: "/majburiy-topshiriq-qoshish",
                 icon: RiFileList3Line,
-                element: TopshiriqlarQoshish,
+                element: MajTopQoshish,
                 role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
             },
         ],
