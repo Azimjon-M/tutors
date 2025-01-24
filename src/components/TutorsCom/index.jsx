@@ -8,68 +8,29 @@ import UsersFormCom from "../UsersFormCom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const TutorsCom = () => {
-    const queryClient = useQueryClient()
-    const [editData, setEditData] = useState([]);
-    // const [editId, setEditId] = useState(null);
+    const queryClient = useQueryClient();
+    const [editData, setEditData] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
-    // const [datas, setDatas] = useState([]);
-    // const [loading, setLoading] = useState(false);
-    // const [error, setError] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModal, setIsDeleteModal] = useState(false);
-    // const [initialValues, setInitialValues] = useState({
-    //     username: "",
-    //     first_name: "",
-    //     last_name: "",
-    //     role: "tutor",
-    //     fakultet: "",
-    //     password: "",
-    //     is_active: true,
-    // });
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
 
-    // const fetchData = async () => {
-    //     setLoading(true);
-    //     setError("");
-    //     try {
-    //         const response = await APIUsers.getRole("tutor");
-    //         // setDatas(response.data);
-    //     } catch (error) {
-    //         setError("Ma'lumotni olishda xatolik yuz berdi!");
-    //         console.error("Xatolik yuz berdi!", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    const {data: datas = [], isLoading: loading, isError: error, refetch} = useQuery({
+    const {
+        data: datas = [],
+        isLoading: loading,
+        isError: error,
+        refetch,
+    } = useQuery({
         queryKey: ["tutorList"],
         queryFn: async () => {
             const response = await APIUsers.getRole("tutor");
-            return response.data
-        }
-    })
+            return response.data;
+        },
+    });
 
-
-
-    // const handleEdit = (data) => {
-    //   handleOpenModal();
-    //   setEdit(true);
-    //   setEditId(data.id);
-    //   setInitialValues({
-    //     username: data.username,
-    //     first_name: data.first_name,
-    //     last_name: data.last_name,
-    //     role: data.role,
-    //     fakultet: data.fakultet,
-    //     password: data.parol,
-    //     is_active: data.is_active,
-    //   });
-    // };
-
-    const editModalOpen = data => {
+    const editModalOpen = (data) => {
         setEditData(data);
         handleOpenModal();
     };
@@ -80,38 +41,24 @@ const TutorsCom = () => {
     };
 
     const deleteMutation = useMutation({
-        mutationFn: id => APIUsers.del(id),
-        onSuccess: ()=>{
-            queryClient.invalidateQueries(["tutorList"])
-        }
-    })
-    
-    const handleDelete = async () => {
-        console.log(deleteId);
-        
-        deleteMutation.mutate(deleteId)
-        deleteModalOpen(false)
+        mutationFn: (id) => APIUsers.del(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries(["tutorList"]);
+        },
+    });
 
-        // setLoading(true);
-        // setError("");
-        // try {
-        //     await APIUsers.del(deleteId);
-        //     fetchData();
-        // } catch (error) {
-        //     setError("Ma'lumotni o'chirishda xatolik yuz berdi!");
-        //     console.error("Xatolik yuz berdi!", error);
-        // } finally {
-        //     setLoading(false);
-        //     deleteModalOpen(false);
-        // }
+    const handleDelete = async () => {
+        deleteMutation.mutate(deleteId);
+        deleteModalOpen(false);
     };
 
-
     useEffect(() => {
-        setTimeout(() => {
-            refetch()
-        }, 1000);
-    }, [isModalOpen]);
+        if (!isModalOpen) {
+            setTimeout(() => {
+                refetch();
+            }, 1000);
+        }
+    }, [isModalOpen, refetch]);
 
     return (
         <div className="max-w-[1600px] mx-auto">
@@ -154,7 +101,7 @@ const TutorsCom = () => {
                                 </th>
                             </tr>
                         </thead>
-                        {datas.map(data => (
+                        {datas.map((data) => (
                             <tbody key={data.id}>
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th
@@ -239,8 +186,8 @@ const TutorsCom = () => {
                         Ishonchingiz komilmi?
                     </h1>
                     <p className="text-center mt-4">
-                        Haqiqatan ham bu foydalanuvchini o'chirib
-                        tashlamoqchimisiz? Bu ma'lumotni ortga qaytarib
+                        Siz haqiqatan ham ushbu foydalanuvchini
+                        o'chirmoqchimisiz? Bu ma'lumotni ortga qaytarib
                         bo'lmaydi!
                     </p>
                     <div className="flex items-center justify-center gap-4 mt-10">
@@ -263,6 +210,7 @@ const TutorsCom = () => {
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
                 info={editData}
+                roleUser={"tutor"}
             />
         </div>
     );
