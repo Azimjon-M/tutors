@@ -87,7 +87,7 @@ const sidebar = [
                 path: "/topshiriqlar",
                 icon: RiFileList3Line,
                 element: TopshiriqlarniKorish,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`,],
+                role: [`"${userRole.superAdmin}"`],
             },
             {
                 id: 5 - 2,
@@ -114,12 +114,12 @@ const sidebar = [
                 role: [`"${userRole.admin}"`],
             },
             {
-                id: 5 - 3,
+                id: 5 - 5,
                 title: "Majburiy topshiriq qo'shish",
                 path: "/majburiy-topshiriq-qoshish",
                 icon: RiFileList3Line,
                 element: MajTopQoshish,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
+                role: [`"${userRole.superAdmin}"`],
             },
         ],
     },
