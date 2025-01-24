@@ -5,22 +5,13 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { RiPencilFill } from "react-icons/ri";
 import { MdDeleteForever } from "react-icons/md";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const AdminsCom = () => {
-    // TanStack Query to fetch users
-    const fetchUsers = async () => {
-        const response = await APIUsers.getRole("admin");
-        return response.data;
-    };
-
-    // TanStack Query to fetch faculties
-    const fetchFaculties = async () => {
-        const resFakultet = await APIFakultet.get();
-        return resFakultet.data;
-    };
     const [edit, setEdit] = useState(false);
     const [id, setId] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const [initialValues, setInitialValues] = useState({
         username: "",
         first_name: "",
@@ -31,60 +22,71 @@ const AdminsCom = () => {
         is_active: true,
     });
 
-    // Use TanStack Query hooks to fetch data
+    // *** Whith Quary
+    // Get Admin FN from userModel
+    const fatchUser = async () => {
+        setLoading(true);
+        const res = await APIUsers.getRole("admin");
+        if (res.data) {
+            setLoading(false);
+        }
+        return res.data;
+    };
+    // Get Fakultets FN
+    const fatchFakultet = async () => {
+        setLoading(true);
+        const res = await APIFakultet.get();
+        if (res.data) {
+            setLoading(false);
+        }
+        return res.data;
+    };
+    // Get Admin
     const {
-        data: datas,
-        isLoading: isLoadingUsers,
-        error: usersError,
-        refetch: refetchUsers,
+        data: dataAdmin = [],
+        reftech: reftechAdmin,
     } = useQuery({
-        queryKey: ["users"],
-        queryFn: fetchUsers,
+        queryKey: ["getAdmin"],
+        queryFn: fatchUser,
     });
-
+    // Get Fakultet
     const {
         data: dataFakultet = [],
-        isLoading: isLoadingFaculties,
-        error: facultiesError,
-        refetch: refetchFaculties,
     } = useQuery({
-        queryKey: ["faculties"],
-        queryFn: fetchFaculties,
+        queryKey: ["getFakultet"],
+        queryFn: fatchFakultet,
     });
-
-    // Mutation for delete action
-    const { mutateAsync: deleteUser, isLoading: isDeleting } = useMutation({
-        mutationFn: id => APIUsers.del(id),
+    // Admin delete
+    const { mutateAsync: onDeleteUser } = useMutation({
+        mutationFn: (id) => APIUsers.del(id),
+        onSuccess: () => reftechAdmin,
+        onError: (err) => {
+            console.log("UserDeleteError: ", err);
+        },
+    });
+    // Submit Form Post
+    const { mutateAsync: createOrUpdateUser } = useMutation({
+        mutationFn: (formData) => {
+            if (edit) {
+                return APIUsers.patch(id, formData);
+            } else {
+                return APIUsers.post(formData);
+            }
+        },
         onSuccess: () => {
-            refetchUsers();
+            reftechAdmin()
+            setEdit(false);
+            setId(null);
         },
-        onError: error => {
-            console.error("Delete Error:", error);
+        onError: (err) => {
+            console.error("Submit Error:", err);
         },
     });
 
-    // Mutation for adding/editing user
-    const { mutateAsync: createOrUpdateUser, isLoading: isSubmitting } =
-        useMutation({
-            mutationFn: formData => {
-                if (edit) {
-                    return APIUsers.patch(id, formData);
-                } else {
-                    return APIUsers.post(formData);
-                }
-            },
-            onSuccess: () => {
-                refetchUsers();
-                setEdit(false);
-                setId(null);
-            },
-            onError: error => {
-                console.error("Submit Error:", error);
-            },
-        });
+    // /Whith Quary
 
-    const fakultetName = id => {
-        const data = dataFakultet.find(item => item.id === id);
+    const fakultetName = (id) => {
+        const data = dataFakultet.find((item) => item.id === id);
         return data ? data.name : "Fakultet nomi kiritilmagan";
     };
 
@@ -102,7 +104,7 @@ const AdminsCom = () => {
         is_active: Yup.boolean(),
     });
 
-    const handleEdit = data => {
+    const handleEdit = (data) => {
         setEdit(true);
         setId(data.id);
         setInitialValues({
@@ -116,10 +118,6 @@ const AdminsCom = () => {
         });
     };
 
-    const handleDelete = async id => {
-        await deleteUser(id);
-    };
-
     const handleSubmit = async (values, { resetForm }) => {
         const formData = new FormData();
         for (let key in values) {
@@ -130,7 +128,10 @@ const AdminsCom = () => {
             }
         }
 
+
         await createOrUpdateUser(formData);
+        console.log("Post bo'ldi", resetForm);
+        
         resetForm();
     };
 
@@ -154,14 +155,156 @@ const AdminsCom = () => {
                     >
                         {({ values }) => (
                             <Form>
-                                {/* Form fields here */}
-                                {/* Facultet, first_name, last_name, username, password, is_active */}
+                                {/* Fakultet */}
+                                <div className="mb-4">
+                                    <label
+                                        htmlFor="fakultet"
+                                        className="block text-sm font-medium text-gray-700"
+                                    >
+                                        Fakultitet
+                                    </label>
+                                    <Field
+                                        component="select"
+                                        id="fakultet"
+                                        name="fakultet"
+                                        className="w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300"
+                                    >
+                                        <option value="" disabled>
+                                            Fakultitetni kiriting
+                                        </option>
+                                        {dataFakultet.map((data) => (
+                                            <option
+                                                key={data.id}
+                                                value={data.id}
+                                            >
+                                                {data.name}
+                                            </option>
+                                        ))}
+                                    </Field>
+                                    <ErrorMessage
+                                        name="fakultet"
+                                        component="div"
+                                        className="text-red-500 text-sm mt-1"
+                                    />
+                                </div>
+
+                                {/* First Name */}
+                                <div className="mb-4">
+                                    <label
+                                        htmlFor="first_name"
+                                        className="block text-sm font-medium text-gray-700"
+                                    >
+                                        Ismi
+                                    </label>
+                                    <Field
+                                        type="text"
+                                        id="first_name"
+                                        name="first_name"
+                                        className="w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300"
+                                    />
+                                    <ErrorMessage
+                                        name="first_name"
+                                        component="div"
+                                        className="text-red-500 text-sm mt-1"
+                                    />
+                                </div>
+
+                                {/* Last name */}
+                                <div className="mb-4">
+                                    <label
+                                        htmlFor="last_name"
+                                        className="block text-sm font-medium text-gray-700"
+                                    >
+                                        Familiyasi
+                                    </label>
+                                    <Field
+                                        type="text"
+                                        id="last_name"
+                                        name="last_name"
+                                        className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
+                                    />
+                                    <ErrorMessage
+                                        name="last_name"
+                                        component="div"
+                                        className="text-red-500 text-sm mt-1"
+                                    />
+                                </div>
+
+                                {/* Username */}
+                                <div className="mb-4">
+                                    <label
+                                        htmlFor="username"
+                                        className="block text-sm font-medium text-gray-700"
+                                    >
+                                        Foydalanuvchi nomi
+                                    </label>
+                                    <Field
+                                        type="text"
+                                        id="username"
+                                        name="username"
+                                        className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
+                                    />
+                                    <ErrorMessage
+                                        name="username"
+                                        component="div"
+                                        className="text-red-500 text-sm mt-1"
+                                    />
+                                </div>
+
+                                {/* Password */}
+                                <div className="mb-4">
+                                    <label
+                                        htmlFor="password"
+                                        className="block text-sm font-medium text-gray-700"
+                                    >
+                                        Parol
+                                    </label>
+                                    <Field
+                                        type="text"
+                                        id="password"
+                                        name="password"
+                                        className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
+                                    />
+                                    <ErrorMessage
+                                        name="password"
+                                        component="div"
+                                        className="text-red-500 text-sm mt-1"
+                                    />
+                                </div>
+                                {/* is active btn */}
+                                <div className="mb-4">
+                                    <div
+                                        role="group"
+                                        aria-labelledby="my-radio-group"
+                                    >
+                                        <p className="block text-sm font-medium text-gray-700">
+                                            Foydalanuvchi faolligi
+                                        </p>
+                                        <label className="mr-3">
+                                            <Field
+                                                type="checkbox"
+                                                name="is_active"
+                                                className="mr-1"
+                                            />
+                                            {values.is_active
+                                                ? "faol"
+                                                : "faol emas"}
+                                        </label>
+                                    </div>
+                                    <ErrorMessage
+                                        name="is_active"
+                                        component="div"
+                                        className="text-red-500 text-sm mt-1"
+                                    />
+                                </div>
+
                                 <button
                                     type="submit"
                                     className={`w-full py-2 px-4 rounded-md text-white font-semibold ${
-                                        edit ? "bg-teal-500" : "bg-blue-500"
+                                        edit
+                                            ? "border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
+                                            : "border border-blue-500 bg-blue-500 hover:bg-blue-600 active:bg-blue-100 active:border-blue-600 active:text-blue-600"
                                     }`}
-                                    disabled={isSubmitting}
                                 >
                                     {edit ? "Saqlash" : "Yuborish"}
                                 </button>
@@ -171,57 +314,68 @@ const AdminsCom = () => {
                 </div>
 
                 <div className="space-y-3 max-h-[600px] overflow-y-auto">
-                    {isLoadingUsers && (
+                    {loading && (
                         <p className="text-blue-500 font-bold text-center">
                             Yuklanmoqda...
                         </p>
                     )}
-                    {usersError && (
+                    {error && (
                         <p className="text-red-500 font-bold text-center">
-                            {usersError.message}
+                            {error}
                         </p>
                     )}
-                    {datas &&
-                        datas.map(data => (
-                            <div
-                                key={data.id}
-                                className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg"
-                            >
-                                <input type="checkbox" name="my-accordion-2" />
-                                <div className="collapse-title flex justify-between items-center">
-                                    <p className="text-sky-700 font-medium">
-                                        {data.first_name} {data.last_name}
-                                    </p>
-                                    <div className="flex space-x-2 z-10">
-                                        <button
-                                            type="button"
-                                            className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600"
-                                            onClick={() => handleEdit(data)}
-                                        >
-                                            <RiPencilFill />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600"
-                                            onClick={() =>
-                                                handleDelete(data.id)
-                                            }
-                                        >
-                                            <MdDeleteForever />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="collapse-content">
-                                    <p className="text-sky-700 font-medium">
-                                        Fakultitet:{" "}
-                                        {fakultetName(data.fakultet)}
-                                    </p>
-                                    <p className="text-sky-700 font-medium">
-                                        Foydalanuvchi nomi: {data.username}
-                                    </p>
+                    {dataAdmin.map((data) => (
+                        <div
+                            key={data.id}
+                            className="collapse collapse-arrow border rounded-lg shadow-md hover:shadow-lg"
+                        >
+                            <input type="checkbox" name="my-accordion-2" />
+                            <div className="collapse-title flex justify-between items-center">
+                                <p className="text-sky-700 font-medium line-clamp-1">
+                                    <span className="text-sky-800 font-bold">
+                                        Admin:
+                                    </span>{" "}
+                                    {data.first_name} {data.last_name}
+                                </p>
+                                <div className="flex space-x-2 z-10">
+                                    <button
+                                        type="button"
+                                        className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
+                                        onClick={() => handleEdit(data)}
+                                    >
+                                        <RiPencilFill />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
+                                        onClick={() => onDeleteUser(data.id)}
+                                    >
+                                        <MdDeleteForever />
+                                    </button>
                                 </div>
                             </div>
-                        ))}
+                            <div className="collapse-content">
+                                <p className="text-sky-700 font-medium">
+                                    <span className="text-sky-800 font-bold">
+                                        Fakultitet nomi:
+                                    </span>{" "}
+                                    {fakultetName(data.fakultet)}
+                                </p>
+                                <p className="text-sky-700 font-medium">
+                                    <span className="text-sky-800 font-bold">
+                                        Foydalanuvchi nomi:
+                                    </span>{" "}
+                                    {data.username}
+                                </p>
+                                <p className="text-sky-700 font-medium">
+                                    <span className="text-sky-800 font-bold">
+                                        Foydalanuvchi paroli:
+                                    </span>{" "}
+                                    {data.parol}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
