@@ -11,6 +11,8 @@ import { VscGraph } from "react-icons/vsc";
 // Components
 import { Admins, Analitika, BaholashMezonlari, BahoMajburiy, BahoOzTashabbusi, BahoQoshmcha, BahoSohagaOid, Fakultet, TopshiriqlarniKorish, Tutors } from "../pages";
 import TopshiriqlarQoshish from "../pages/Topshiriqlar";
+import TopshiriqlarQoshishZamdekan from "../pages/TopshiriqlarQoshishZamdekan";
+import TopshiriqlarniKorishZamdekan from "../pages/TopshiriqlarniKorishZamdekan";
 import userRole from "../components/userRole";
 
 const sidebar = [
@@ -59,7 +61,7 @@ const sidebar = [
                 path: "/topshiriqlar",
                 icon: RiFileList3Line,
                 element: TopshiriqlarniKorish,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`,],
+                role: [`"${userRole.superAdmin}"`],
             },
             {
                 id: 5-2,
@@ -67,7 +69,23 @@ const sidebar = [
                 path: "/topshiriq-qoshish",
                 icon: RiFileList3Line,
                 element: TopshiriqlarQoshish,
-                role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
+                role: [`"${userRole.superAdmin}"`],
+            },
+            {
+                id: 5-3,
+                title: "Topshiriqlar",
+                path: "/qoshimcha-topshiriqlar",
+                icon: RiFileList3Line,
+                element: TopshiriqlarniKorishZamdekan,
+                role: [`"${userRole.admin}"`],
+            },
+            {
+                id: 5-4,
+                title: "Topshiriq qo'shish",
+                path: "/qoshimcha-topshiriq-qoshish",
+                icon: RiFileList3Line,
+                element: TopshiriqlarQoshishZamdekan,
+                role: [`"${userRole.admin}"`],
             },
         ]
     },
