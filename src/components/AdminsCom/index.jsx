@@ -11,7 +11,7 @@ const AdminsCom = () => {
     const [edit, setEdit] = useState(false);
     const [id, setId] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [error] = useState("");
     const [initialValues, setInitialValues] = useState({
         username: "",
         first_name: "",
