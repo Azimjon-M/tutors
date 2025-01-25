@@ -33,13 +33,17 @@ function TTJgaTashrifCom() {
             <h4 className="li line-clamp-1">
               Click to open this one and close others
             </h4>
-            <p className="w-7 h-7 rounded-md text-center leading-7 bg-emerald-200 text-emerald-600">7</p>
+            <p className="w-7 h-7 rounded-md text-center leading-7 bg-emerald-200 text-emerald-600">
+              7
+            </p>
           </div>
         </div>
-        <div className="collapse-content bg-slate-400">
-          <div className="flex items-center justify-between mt-4">
-            <p>22.02.2025</p>
-            <button>PDF yuklab olish</button>
+        <div className="collapse-content">
+          <div className="bg-slate-400 rounded-md p-3">
+            <div className="flex items-center justify-between">
+              <p>22.02.2025</p>
+              <button>PDF yuklab olish</button>
+            </div>
           </div>
         </div>
       </div>
