@@ -127,7 +127,7 @@ const UsersFormCom = ({ isOpen, onClose, info, roleUser }) => {
         </button>
         <div className="flex items-start justify-between">
           <h2 className="text-lg font-semibold text-gray-600 mb-4">
-            {false ? "Tyutorni tahrirlash" : "Yangi tyutor qo'shish"}
+            {edit ? `${roleUser}ni tahrirlash` : `Yangi ${roleUser} qo'shish`}
           </h2>
         </div>
         <Formik
@@ -142,9 +142,9 @@ const UsersFormCom = ({ isOpen, onClose, info, roleUser }) => {
               <div className="mb-4">
                 <label
                   htmlFor="fakultet"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 capitalize"
                 >
-                  Tyutor
+                  {roleUser}
                 </label>
                 <Field
                   component="select"
