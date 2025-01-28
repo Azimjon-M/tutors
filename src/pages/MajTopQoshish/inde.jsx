@@ -3,18 +3,17 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const MajTopQoshish = () => {
-
     const kategory = [
-        { id: 1, name: "Kategoryani tanlang!", disabled: true },
-        { id: 2, name: "Ijaraga tashrif" },
-        { id: 3, name: "TTJda tadbir" },
-        { id: 4, name: "Davra suhbati" },
-        { id: 5, name: "Tadbirlar" },
-        { id: 6, name: "Tutorlik soati" },
-        { id: 7, name: "Iqtidorli talabar" },
-        { id: 8, name: "Ota-onaga xat" },
-        { id: 9, name: "Test" },
-        { id: 10, name: "To'garak" },
+        { id: 0, name: "Kategoryani tanlang!", disabled: true, },
+        { id: 1, name: "Ijaraga tashrif" },
+        { id: 2, name: "TTJda tadbir" },
+        { id: 3, name: "Davra suhbati" },
+        { id: 4, name: "Tadbirlar" },
+        { id: 5, name: "Tutorlik soati" },
+        { id: 6, name: "Iqtidorli talabar" },
+        { id: 7, name: "Ota-onaga xat" },
+        { id: 8, name: "Test" },
+        { id: 9, name: "To'garak" },
         // { id: , name: "" },
     ];
 
@@ -22,7 +21,7 @@ const MajTopQoshish = () => {
         initialValues: {
             // title: "",
             // details: "",
-            category: "",
+            category: 0,
             numberValue: "",
             // file1: null,
             // file2: null,
@@ -47,7 +46,6 @@ const MajTopQoshish = () => {
             <h1 className="text-lg font-bold">Topshiriq yuborish:</h1>
 
             <form onSubmit={formik.handleSubmit}>
-
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                     <div className="form-control mb-4">
                         <label htmlFor="category" className="label">
@@ -65,8 +63,7 @@ const MajTopQoshish = () => {
                             {kategory?.map((item) => (
                                 <option
                                     key={item.id}
-                                    value={item.name}
-                                    selected={item.selected}
+                                    value={item.id}
                                     disabled={item.disabled}
                                 >
                                     {item.name}
