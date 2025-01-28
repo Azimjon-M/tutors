@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
-import Pagination from "../../components/Pagination";
+import Pagination from "../../../components/Pagination";
 
 const BahoQoshmcha = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);

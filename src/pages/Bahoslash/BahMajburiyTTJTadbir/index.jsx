@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
-import Pagination from "../Pagination";
+import Pagination from "../../../components/Pagination";
 
-const BahMajburiyIjaraTashrif = () => {
+const BahMajburiyTTJTadbir = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     // Pagination
     const [paginationData, setPaginationData] = useState({
@@ -24,8 +24,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Shirin Asqarova",
             fakultet: "Fiz-Mat",
             taskCompleted: 0,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: true,
             isRated: true,
             maxScore: 10,
@@ -37,8 +37,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Shirin Asqarova",
             fakultet: "Fiz-Mat",
             taskCompleted: 0,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: false,
             isRated: false,
             maxScore: 10,
@@ -50,8 +50,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Azimjon Shukur",
             fakultet: "Fiz-Mat",
             taskCompleted: 1,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: true,
             isRated: true,
             maxScore: 10,
@@ -63,8 +63,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Dilshod Raxmatov",
             fakultet: "Fiz-Mat",
             taskCompleted: 1,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: true,
             isRated: false,
             maxScore: 10,
@@ -76,8 +76,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Dilshod Raxmatov",
             fakultet: "Fiz-Mat",
             taskCompleted: 2,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: true,
             isRated: true,
             maxScore: 10,
@@ -89,8 +89,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Dilshod Raxmatov",
             fakultet: "Fiz-Mat",
             taskCompleted: 2,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: true,
             isRated: false,
             maxScore: 10,
@@ -102,8 +102,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 0,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -115,8 +115,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 1,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -128,8 +128,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -141,8 +141,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -154,8 +154,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -167,8 +167,8 @@ const BahMajburiyIjaraTashrif = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 2,
-            deadline: "1 hafta",
+            taskTotal: 1,
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -538,4 +538,4 @@ const BahMajburiyIjaraTashrif = () => {
     );
 };
 
-export default BahMajburiyIjaraTashrif;
+export default BahMajburiyTTJTadbir;

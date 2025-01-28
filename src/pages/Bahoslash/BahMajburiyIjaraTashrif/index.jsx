@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
-import Pagination from "../Pagination";
+import Pagination from "../../../components/Pagination";
 
-const BahMajburiyTTJTashrif = () => {
+const BahMajburiyIjaraTashrif = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     // Pagination
     const [paginationData, setPaginationData] = useState({
         totalPages: 10,
-        currentPage: 10,
+        currentPage: 1,
     });
 
     const handlePageChange = (page) => {
         setPaginationData((prev) => ({ ...prev, currentPage: page }));
+        // Bu yerda API chaqiruv amalga oshirilishi mumkin
         console.log(`Page changed to: ${page}`);
     };
-
     // /Pagination
 
     const data = [
@@ -538,4 +538,4 @@ const BahMajburiyTTJTashrif = () => {
     );
 };
 
-export default BahMajburiyTTJTashrif;
+export default BahMajburiyIjaraTashrif;

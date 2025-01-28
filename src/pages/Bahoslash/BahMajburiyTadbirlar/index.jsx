@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
-import Pagination from "../Pagination";
+import Pagination from "../../../components/Pagination";
 
-const BahMajburiyTutorlikSoati = () => {
+const BahMajburiyTadbirlar = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     // Pagination
     const [paginationData, setPaginationData] = useState({
@@ -25,7 +25,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Fiz-Mat",
             taskCompleted: 0,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: true,
             isRated: true,
             maxScore: 10,
@@ -38,7 +38,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Fiz-Mat",
             taskCompleted: 0,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: false,
             isRated: false,
             maxScore: 10,
@@ -51,7 +51,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Fiz-Mat",
             taskCompleted: 1,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: true,
             isRated: true,
             maxScore: 10,
@@ -64,7 +64,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Fiz-Mat",
             taskCompleted: 1,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: true,
             isRated: false,
             maxScore: 10,
@@ -77,7 +77,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Fiz-Mat",
             taskCompleted: 2,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: true,
             isRated: true,
             maxScore: 10,
@@ -90,7 +90,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Fiz-Mat",
             taskCompleted: 2,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: true,
             isRated: false,
             maxScore: 10,
@@ -103,7 +103,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Ona-tili",
             taskCompleted: 0,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -116,7 +116,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Ona-tili",
             taskCompleted: 1,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -129,7 +129,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Ona-tili",
             taskCompleted: 2,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -142,7 +142,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Ona-tili",
             taskCompleted: 2,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -155,7 +155,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Ona-tili",
             taskCompleted: 2,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -168,7 +168,7 @@ const BahMajburiyTutorlikSoati = () => {
             fakultet: "Ona-tili",
             taskCompleted: 2,
             taskTotal: 1,
-            deadline: "1 hafta",
+            deadline: "1 oy",
             status: false,
             isRated: true,
             maxScore: 0,
@@ -538,4 +538,4 @@ const BahMajburiyTutorlikSoati = () => {
     );
 };
 
-export default BahMajburiyTutorlikSoati;
+export default BahMajburiyTadbirlar;
