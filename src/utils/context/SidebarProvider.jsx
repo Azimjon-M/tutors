@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { createContext } from "react";
 
 export const SidebarContext = createContext({
-    isOpen: false,
+    isOpen: true,
     changeOpen: () => {},
     setOpen: () => {},
     setClose: () => {},
     logOut: () => {},
 });
 const SidebarProvider = ({ children }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     // localstorage ga qarab sidbarni boshlang'ich holatini belgilaydi
     useEffect(() => {

@@ -144,8 +144,6 @@ const Login = () => {
                     data?.password,
                 ),
             })
-        } else {
-            localStorage.clear();
         }
         removeLoop.current = true;
     }, [data, formik]);
