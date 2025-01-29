@@ -1,5 +1,5 @@
 import React from "react";
-import BaholashMezonlariCom from "../../components/BaholashMezonlariCom";
+import BaholashMezonlariCom from "../../../components/BaholashMezonlariCom";
 
 const BaholashMezonlari = () => {
   return (

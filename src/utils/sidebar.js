@@ -21,21 +21,22 @@ import {
     TopshiriqlarniKorish,
     Tutors,
 } from "../pages";
-import TopshiriqlarQoshish from "../pages/Topshiriqlar";
-import TopshiriqlarQoshishZamdekan from "../pages/TopshiriqlarQoshishZamdekan";
-import TopshiriqlarniKorishZamdekan from "../pages/TopshiriqlarniKorishZamdekan";
+import TopshiriqlarQoshish from "../pages/Topshiriq/TopshiriqlarQoshish";
+import TopshiriqlarQoshishZamdekan from "../pages/Topshiriq/TopshiriqlarQoshishZamdekan";
+import TopshiriqlarniKorishZamdekan from "../pages/Topshiriq/TopshiriqlarniKorishZamdekan";
 import userRole from "../components/userRole";
-import TTJgaTashrifTutor from "../pages/MajburiyTopshiriqlar/TTJgaTashrifTutor";
-import IjaragaTashrif from "../pages/MajburiyTopshiriqlar/IjaragaTashrif";
-import TutorSoati from "../pages/MajburiyTopshiriqlar/TutorlikSoati";
-import DavraSuxbati from "../pages/MajburiyTopshiriqlar/DavraSuxbati";
-import Tadbirlar from "../pages/MajburiyTopshiriqlar/Tadbirlar";
-import TTJdaTadbirlar from "../pages/MajburiyTopshiriqlar/TTJdaTadbirlar";
-import IqtidorliTalabalar from "../pages/MajburiyTopshiriqlar/IqtidorliTalabalar";
-import TestTutor from "../pages/MajburiyTopshiriqlar/TestTutor";
-import Togarak from "../pages/MajburiyTopshiriqlar/Togarak";
-import OilagaXat from "../pages/MajburiyTopshiriqlar/OilagaXat";
-import MajTopQoshish from "../pages/MajTopQoshish/inde";
+
+import TTJgaTashrifTutor from "../pages/Topshiriq/MajburiyTopshiriqlar/TTJgaTashrifTutor";
+import IjaragaTashrif from "../pages/Topshiriq/MajburiyTopshiriqlar/IjaragaTashrif";
+import TutorSoati from "../pages/Topshiriq/MajburiyTopshiriqlar/TutorlikSoati";
+import DavraSuxbati from "../pages/Topshiriq/MajburiyTopshiriqlar/DavraSuxbati";
+import Tadbirlar from "../pages/Topshiriq/MajburiyTopshiriqlar/Tadbirlar";
+import TTJdaTadbirlar from "../pages/Topshiriq/MajburiyTopshiriqlar/TTJdaTadbirlar";
+import IqtidorliTalabalar from "../pages/Topshiriq/MajburiyTopshiriqlar/IqtidorliTalabalar";
+import TestTutor from "../pages/Topshiriq/MajburiyTopshiriqlar/TestTutor";
+import Togarak from "../pages/Topshiriq/MajburiyTopshiriqlar/Togarak";
+import OilagaXat from "../pages/Topshiriq/MajburiyTopshiriqlar/OilagaXat";
+import MajTopQoshish from "../pages/Topshiriq/MajTopQoshish/index";
 
 const sidebar = [
     {
@@ -115,7 +116,7 @@ const sidebar = [
             },
             {
                 id: 5 - 5,
-                title: "Majburiy topshiriq qo'shish",
+                title: "Majburiy topshiriqlar",
                 path: "/majburiy-topshiriq-qoshish",
                 icon: RiFileList3Line,
                 element: MajTopQoshish,

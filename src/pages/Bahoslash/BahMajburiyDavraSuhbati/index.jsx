@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
-import Pagination from "../Pagination";
+import Pagination from "../../../components/Pagination";
 
-const BahMajburiyTTJTadbir = () => {
+const BahMajburiyDavraSuhbati = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     // Pagination
     const [paginationData, setPaginationData] = useState({
@@ -24,7 +24,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Shirin Asqarova",
             fakultet: "Fiz-Mat",
             taskCompleted: 0,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: true,
             isRated: true,
@@ -37,7 +37,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Shirin Asqarova",
             fakultet: "Fiz-Mat",
             taskCompleted: 0,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: false,
             isRated: false,
@@ -50,7 +50,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Azimjon Shukur",
             fakultet: "Fiz-Mat",
             taskCompleted: 1,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: true,
             isRated: true,
@@ -63,7 +63,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Dilshod Raxmatov",
             fakultet: "Fiz-Mat",
             taskCompleted: 1,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: true,
             isRated: false,
@@ -76,7 +76,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Dilshod Raxmatov",
             fakultet: "Fiz-Mat",
             taskCompleted: 2,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: true,
             isRated: true,
@@ -89,7 +89,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Dilshod Raxmatov",
             fakultet: "Fiz-Mat",
             taskCompleted: 2,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: true,
             isRated: false,
@@ -102,7 +102,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 0,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -115,7 +115,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 1,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -128,7 +128,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -141,7 +141,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -154,7 +154,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -167,7 +167,7 @@ const BahMajburiyTTJTadbir = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 1,
+            taskTotal: 2,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -538,4 +538,4 @@ const BahMajburiyTTJTadbir = () => {
     );
 };
 
-export default BahMajburiyTTJTadbir;
+export default BahMajburiyDavraSuhbati;

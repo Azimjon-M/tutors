@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import TTJTashrif from "../../components/BahMajburiyTTJTashrif";
-import IjaraTashrif from "../../components/BahMajburiyIjaraTashrif";
-import TTJTadbir from "../../components/BahMajburiyTTJTadbir";
-import DavraSuhbati from "../../components/BahMajburiyDavraSuhbati";
-import Tadbirlar from "../../components/BahMajburiyTadbirlar";
-import TutorlikSoati from "../../components/BahMajburiyTutorlikSoati";
-import IqtidorliTalabalarim from "../../components/BahMajburiyIqtidorliTalabalarim";
-import OilagaXat from "../../components/BahMajburiyOilagaXat";
-import Test from "../../components/BahMajburiyTest";
+import TTJTashrif from "../BahMajburiyTTJTashrif";
+import IjaraTashrif from "../BahMajburiyIjaraTashrif";
+import TTJTadbir from "../BahMajburiyTTJTadbir";
+import DavraSuhbati from "../BahMajburiyDavraSuhbati";
+import Tadbirlar from "../BahMajburiyTadbirlar";
+import TutorlikSoati from "../BahMajburiyTutorlikSoati";
+import IqtidorliTalabalarim from "../BahMajburiyIqtidorliTalabalarim";
+import OilagaXat from "../BahMajburiyOilagaXat";
+import Test from "../BahMajburiyTest";
 import BahoTogarak from "../BahoTogarak";
 
 const BahoMajburiy = () => {

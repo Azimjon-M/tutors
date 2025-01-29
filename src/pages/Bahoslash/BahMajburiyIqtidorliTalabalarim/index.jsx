@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
-import Pagination from "../Pagination";
+import Pagination from "../../../components/Pagination";
 
-const BahMajburiyTadbirlar = () => {
+const BahMajburiyIqtidorliTalabalarim = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     // Pagination
     const [paginationData, setPaginationData] = useState({
@@ -538,4 +538,4 @@ const BahMajburiyTadbirlar = () => {
     );
 };
 
-export default BahMajburiyTadbirlar;
+export default BahMajburiyIqtidorliTalabalarim;
