@@ -23,6 +23,7 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState("");
     const [errMessage, setErrMessage] = useState("");
     const removeLoop = useRef(false);
+    const clearLocalStorage = useRef(false);
     const navigate = useNavigate();
 
     const validationSchema = Yup.object({
@@ -54,7 +55,6 @@ const Login = () => {
                         username: values.username,
                         password: values.password,
                     });
-
                     if (res.data && res.data.access) {
                         try {
                             const resUser = await APIGetUser.get(
@@ -133,7 +133,8 @@ const Login = () => {
     };
 
     useEffect(() => {
-        if (data && data.remember && !removeLoop.current) {
+        if (data?.remember && !removeLoop.current) {
+            console.log(data?.remember);
             formik.setValues({
                 username: unShifredTxt(
                     process.env.REACT_APP_SHIFRED_USERNAME,
@@ -143,11 +144,18 @@ const Login = () => {
                     process.env.REACT_APP_SHIFRED_PASSWORD,
                     data?.password
                 ),
-                remember: false,
+                remember: formik.values.remember,
             });
-            removeLoop.current = true; 
         }
-    }, [data, navigate, formik]);
+        removeLoop.current = true;
+    }, [data, formik]);
+
+    useEffect(() => {
+        if (!data?.remember && !clearLocalStorage.current) {
+            localStorage.removeItem("data");
+        }
+        clearLocalStorage.current = true;
+    }, [data]);
 
     return (
         <div className="w-full h-[100vh] flex justify-center items-center ">
