@@ -54,7 +54,6 @@ const Login = () => {
                         username: values.username,
                         password: values.password,
                     });
-
                     if (res.data && res.data.access) {
                         try {
                             const resUser = await APIGetUser.get(
@@ -133,21 +132,23 @@ const Login = () => {
     };
 
     useEffect(() => {
-        if (data && data.remember && !removeLoop.current) {
+        if (data?.remember && !removeLoop.current) {
+            console.log(data?.remember);
             formik.setValues({
                 username: unShifredTxt(
                     process.env.REACT_APP_SHIFRED_USERNAME,
-                    data?.username
+                    data?.username,
                 ),
                 password: unShifredTxt(
                     process.env.REACT_APP_SHIFRED_PASSWORD,
-                    data?.password
+                    data?.password,
                 ),
-                remember: false,
-            });
-            removeLoop.current = true; 
+            })
+        } else {
+            localStorage.clear();
         }
-    }, [data, navigate, formik]);
+        removeLoop.current = true;
+    }, [data, formik]);
 
     return (
         <div className="w-full h-[100vh] flex justify-center items-center ">
