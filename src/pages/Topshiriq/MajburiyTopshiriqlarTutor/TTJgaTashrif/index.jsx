@@ -1,5 +1,5 @@
 import React from "react";
-import TTJgaTashrifCom from "../../../components/TTJgaTashrifCom";
+import TTJgaTashrifCom from "../../../../components/TTJgaTashrifCom";
 
 function TTJgaTashrifTutor() {
   return (
