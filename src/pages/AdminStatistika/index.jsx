@@ -4,6 +4,7 @@ import StatistikBoxGuruhSardor from "../../components/StatistikBoxGuruhSardor";
 import Bachalor from "../../assets/icons/icons8-bachelor-64.png";
 import Team from "../../assets/icons/icons8-users-100.png";
 import Person from "../../assets/icons/person.png";
+import User from "../../assets/icons/user.svg"
 
 const AdminStatistika = () => {
   const talabalarType = [
@@ -87,7 +88,7 @@ const AdminStatistika = () => {
       last_name: "Abdupattoyev",
       first_name: "Jasur",
       number: "+998901234567",
-      icon: Team,
+      icon: User,
     },
     {
       id: 4,
@@ -95,7 +96,7 @@ const AdminStatistika = () => {
       last_name: "Ikromov",
       first_name: "Bobur",
       number: "+998958526341",
-      icon: Team,
+      icon: User,
     },
     {
       id: 5,
@@ -103,7 +104,55 @@ const AdminStatistika = () => {
       last_name: "Abdurashidov",
       first_name: "Akrom",
       number: "+998936984521",
-      icon: Team,
+      icon: User,
+    },
+    {
+      id: 3,
+      group: "01-21",
+      last_name: "Abdupattoyev",
+      first_name: "Jasur",
+      number: "+998901234567",
+      icon: User,
+    },
+    {
+      id: 4,
+      group: "02-22",
+      last_name: "Ikromov",
+      first_name: "Bobur",
+      number: "+998958526341",
+      icon: User,
+    },
+    {
+      id: 5,
+      group: "03-23",
+      last_name: "Abdurashidov",
+      first_name: "Akrom",
+      number: "+998936984521",
+      icon: User,
+    },
+    {
+      id: 3,
+      group: "01-21",
+      last_name: "Abdupattoyev",
+      first_name: "Jasur",
+      number: "+998901234567",
+      icon: User,
+    },
+    {
+      id: 4,
+      group: "02-22",
+      last_name: "Ikromov",
+      first_name: "Bobur",
+      number: "+998958526341",
+      icon: User,
+    },
+    {
+      id: 5,
+      group: "03-23",
+      last_name: "Abdurashidov",
+      first_name: "Akrom",
+      number: "+998936984521",
+      icon: User,
     },
   ];
 
