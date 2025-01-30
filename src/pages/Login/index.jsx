@@ -23,6 +23,7 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState("");
     const [errMessage, setErrMessage] = useState("");
     const removeLoop = useRef(false);
+    const clearLocalStorage = useRef(false);
     const navigate = useNavigate();
 
     const validationSchema = Yup.object({
@@ -137,16 +138,24 @@ const Login = () => {
             formik.setValues({
                 username: unShifredTxt(
                     process.env.REACT_APP_SHIFRED_USERNAME,
-                    data?.username,
+                    data?.username
                 ),
                 password: unShifredTxt(
                     process.env.REACT_APP_SHIFRED_PASSWORD,
-                    data?.password,
+                    data?.password
                 ),
-            })
+                remember: formik.values.remember,
+            });
         }
         removeLoop.current = true;
     }, [data, formik]);
+
+    useEffect(() => {
+        if (!data?.remember && !clearLocalStorage.current) {
+            localStorage.removeItem("data");
+        }
+        clearLocalStorage.current = true;
+    }, [data]);
 
     return (
         <div className="w-full h-[100vh] flex justify-center items-center ">
