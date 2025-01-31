@@ -107,7 +107,7 @@ const AdminStatistika = () => {
       icon: User,
     },
     {
-      id: 3,
+      id: 6,
       group: "01-21",
       last_name: "Abdupattoyev",
       first_name: "Jasur",
@@ -115,7 +115,7 @@ const AdminStatistika = () => {
       icon: User,
     },
     {
-      id: 4,
+      id: 7,
       group: "02-22",
       last_name: "Ikromov",
       first_name: "Bobur",
@@ -123,7 +123,7 @@ const AdminStatistika = () => {
       icon: User,
     },
     {
-      id: 5,
+      id: 8,
       group: "03-23",
       last_name: "Abdurashidov",
       first_name: "Akrom",
@@ -131,7 +131,7 @@ const AdminStatistika = () => {
       icon: User,
     },
     {
-      id: 3,
+      id: 9,
       group: "01-21",
       last_name: "Abdupattoyev",
       first_name: "Jasur",
@@ -139,7 +139,7 @@ const AdminStatistika = () => {
       icon: User,
     },
     {
-      id: 4,
+      id: 10,
       group: "02-22",
       last_name: "Ikromov",
       first_name: "Bobur",
@@ -147,7 +147,7 @@ const AdminStatistika = () => {
       icon: User,
     },
     {
-      id: 5,
+      id: 11,
       group: "03-23",
       last_name: "Abdurashidov",
       first_name: "Akrom",
