@@ -29,19 +29,19 @@ const TutorModalFormCom = ({ isOpen, onClose, info, roleUser }) => {
     }
   };
 
-//   const validationSchema = Yup.object({
-//     username: Yup.string().required("Foydalanuvchi nomi majburiy"),
-//     first_name: Yup.string().required("Ism majburiy"),
-//     last_name: Yup.string().required("Familiya majburiy"),
-//     password: Yup.string()
-//       .min(6, "Parol kamida 6 ta belgi bo'lishi kerak")
-//       .required("Parol majburiy"),
-//     fakultet: Yup.string().required("Fakultet majburiy"),
-//     role: Yup.string()
-//       .oneOf(["superadmin", "admin", "tutor"], "Noto'g'ri rol tanlangan")
-//       .required("Rol majburiy"),
-//     is_active: Yup.boolean(),
-//   });
+  const validationSchema = Yup.object({
+    username: Yup.string().required("Foydalanuvchi nomi majburiy"),
+    first_name: Yup.string().required("Ism majburiy"),
+    last_name: Yup.string().required("Familiya majburiy"),
+    password: Yup.string()
+      .min(6, "Parol kamida 6 ta belgi bo'lishi kerak")
+      .required("Parol majburiy"),
+    fakultet: Yup.string().required("Fakultet majburiy"),
+    role: Yup.string()
+      .oneOf(["superadmin", "admin", "tutor"], "Noto'g'ri rol tanlangan")
+      .required("Rol majburiy"),
+    is_active: Yup.boolean(),
+  });
 
   const handleEdit = (data) => {
     setId(data.id);
