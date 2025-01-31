@@ -38,7 +38,7 @@
 //       .required("Parol majburiy"),
 //     fakultet: Yup.string().required("Fakultet majburiy"),
 //     role: Yup.string()
-//       .oneOf(["superadmin", "admin", "tutor"], "Noto'g'ri rol tanlangan")
+//       .oneOf(["superadmin", "admin", "tyutor"], "Noto'g'ri rol tanlangan")
 //       .required("Rol majburiy"),
 //     is_active: Yup.boolean(),
 //   });

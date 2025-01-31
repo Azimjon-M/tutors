@@ -25,7 +25,7 @@ const TutorsCom = () => {
     } = useQuery({
         queryKey: ["tutorList"],
         queryFn: async () => {
-            const response = await APIUsers.getRole("tutor");
+            const response = await APIUsers.getRole("tyutor");
             return response.data;
         },
     });
@@ -210,7 +210,7 @@ const TutorsCom = () => {
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
                 info={editData}
-                roleUser={"tutor"}
+                roleUser={"tyutor"}
             />
         </div>
     );

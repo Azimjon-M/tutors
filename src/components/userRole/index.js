@@ -1,2 +1,2 @@
-const userRole = {superAdmin: "superadmin", admin: "admin", tutor: "tutor"};
+const userRole = {superAdmin: "superadmin", admin: "admin", tutor: "tyutor"};
 export default userRole;
