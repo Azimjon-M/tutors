@@ -113,11 +113,7 @@ const TopshiriqlarQoshishZamdekan = () => {
     onSubmit: async (values) => {
       console.log(selectedTutors);
       const dataToPost = {
-        users: [
-          "dd933ec5-78e4-4bf0-9a9c-9251e8f7b20c",
-          "7960d47b-347e-4b59-871d-fdd2af8c1715",
-          "513c30d3-0c3e-4709-9f55-950a434726ca"
-        ],
+        users: selectedTutors,
         urinishlar_soni: 2,
         topshiriq_turi: "majburiy",
         boshlanish_vaqti: values.boshlanish_vaqti,
