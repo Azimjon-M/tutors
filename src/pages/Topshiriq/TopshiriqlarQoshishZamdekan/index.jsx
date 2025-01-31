@@ -1,10 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import APITopshiriq from "../../../services/topshiriq";
+import APIUsers from "../../../services/users";
 
 const TopshiriqlarQoshishZamdekan = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedTutors, setSelectedTutors] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const tutors = useMemo(
     () => [
@@ -20,6 +23,21 @@ const TopshiriqlarQoshishZamdekan = () => {
     ],
     []
   );
+
+  const getUsers = async () => {
+    try {
+      const response = await APIUsers.get();
+      const sortedData = response.data.filter((item) => !item.admin);
+
+      setUsers(sortedData);
+    } catch (error) {
+      console.error("Failed to fetch admins", error);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   // Fakultet Select orqali filtrlangan tutor
   const filteredTutors = useMemo(() => {
@@ -68,30 +86,50 @@ const TopshiriqlarQoshishZamdekan = () => {
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      details: "",
-      category: 1,
-      numberValue: "",
-      file1: null,
-      file2: null,
-      file3: null,
-      file4: null,
-      startDate: "",
-      endDate: "",
+      users: "",
+      // title: "",
+      // details: "",
+      topshiriq_turi: "majburiy",
+      // numberValue: "",
+      // file1: null,
+      // file2: null,
+      // file3: null,
+      // file4: null,
+      // urinishlar_soni: "",
+      boshlanish_vaqti: "",
+      tugash_vaqti: "",
     },
     validationSchema: Yup.object({
       title: Yup.string().required("Sarlavha kiritilishi shart!"),
       details: Yup.string().required("Batafsil ma'lumot kiritilishi kerak!"),
-      startDate: Yup.date().required("Boshlanish sanasini kiriting!"),
-      endDate: Yup.date()
+      boshlanish_vaqti: Yup.date().required("Boshlanish sanasini kiriting!"),
+      tugash_vaqti: Yup.date()
         .required("Tugash sanasini kiriting!")
         .min(
           Yup.ref("startDate"),
           "Tugash sanasi boshlanish sanasidan keyin bo‘lishi kerak!"
         ),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      console.log(selectedTutors);
+      const dataToPost = {
+        users: [
+          "dd933ec5-78e4-4bf0-9a9c-9251e8f7b20c",
+          "7960d47b-347e-4b59-871d-fdd2af8c1715",
+          "513c30d3-0c3e-4709-9f55-950a434726ca"
+        ],
+        urinishlar_soni: 2,
+        topshiriq_turi: "majburiy",
+        boshlanish_vaqti: values.boshlanish_vaqti,
+        tugash_vaqti: values.tugash_vaqti,
+      };
+      try {
+        await APITopshiriq.post(dataToPost);
+        alert("Muvaffaqiyatli qo'shildi.!");
+        // resetForm();
+      } catch (error) {
+        console.error("Failed to add/update user", error);
+      }
     },
   });
 
@@ -121,11 +159,11 @@ const TopshiriqlarQoshishZamdekan = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredTutors.map((tutor, index) => (
+            {users.map((tutor, index) => (
               <tr key={tutor.id} className="hover">
                 <td className="py-2">{index + 1}</td>
-                <td className="py-2">{tutor.name}</td>
-                <td className="py-2">{tutor.fak}</td>
+                <td className="py-2">{tutor.last_name}</td>
+                <td className="py-2">{tutor.first_name}</td>
                 <td className="py-2">
                   <label className="cursor-pointer flex items-center justify-center gap-2">
                     <input
@@ -228,36 +266,37 @@ const TopshiriqlarQoshishZamdekan = () => {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
           <div className="form-control">
-            <label htmlFor="startDate" className="label">
+            <label htmlFor="boshlanish_vaqti" className="label">
               <span className="label-text">Boshlanish sanasi</span>
             </label>
             <input
               type="date"
-              id="startDate"
-              name="startDate"
+              id="boshlanish_vaqti"
+              name="boshlanish_vaqti"
               className="input input-bordered"
-              {...formik.getFieldProps("startDate")}
+              {...formik.getFieldProps("boshlanish_vaqti")}
             />
-            {formik.touched.startDate && formik.errors.startDate ? (
+            {formik.touched.boshlanish_vaqti &&
+            formik.errors.boshlanish_vaqti ? (
               <span className="text-red-500 text-sm">
-                {formik.errors.startDate}
+                {formik.errors.boshlanish_vaqti}
               </span>
             ) : null}
           </div>
           <div className="form-control">
-            <label htmlFor="endDate" className="label">
+            <label htmlFor="tugash_vaqti" className="label">
               <span className="label-text">Tugash sanasi</span>
             </label>
             <input
               type="date"
-              id="endDate"
-              name="endDate"
+              id="tugash_vaqti"
+              name="tugash_vaqti"
               className="input input-bordered"
-              {...formik.getFieldProps("endDate")}
+              {...formik.getFieldProps("tugash_vaqti")}
             />
-            {formik.touched.endDate && formik.errors.endDate ? (
+            {formik.touched.tugash_vaqti && formik.errors.tugash_vaqti ? (
               <span className="text-red-500 text-sm">
-                {formik.errors.endDate}
+                {formik.errors.tugash_vaqti}
               </span>
             ) : null}
           </div>
