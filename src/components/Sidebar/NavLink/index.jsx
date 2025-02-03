@@ -83,13 +83,13 @@ const NavLink = ({ data, unShiredRole }) => {
                 </div>
             </div>
 
-            {/* child links */}
+            {/* child links my */}
 
             {children && isOpen && (
                 <div
                     className={`${
                         !isSubOpen && "hidden"
-                    } text-xs ml-3 overflow-hidden transition-all duration-1000`}
+                    } text-xs ml-5 overflow-hidden transition-all duration-1000`}
                 >
                     {children
                         .filter(item => {

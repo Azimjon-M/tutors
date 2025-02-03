@@ -1,6 +1,6 @@
 import axiosInstance from ".";
 
-const endPoint = "users/fakultet/";
+const endPoint = "topshiriq/topshiriq/";
 
 const get = () => axiosInstance.get(endPoint);
 
@@ -16,6 +16,6 @@ const put = (id, item) => axiosInstance.put(`${endPoint}${id}/`, item);
 
 const del = (id) => axiosInstance.delete(`${endPoint}${id}/`);
 
-const APIFakultet = {get, getbyId, post, patch, put, del};
+const APITopshiriq = {get, getbyId, post, patch, put, del};
 
-export default APIFakultet;
+export default APITopshiriq;
