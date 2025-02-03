@@ -90,7 +90,7 @@ const Breadcrumb = () => {
         }
     }, [data]);
 
-    //chiqish funksiyasi
+    //chiqish funksiyasi bg-
     const exit = () => {
         navigate("/login");
         logOut();
