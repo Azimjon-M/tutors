@@ -3,14 +3,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Calendar from "../../../../components/Calendar";
 
-// import {
-//     format,
-//     eachDayOfInterval,
-//     getDay,
-//     startOfMonth,
-//     endOfMonth,
-// } from "date-fns";
-
 const TTJgaTashrif = () => {
     const formik = useFormik({
         initialValues: {
@@ -33,11 +25,11 @@ const TTJgaTashrif = () => {
     });
 
     const holidays = [
-        { startTime: "2025-01-06", endtime: "2025-01-11" },
-        { startTime: "2025-01-13", endtime: "2025-01-19" },
         { startTime: "2025-01-20", endtime: "2025-01-25" },
-        { startTime: "2025-01-27", endtime: "2025-01-29" },
-        { startTime: "2025-01-30", endtime: "2025-01-31" },
+        { startTime: "2025-01-27", endtime: "2025-02-01" },
+        { startTime: "2025-02-03", endtime: "2025-02-08" },
+        { startTime: "2025-02-10", endtime: "2025-02-15" },
+        { startTime: "2025-02-17", endtime: "2025-02-22" },
     ];
 
     return (
@@ -150,6 +142,7 @@ const TTJgaTashrif = () => {
             </form>
 
             <div className="my-10">
+                <h1 className="text-lg font-bold">Jo'natilgan ma'lumotlar jadvali</h1>
                 <Calendar holidays={holidays} />
             </div>
         </div>

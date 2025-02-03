@@ -14,7 +14,6 @@ const BahMajburiyTTJTashrif = () => {
         setPaginationData((prev) => ({ ...prev, currentPage: page }));
         console.log(`Page changed to: ${page}`);
     };
-
     // /Pagination
 
     const data = [

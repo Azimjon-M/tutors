@@ -7,12 +7,11 @@ const BahMajburiyTadbirlar = () => {
     // Pagination
     const [paginationData, setPaginationData] = useState({
         totalPages: 10,
-        currentPage: 1,
+        currentPage: 10,
     });
 
     const handlePageChange = (page) => {
         setPaginationData((prev) => ({ ...prev, currentPage: page }));
-        // Bu yerda API chaqiruv amalga oshirilishi mumkin
         console.log(`Page changed to: ${page}`);
     };
     // /Pagination

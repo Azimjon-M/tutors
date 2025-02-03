@@ -1,65 +1,76 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const Calendar = ({ holidays }) => {
-    const [currentMonth, setCurrentMonth] = useState(new Date().getMonth()); // Hozirgi oy
-    const [currentYear, setCurrentYear] = useState(new Date().getFullYear()); // Hozirgi yil
+    const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
-    const holidayClass = (holiday) => {
-        const currentDate = new Date();
+    // Bayram rangini aniqlash
+    const holidayClass = (holiday, isToday) => {
+        const currentDate = new Date().setHours(0, 0, 0, 0); // Bugungi kunni solishtirish uchun
+        const startTime = new Date(holiday.startTime).setHours(0, 0, 0, 0);
+        const endTime = new Date(holiday.endtime).setHours(23, 59, 59, 999);
 
-        // Bayramning holatini aniqlash:
-        if (new Date(holiday.startTime) > currentDate) {
-            return "text-yellow-500"; // Keladigan bayramlar uchun sariq rang
-        } else if (new Date(holiday.endtime) < currentDate) {
-            return "text-red-500"; // O'tgan bayramlar uchun qizil rang
+        // Agar bugungi kun bayram kuni ichida bo'lsa, ustunlik beramiz
+        if (isToday && currentDate >= startTime && currentDate <= endTime) {
+            return "btn btn-info text-white"; // Hozirgi kun bayram kuni
+        }
+
+        // Bayramning holatini aniqlash
+        if (currentDate < startTime) {
+            return "btn btn-success text-white"; // Keladigan bayramlar
+        } else if (currentDate > endTime) {
+            return "btn btn-error text-white"; // O'tgan bayramlar
         } else {
-            return "text-green-500"; // Hozirgi bayram kuni uchun yashil rang
+            return "btn btn-warning text-white"; // Hozirgi bayramlar
         }
     };
 
+    // Kun bayramga to'g'ri keladimi?
     const isHoliday = (day, holidays) => {
-        for (let holiday of holidays) {
-            const startTime = new Date(holiday.startTime);
-            const endTime = new Date(holiday.endtime);
+        const dayTime = new Date(day).setHours(0, 0, 0, 0); // Kunni solishtirish uchun vaqtni nolga o'rnatamiz
 
-            // Bayram kunini tekshirish: agar startTime bayram sanasidan keyin yoki teng bo'lsa
-            if (day >= startTime && day <= endTime) {
-                return holiday; // Bayramni qaytarish
+        for (let holiday of holidays) {
+            const startTime = new Date(holiday.startTime).setHours(0, 0, 0, 0);
+            const endTime = new Date(holiday.endtime).setHours(23, 59, 59, 999); // Kun oxirigacha
+
+            if (dayTime >= startTime && dayTime <= endTime) {
+                return holiday;
             }
         }
-        return null; // Bayramda emas
+        return null;
     };
 
+    // Oy kunlarini generatsiya qilish
     const generateDaysOfMonth = (month, year) => {
-        const daysInMonth = new Date(year, month + 1, 0).getDate(); // Oydagi kunlar soni
-        const currentDate = new Date(); // Hozirgi sana
+        const daysInMonth = new Date(year, month + 1, 0).getDate(); // Oy kunlari soni
+        const firstDayOfMonth = (new Date(year, month, 1).getDay() + 6) % 7; // Dushanbadan boshlanish
         const days = [];
 
+        // Bo'sh joylarni qo'shish
+        for (let i = 0; i < firstDayOfMonth; i++) {
+            days.push(<div key={`empty-${i}`} className="p-2 m-1"></div>);
+        }
+
+        // Kunlarni generatsiya qilish
         for (let day = 1; day <= daysInMonth; day++) {
             const currentDay = new Date(year, month, day);
             const isToday =
-                currentDay.toDateString() === currentDate.toDateString(); // Bugungi kunni aniqlash
-
-            // Bayramni tekshirish
-            const holiday = isHoliday(currentDay, holidays);
+                currentDay.toDateString() === new Date().toDateString(); // Bugungi kun
+            const holiday = isHoliday(currentDay, holidays); // Bayramni tekshirish
             const holidayClasses = holiday
-                ? holidayClass(holiday)
-                : "text-black";
-
-            // Agar bayram kuni ichida bo'lsak, bugungi kunni ko'rsatish
-            const isHolidayToday = holiday && isToday;
+                ? holidayClass(holiday, isToday)
+                : "text-black"; // Bayram ranglari btn btn-pri
 
             days.push(
                 <div
                     key={day}
                     className={`day ${
-                        isToday ? "bg-blue-500 text-white rounded-full" : ""
-                    } ${holidayClasses} p-2 m-1 cursor-pointer ${
-                        isHolidayToday ? "underline" : ""
-                    }`}
+                        isToday && !holiday
+                            ? "btn bg-[#00b7ff] border border-black hover:bg-[#0099ff] text-white"
+                            : ""
+                    } ${holidayClasses} p-2 m-1 cursor-pointer`}
                 >
-                    {day}{" "}
-                    {/* Bayramda ham bugungi kunni ko'rsatamiz, faqat underline qilamiz */}
+                    {day}
                 </div>
             );
         }
@@ -82,40 +93,42 @@ const Calendar = ({ holidays }) => {
     };
 
     return (
-        <div className="p-4">
-            <div className="flex justify-between mb-4">
+        <div className="border rounded-lg shadow-xl p-4">
+            <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={() => changeMonth("prev")}
-                    className="px-4 py-2 bg-gray-300 rounded-md"
+                    className="btn btn-neutral text-white"
                 >
-                    Prev
+                    Ortga
                 </button>
                 <div className="text-lg font-semibold">
                     {new Date(currentYear, currentMonth).toLocaleString(
                         "default",
-                        { month: "long" }
+                        {
+                            month: "long",
+                        }
                     )}{" "}
                     {currentYear}
                 </div>
                 <button
                     onClick={() => changeMonth("next")}
-                    className="px-4 py-2 bg-gray-300 rounded-md"
+                    className="btn btn-neutral text-white"
                 >
-                    Next
+                    Oldinga
                 </button>
             </div>
 
-            <div className="grid grid-cols-7 gap-2">
-                {/* Haftaning kunlarini ko'rsatish */}
-                <div className="text-center">Mon</div>
-                <div className="text-center">Tue</div>
-                <div className="text-center">Wed</div>
-                <div className="text-center">Thu</div>
-                <div className="text-center">Fri</div>
-                <div className="text-center">Sat</div>
-                <div className="text-center">Sun</div>
+            <div className="grid grid-cols-7 gap-2 text-center">
+                {/* Hafta kunlari */}
+                <div className="text-center">Dushanba</div>
+                <div className="text-center">Seshanba</div>
+                <div className="text-center">Chorshanba</div>
+                <div className="text-center">Payshanba</div>
+                <div className="text-center">Juma</div>
+                <div className="text-center">Shanba</div>
+                <div className="text-center">Yakshanba</div>
 
-                {/* Oydagi kunlarni ko'rsatish */}
+                {/* Oy kunlari */}
                 {generateDaysOfMonth(currentMonth, currentYear)}
             </div>
         </div>
