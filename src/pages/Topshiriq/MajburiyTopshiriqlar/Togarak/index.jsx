@@ -140,7 +140,6 @@ const Togarak = () => {
                     </button>
                 </div>
             </form>
-
             <div className="my-10">
                 <h1 className="text-lg font-bold">Jo'natilgan ma'lumotlar jadvali</h1>
                 <Calendar holidays={holidays} />

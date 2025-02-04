@@ -37,18 +37,18 @@ import IqtidorliTalabalarTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTuto
 import TestTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/TestTutor";
 import TogarakTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/Togarak";
 import OilagaXatTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/OilagaXat";
+import MajTopQoshish from "../pages/Topshiriq/MajTopQoshish/index";
 
 // Majburiy topshiriq Superadmin 
-import IjaragaTashrif from "../pages/Topshiriq/MajburiyTopshiriqlar/IjaragaTashrif";
-import TutorSoati from "../pages/Topshiriq/MajburiyTopshiriqlar/TutorlikSoati";
-import DavraSuxbati from "../pages/Topshiriq/MajburiyTopshiriqlar/DavraSuxbati";
-import Tadbirlar from "../pages/Topshiriq/MajburiyTopshiriqlar/Tadbirlar";
-import TTJdaTadbirlar from "../pages/Topshiriq/MajburiyTopshiriqlar/TTJdaTadbirlar";
-import IqtidorliTalabalar from "../pages/Topshiriq/MajburiyTopshiriqlar/IqtidorliTalabalar";
-import TestTutor1 from "../pages/Topshiriq/MajburiyTopshiriqlar/TestTutor";
-import Togarak from "../pages/Topshiriq/MajburiyTopshiriqlar/Togarak";
-import OilagaXat from "../pages/Topshiriq/MajburiyTopshiriqlar/OilagaXat";
-import MajTopQoshish from "../pages/Topshiriq/MajTopQoshish/index";
+// import IjaragaTashrif from "../pages/Topshiriq/MajburiyTopshiriqlar/IjaragaTashrif";
+// import TutorSoati from "../pages/Topshiriq/MajburiyTopshiriqlar/TutorlikSoati";
+// import DavraSuxbati from "../pages/Topshiriq/MajburiyTopshiriqlar/DavraSuxbati";
+// import Tadbirlar from "../pages/Topshiriq/MajburiyTopshiriqlar/Tadbirlar";
+// import TTJdaTadbirlar from "../pages/Topshiriq/MajburiyTopshiriqlar/TTJdaTadbirlar";
+// import IqtidorliTalabalar from "../pages/Topshiriq/MajburiyTopshiriqlar/IqtidorliTalabalar";
+// import TestTutor1 from "../pages/Topshiriq/MajburiyTopshiriqlar/TestTutor";
+// import Togarak from "../pages/Topshiriq/MajburiyTopshiriqlar/Togarak";
+// import OilagaXat from "../pages/Topshiriq/MajburiyTopshiriqlar/OilagaXat";
 
 const sidebar = [
   {
@@ -96,8 +96,8 @@ const sidebar = [
     children: [
       {
         id: 5 - 1,
-        title: "Topshiriqlar",
-        path: "/topshiriqlar",
+        title: "Topshiriqlar ko'rish",
+        path: "/topshiriqlar-korish",
         icon: RiFileList3Line,
         element: TopshiriqlarniKorish,
         role: [`"${userRole.superAdmin}"`],

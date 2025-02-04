@@ -82,15 +82,14 @@ const TopshiriqlarniKorish = () => {
         if (confrim) {
             console.log(id);
         }
-        
-    }
+    };
 
     return (
-        <div className="relative z-0">
+        <div className="relative z-10">
             <div
                 className={`${
-                    isOpenModal ? "z-20 opacity-100" : "-z-10 opacity-0"
-                } w-[100%] h-[100vh] absolute top-[-1.5rem] left-0 bg-[#00000093] transition-[opacity] ease-linear duration-150`}
+                    isOpenModal ? "opacity-100 visible z-50" : "opacity-0 invisible -z-20"
+                } w-full h-[calc(100vh-54px)] absolute top-[-24px] right-0 bg-[#00000093] transition-all ease-linear duration-150`}
             >
                 <div className="flex justify-end pl-4 pt-4 pr-4">
                     <button
@@ -311,9 +310,7 @@ const TopshiriqlarniKorish = () => {
                                     <td className=" text-center">
                                         <button
                                             className="btn btn-sm btn-info"
-                                            onClick={() =>
-                                                setIsOpenModal(true)
-                                            }
+                                            onClick={() => setIsOpenModal(true)}
                                         >
                                             Tahrirlash
                                         </button>
@@ -321,7 +318,7 @@ const TopshiriqlarniKorish = () => {
                                     <td className=" text-center">
                                         <button
                                             className="btn btn-sm btn-error"
-                                            onClick={() => onDelete(item.id)}                                           
+                                            onClick={() => onDelete(item.id)}
                                         >
                                             O'chirish
                                         </button>
