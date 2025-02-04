@@ -112,22 +112,41 @@ function TestTutor() {
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
 
+  // Dynamic color change based on width
+  const widthPercentage = (timeLeft / TOTAL_TIME / 60) * 100;
+  // Background color based on widthPercentage
+  const backgroundColorClass =
+    widthPercentage <= 20
+      ? "bg-red-600"
+      : widthPercentage <= 80
+      ? "bg-yellow-600"
+      : "bg-blue-600";
+
   return (
     <div className="p-4 max-w-lg mx-auto">
       {!isFinished ? (
         <>
           {/* ⏳ Timer */}
           <div className="text-center text-lg font-bold mb-4">
-            ⏳ Qolgan vaqt:{" "}
+            <span className="spinning-hourglass">⏳</span> Qolgan vaqt:{" "}
             <span className="text-red-500">
               {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
             </span>
+            <div
+              className="relative mt-4"
+              style={{
+                width: `${(timeLeft / TOTAL_TIME / 60) * 100}%`,
+              }}
+            >
+              <div className={`h-1 ${backgroundColorClass} rounded-full`}></div>
+            </div>
           </div>
 
-          <h2 className="text-xl font-bold mb-4">
-            {currentIndex + 1}.
-            {tests[currentIndex].question}
-          </h2>
+          <div className="border-2 mb-3 rounded-md flex justify-center items-center text-center bg-slate-300 min-h-[100px] particles-js">
+            <h2 className="text-xl font-bold">
+              {currentIndex + 1}.{tests[currentIndex].question}
+            </h2>
+          </div>
           <ul>
             {tests[currentIndex].options.map((option) => (
               <li
