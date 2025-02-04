@@ -60,11 +60,8 @@ function TestTutor() {
   ).length;
 
   // Vaqtni minut:sekund formatiga o'tkazish
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
-  };
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
 
   return (
     <div className="p-4 max-w-lg mx-auto">
@@ -72,8 +69,10 @@ function TestTutor() {
         <>
           {/* ⏳ Timer */}
           <div className="text-center text-lg font-bold mb-4">
-            ⏳ Qolgan vaqt:{" "}
-            <span className="text-red-500">{formatTime(timeLeft)}</span>
+          ⏳ Qolgan vaqt:{" "}
+            <span className="text-red-500">
+              {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+            </span>
           </div>
 
           <h2 className="text-xl font-bold mb-4">
