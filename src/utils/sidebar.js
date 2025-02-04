@@ -34,7 +34,7 @@ import DavraSuxbatiTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/Davr
 import TadbirlarTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/Tadbirlar";
 import TTJdaTadbirlarTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/TTJdaTadbirlar";
 import IqtidorliTalabalarTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/IqtidorliTalabalar";
-import TestTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/TestTutor";
+import TestTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/Test";
 import TogarakTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/Togarak";
 import OilagaXatTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/OilagaXat";
 import MajTopQoshish from "../pages/Topshiriq/MajTopQoshish/index";
