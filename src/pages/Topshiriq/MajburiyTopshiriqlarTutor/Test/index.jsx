@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Modal from "../TestResultModal";
+import Modal from "../../../../components/TestResultModal";
 
 const tests = [
   {
