@@ -63,6 +63,7 @@ const Login = () => {
                             );
                             if (resUser.data) {
                                 const [data] = resUser.data;
+                                console.log(data)
                                 const jsonData = JSON.stringify({
                                     username: ShifredTxt(
                                         process.env.REACT_APP_SHIFRED_USERNAME,
@@ -89,6 +90,10 @@ const Login = () => {
                                         process.env.REACT_APP_SHIFRED_ROLE,
                                         data.role
                                     ),
+                                    fakultet: ShifredTxt(
+                                        process.env.REACT_APP_SHIFRED_FAKULTET,
+                                        data.fakultet.name
+                                    )
                                 });
                                 localStorage.setItem("data", jsonData);
                                 navigate("/analitka");
