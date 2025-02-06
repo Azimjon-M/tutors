@@ -28,42 +28,27 @@ const TopshiriqlarQoshishZamdekan = () => {
     }
   }, [data]);
 
-  const tutors = useMemo(
-    () => [
-      { id: 1, name: "Abdulla Karimov", fak: "Fiz-Mat" },
-      { id: 2, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
-      { id: 3, name: "Saida Rasulova", fak: "Ona-tili" },
-      { id: 4, name: "Abdulla Karimov", fak: "Ona-tili" },
-      { id: 5, name: "Muhammad Aliyev", fak: "Ximya" },
-      { id: 6, name: "Saida Rasulova", fak: "Ximya" },
-      { id: 7, name: "Abdulla Karimov", fak: "Sanat" },
-      { id: 8, name: "Muhammad Aliyev", fak: "Sanat" },
-      { id: 9, name: "Saida Rasulova", fak: "Kimyo" },
-    ],
-    []
-  );
-
-  const getUsers = async () => {
-    try {
-      const response = await APIUsers.getFakUsers("Matematika");
-      // const response = await APIUsers.getFakUsers(unShiredFakultet);
-      const sortedData = response.data.filter((item) => !item.admin);
-      setUsers(sortedData);
-    } catch (error) {
-      console.error("Failed to fetch admins", error);
-    }
-  };
-
   useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const response = await APIUsers.getFakUsers(unShiredFakultet);
+        console.log(response.data);
+        
+        const sortedData = response.data.filter((item) => !item.admin);
+        setUsers(sortedData);
+      } catch (error) {
+        console.error("Failed to fetch admins", error);
+      }
+    };
     getUsers();
-  }, []);
+  }, [unShiredFakultet]);
 
   // Fakultet Select orqali filtrlangan tutor
   const filteredTutors = useMemo(() => {
     setSelectAll(false);
     setSelectedTutors([]);
-    return tutors;
-  }, [tutors]);
+    return users;
+  }, [users]);
 
   // Checkbox Hammasini tanlash
   const handleSelectAll = (checked) => {
@@ -127,7 +112,7 @@ const TopshiriqlarQoshishZamdekan = () => {
       tugash_vaqti: Yup.date()
         .required("Tugash sanasini kiriting!")
         .min(
-          Yup.ref("startDate"),
+          Yup.ref("boshlanish_vaqti"),
           "Tugash sanasi boshlanish sanasidan keyin bo‘lishi kerak!"
         ),
     }),
