@@ -3,7 +3,6 @@ import { MdCheckCircle, MdErrorOutline } from "react-icons/md";
 import Pagination from "../../../components/Pagination";
 
 const BahMajburiyTest = () => {
-    const [isOpenModal, setIsOpenModal] = useState(false);
     // Pagination
     const [paginationData, setPaginationData] = useState({
         totalPages: 10,
@@ -175,77 +174,6 @@ const BahMajburiyTest = () => {
         },
     ];
 
-    const getByIdData = [
-        {
-            tasks: [
-                {
-                    id: 1,
-                    title: "Afkksd akkmdoikjasidodj ijsio sapioj",
-                    batafsil:
-                        "OKOKoaskoa okasoadkdpaokdp idjjsf iniusda iaus diauhsdiuiuh hjuhauihdsuiahsuih iasoida a;lihjjkj",
-                    file_1: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
-                    file_2: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
-                    file_3: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
-                    file_4: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
-                },
-                {
-                    id: 2,
-                    title: "Afkksd akkmdoikjasidodj ijsio sapioj",
-                    batafsil:
-                        "OKOKoaskoa okasoadkdpaokdp idjjsf iniusda iaus diauhsdiuiuh hjuhauihdsuiahsuih iasoida",
-                    file_1: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
-                    file_2: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
-                    file_3: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
-                    file_4: "https://image.shutterstock.com/image-photo/anime-artistic-image-cute-animae-600w-2428976759.jpg",
-                },
-            ],
-            startTime: "01-01-2025",
-            endTime: "06-01-2025",
-            maxBal: 16,
-            grade: 6,
-        },
-    ];
-
-    const getMaxGreade = () => {
-        return getByIdData[0]?.maxBal;
-    };
-
-    const handleChangeMaxBal = (e) => {
-        const btn = document.getElementById("numberValue");
-        let value = e.target.value;
-
-        if (value > getMaxGreade()) {
-            btn.value = getMaxGreade();
-        }
-    };
-
-    const handleDownload = async (fileUrl) => {
-        try {
-            // Fetch yordamida faylni olish
-            const response = await fetch(fileUrl);
-            if (!response.ok) {
-                throw new Error("Faylni olishda xatolik yuz berdi");
-            }
-
-            // Faylni Blob formatida olish
-            const blob = await response.blob();
-
-            // Fayl uchun URL yaratish
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = fileUrl.split("/").pop(); // Fayl nomini URL'dan olish
-            document.body.appendChild(link);
-
-            // Linkni bosish
-            link.click();
-
-            // Linkni sahifadan olib tashlash
-            document.body.removeChild(link);
-        } catch (error) {
-            console.error("Faylni yuklab olishda xatolik:", error);
-        }
-    };
-
     const getStatusColor = (taskTotal, taskCompleted) => {
         if (taskTotal === taskCompleted) {
             return "bg-green-500 text-white";
@@ -367,21 +295,13 @@ const BahMajburiyTest = () => {
                                                 </span>
                                             ) : !item.isRated &&
                                               item.gradingTime ? (
-                                                <button
-                                                    onClick={() =>
-                                                        setIsOpenModal(true)
-                                                    }
-                                                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-                                                >
-                                                    Baholash
-                                                </button>
+                                                <span className="font-bold text-yellow-600">
+                                                    Jarayonda
+                                                </span>
                                             ) : (
-                                                <button
-                                                    disabled
-                                                    className="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg"
-                                                >
-                                                    Baholash
-                                                </button>
+                                                <span className="font-bold text-red-600">
+                                                    Baholanmagan
+                                                </span>
                                             )}
                                         </div>
                                     </div>
