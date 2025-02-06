@@ -22,8 +22,8 @@ const BahMajburiyTest = () => {
             rasm: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9llpRZyBsTqxGX7JSr3rw65FcUWdmVLVtiw&s",
             name: "Shirin Asqarova",
             fakultet: "Fiz-Mat",
-            taskCompleted: 0,
-            taskTotal: 2,
+            taskCompleted: 60,
+            taskTotal: 60,
             deadline: "1 oy",
             status: true,
             isRated: true,
@@ -36,7 +36,7 @@ const BahMajburiyTest = () => {
             name: "Shirin Asqarova",
             fakultet: "Fiz-Mat",
             taskCompleted: 0,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: false,
             isRated: false,
@@ -49,7 +49,7 @@ const BahMajburiyTest = () => {
             name: "Azimjon Shukur",
             fakultet: "Fiz-Mat",
             taskCompleted: 1,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: true,
             isRated: true,
@@ -62,7 +62,7 @@ const BahMajburiyTest = () => {
             name: "Dilshod Raxmatov",
             fakultet: "Fiz-Mat",
             taskCompleted: 1,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: true,
             isRated: false,
@@ -75,7 +75,7 @@ const BahMajburiyTest = () => {
             name: "Dilshod Raxmatov",
             fakultet: "Fiz-Mat",
             taskCompleted: 2,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: true,
             isRated: true,
@@ -88,7 +88,7 @@ const BahMajburiyTest = () => {
             name: "Dilshod Raxmatov",
             fakultet: "Fiz-Mat",
             taskCompleted: 2,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: true,
             isRated: false,
@@ -101,7 +101,7 @@ const BahMajburiyTest = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 0,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -114,7 +114,7 @@ const BahMajburiyTest = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 1,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -127,7 +127,7 @@ const BahMajburiyTest = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -140,7 +140,7 @@ const BahMajburiyTest = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -153,7 +153,7 @@ const BahMajburiyTest = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -166,7 +166,7 @@ const BahMajburiyTest = () => {
             name: "Axtamov Ravshan",
             fakultet: "Ona-tili",
             taskCompleted: 2,
-            taskTotal: 2,
+            taskTotal: 60,
             deadline: "1 oy",
             status: false,
             isRated: true,
@@ -285,134 +285,6 @@ const BahMajburiyTest = () => {
         <div className="relative z-0">
             {data && data.length ? (
                 <>
-                    <div
-                        className={`${
-                            isOpenModal ? "z-20 opacity-100" : "-z-20 opacity-0"
-                        } w-full h-full absolute top-[-0.5rem] right-0 bg-[#00000093] transition-[opacity] ease-linear duration-200`}
-                    >
-                        <div className="flex justify-end pl-4 pt-4 pr-4">
-                            <button
-                                onClick={() => setIsOpenModal(false)}
-                                className="btn btn-sm btn-error text-xl text-white"
-                            >
-                                ✖
-                            </button>
-                        </div>
-                        <div className="p-4">
-                            <div className="flex flex-wrap items-center p-6 bg-white rounded-lg shadow-lg gap-8">
-                                <div className="max-h-[700px] overflow-auto flex-1 space-y-6">
-                                    {getByIdData[0]?.tasks?.map((item) => (
-                                        <div
-                                            key={item.id}
-                                            className="p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-200"
-                                        >
-                                            <h3 className="text-lg font-bold text-gray-800">
-                                                {item.title}
-                                            </h3>
-                                            <p className="text-sm text-gray-600 mt-2">
-                                                Batafsil: {item.batafsil}
-                                            </p>
-                                            <table className="table-auto border-collapse mt-4 text-sm">
-                                                <tbody>
-                                                    {[
-                                                        item.file_1,
-                                                        item.file_2,
-                                                        item.file_3,
-                                                        item.file_4,
-                                                    ].map(
-                                                        (file, index) =>
-                                                            file && (
-                                                                <tr
-                                                                    key={index}
-                                                                    className="hover:bg-gray-50"
-                                                                >
-                                                                    <td className="px-2 py-1 text-center">
-                                                                        {index +
-                                                                            1}
-                                                                    </td>
-                                                                    <td className="px-2 py-1">
-                                                                        <a
-                                                                            href={
-                                                                                file
-                                                                            }
-                                                                            target="_blank"
-                                                                            rel="noopener noreferrer"
-                                                                            className="text-blue-600 hover:text-blue-800 underline"
-                                                                        >
-                                                                            Faylni
-                                                                            ko'rish
-                                                                        </a>
-                                                                    </td>
-                                                                    <td className="px-2 py-1 text-center">
-                                                                        <button
-                                                                            onClick={() =>
-                                                                                handleDownload(
-                                                                                    file
-                                                                                )
-                                                                            }
-                                                                            className="px-2 py-1 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 focus:outline-none"
-                                                                        >
-                                                                            Yuklab
-                                                                            olish
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                            )
-                                                    )}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="w-[40%] bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
-                                    <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">
-                                        Baholash
-                                    </h2>
-                                    <div className="text-sm text-gray-600 mb-4">
-                                        <p>
-                                            <strong>Boshlangan vaqti:</strong>{" "}
-                                            {getByIdData[0].startTime}
-                                        </p>
-                                        <p>
-                                            <strong>Tugagan vaqti:</strong>{" "}
-                                            {getByIdData[0].endTime}
-                                        </p>
-                                    </div>
-                                    <form className="space-y-4">
-                                        <div className="flex flex-col">
-                                            <label
-                                                htmlFor="numberValue"
-                                                className="text-gray-700 font-medium"
-                                            >
-                                                <div className="flex justify-between">
-                                                    <div>Baholash:</div>
-                                                    <div>
-                                                        Max bal:{" "}
-                                                        {getMaxGreade()}
-                                                    </div>
-                                                </div>
-                                            </label>
-                                            <input
-                                                type="number"
-                                                id="numberValue"
-                                                name="numberValue"
-                                                min="0"
-                                                onChange={handleChangeMaxBal}
-                                                className="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                            />
-                                        </div>
-                                        <button
-                                            type="submit"
-                                            className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 active:bg-blue-700 transition duration-150"
-                                        >
-                                            Yuborish
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div className="relative w-full bg-white shadow-md rounded-lg">
                         <div className="overflow-y-auto max-h-[800px]">
                             {/* Thead */}
@@ -427,7 +299,7 @@ const BahMajburiyTest = () => {
                                     Fakulteti
                                 </div>
                                 <div className="py-3 px-4 text-sm font-medium text-gray-600 border-b">
-                                    Top./Baj.
+                                    Test/Baj.
                                 </div>
                                 <div className="py-3 px-4 text-sm font-medium text-gray-600 border-b">
                                     Muddati

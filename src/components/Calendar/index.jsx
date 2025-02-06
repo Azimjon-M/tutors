@@ -92,6 +92,37 @@ const Calendar = ({ holidays }) => {
         }
     };
 
+    const getMonth = (numberEfMonth) => {
+        switch (numberEfMonth) {
+            case 0:
+                return "Yanvar";
+            case 1:
+                return "Fevral";
+            case 2:
+                return "Mart";
+            case 3:
+                return "Aprel";
+            case 4:
+                return "May";
+            case 5:
+                return "Iyyun";
+            case 6:
+                return "Iyyul";
+            case 7:
+                return "Avgust";
+            case 8:
+                return "Sentyabr";
+            case 9:
+                return "Oktyabr";
+            case 10:
+                return "Noyabr";
+            case 11:
+                return "Dekabr";
+            default:
+                return "Oy";
+        }
+    };
+
     return (
         <div className="border rounded-lg shadow-xl p-4">
             <div className="flex justify-between items-center mb-4">
@@ -101,14 +132,9 @@ const Calendar = ({ holidays }) => {
                 >
                     Ortga
                 </button>
-                <div className="text-lg font-semibold">
-                    {new Date(currentYear, currentMonth).toLocaleString(
-                        "default",
-                        {
-                            month: "long",
-                        }
-                    )}{" "}
-                    {currentYear}
+                <div className="flex gap-2 text-lg font-semibold">
+                    <h1>{getMonth(currentMonth)}</h1>
+                    <h1>{currentYear}</h1>
                 </div>
                 <button
                     onClick={() => changeMonth("next")}

@@ -6,21 +6,43 @@ import Calendar from "../../../../components/Calendar";
 const Test = () => {
     const formik = useFormik({
         initialValues: {
-            muddat: "",
-            maxBal: "",
-            vazifaSoni: "",
-            startDate: "",
-            endDate: "",
+            muddat: "", // Muddati
+            testSoni: "", // Testlar soni
+            maxBal: "", // Max ball
+            file: null, // Fayl
+            berilganMin: "", // Test uchun berilgan minut
+            startDate: "", // Boshlanish sanasi
+            endDate: "", // Tugash sanasi
         },
         validationSchema: Yup.object({
-            muddat: Yup.string().required("Kiritilishi shart!"),
-            maxBal: Yup.number().required("Kiritilishi shart!"),
-            vazifaSoni: Yup.number().required("Kiritilishi shart!"),
-            startDate: Yup.date().required("Kiritilishi shart!"),
-            endDate: Yup.date().required("Kiritilishi shart!"),
+            muddat: Yup.string().required("Muddati kiritilishi shart!"), // Muddati majburiy
+            testSoni: Yup.number()
+                .required("Testlar soni kiritilishi shart!")
+                .min(1, "Testlar soni kamida 1 bo'lishi kerak!"), // Testlar soni majburiy va kamida 1
+            maxBal: Yup.number()
+                .required("Max ball kiritilishi shart!")
+                .min(0, "Max ball manfiy bo'lishi mumkin emas!"), // Max ball majburiy va manfiy bo'lmasligi kerak
+            file: Yup.mixed()
+                .required("Fayl yuklash majburiy!"),
+            berilganMin: Yup.number()
+                .required("Test uchun berilgan minut kiritilishi shart!")
+                .min(1, "Minut kamida 1 bo'lishi kerak!"), // Berilgan minut majburiy va kamida 1
+            startDate: Yup.date().required(
+                "Boshlanish sanasi kiritilishi shart!"
+            ),
+            // .min(
+            //     new Date(),
+            //     "Boshlanish sanasi bugungi sanadan oldin bo'lishi mumkin emas!"
+            // ), // Boshlanish sanasi majburiy va bugungi sanadan oldin bo'lmasligi kerak
+            endDate: Yup.date()
+                .required("Tugash sanasi kiritilishi shart!")
+                .min(
+                    Yup.ref("startDate"),
+                    "Tugash sanasi boshlanish sanasidan keyin bo'lishi kerak!"
+                ), // Tugash sanasi majburiy va boshlanish sanasidan keyin bo'lishi kerak
         }),
         onSubmit: (values) => {
-            console.log(values);
+            console.log(values); // Forma ma'lumotlarini konsolga chiqarish
         },
     });
 
@@ -36,8 +58,9 @@ const Test = () => {
         <div className="bg-base-200 rounded shadow p-1 md:p-2 lg:p-4">
             <h1 className="text-lg font-bold">Topshiriq yuborish:</h1>
             <form onSubmit={formik.handleSubmit}>
-                <div className="flex justify-between gap-2">
-                    <div className="w-full form-control mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                    {/* Muddati */}
+                    <div className="form-control">
                         <label htmlFor="muddat" className="label">
                             <span className="label-text">Muddati</span>
                         </label>
@@ -55,24 +78,9 @@ const Test = () => {
                             </span>
                         ) : null}
                     </div>
-                    {/* File */}
+
+                    {/* Testlar soni */}
                     <div className="form-control">
-                        <label htmlFor="" className="label">
-                            <span className="label-text">Fayl</span>
-                        </label>
-                        <input
-                            type="file"
-                            id="file"
-                            name="file"
-                            className="file-input file-input-bordered"
-                            onChange={formik.handleChange}
-                        />
-                        <span className="text-red-500 text-sm">
-                            {formik.errors.file}
-                        </span>
-                    </div>
-                    {/* Test nechtaligi */}
-                    <div className="w-full form-control mb-4">
                         <label htmlFor="testSoni" className="label">
                             <span className="label-text">Test soni</span>
                         </label>
@@ -81,7 +89,7 @@ const Test = () => {
                             id="testSoni"
                             name="testSoni"
                             className="input input-bordered"
-                            placeholder="Ballni kiriting"
+                            placeholder="Testlar sonini kiriting"
                             {...formik.getFieldProps("testSoni")}
                         />
                         {formik.touched.testSoni && formik.errors.testSoni ? (
@@ -90,26 +98,9 @@ const Test = () => {
                             </span>
                         ) : null}
                     </div>
-                    {/* Test Berilgan minut */}
-                    <div className="w-full form-control mb-4">
-                        <label htmlFor="berilganMin" className="label">
-                            <span className="label-text">Test uchun berilgan minut</span>
-                        </label>
-                        <input
-                            type="number"
-                            id="berilganMin"
-                            name="berilganMin"
-                            className="input input-bordered"
-                            placeholder="Ballni kiriting"
-                            {...formik.getFieldProps("berilganMin")}
-                        />
-                        {formik.touched.berilganMin && formik.errors.berilganMin ? (
-                            <span className="text-red-500 text-sm">
-                                {formik.errors.berilganMin}
-                            </span>
-                        ) : null}
-                    </div>
-                    <div className="w-full form-control mb-4">
+
+                    {/* Max ball */}
+                    <div className="form-control">
                         <label htmlFor="maxBal" className="label">
                             <span className="label-text">Max ball</span>
                         </label>
@@ -118,7 +109,7 @@ const Test = () => {
                             id="maxBal"
                             name="maxBal"
                             className="input input-bordered"
-                            placeholder="Ballni kiriting"
+                            placeholder="Max ballni kiriting"
                             {...formik.getFieldProps("maxBal")}
                         />
                         {formik.touched.maxBal && formik.errors.maxBal ? (
@@ -127,9 +118,51 @@ const Test = () => {
                             </span>
                         ) : null}
                     </div>
+
+                    {/* File */}
+                    <div className="form-control">
+                        <label htmlFor="file" className="label">
+                            <span className="label-text">Fayl</span>
+                        </label>
+                        <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            className="file-input file-input-bordered"
+                            accept=".xls, .xlsx"
+                            onChange={formik.handleChange}
+                        />
+                        <span className="text-red-500 text-sm">
+                            {formik.errors.file}
+                        </span>
+                    </div>
+
+                    {/* Test uchun berilgan minut */}
+                    <div className="form-control">
+                        <label htmlFor="berilganMin" className="label">
+                            <span className="label-text">
+                                Test uchun berilgan minut
+                            </span>
+                        </label>
+                        <input
+                            type="number"
+                            id="berilganMin"
+                            name="berilganMin"
+                            className="input input-bordered"
+                            placeholder="Minutni kiriting"
+                            {...formik.getFieldProps("berilganMin")}
+                        />
+                        {formik.touched.berilganMin &&
+                        formik.errors.berilganMin ? (
+                            <span className="text-red-500 text-sm">
+                                {formik.errors.berilganMin}
+                            </span>
+                        ) : null}
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                {/* Boshlanish va tugash sanalari */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="form-control">
                         <label htmlFor="startDate" className="label">
                             <span className="label-text">
@@ -149,6 +182,7 @@ const Test = () => {
                             </span>
                         ) : null}
                     </div>
+
                     <div className="form-control">
                         <label htmlFor="endDate" className="label">
                             <span className="label-text">Tugash sanasi</span>
@@ -167,6 +201,8 @@ const Test = () => {
                         ) : null}
                     </div>
                 </div>
+
+                {/* Yuborish tugmasi */}
                 <div className="form-control mt-6">
                     <button type="submit" className="btn btn-info w-full">
                         Yuborish
