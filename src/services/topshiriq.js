@@ -1,6 +1,6 @@
 import axiosInstance from ".";
 
-const endPoint = "topshiriq/topshiriq/";
+const endPoint = "topshiriq/admin_qoshimcha_topshiriq/";
 
 const get = () => axiosInstance.get(endPoint);
 

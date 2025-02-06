@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import APITopshiriq from "../../../services/topshiriq";
@@ -9,7 +9,6 @@ const TopshiriqlarQoshishZamdekan = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedTutors, setSelectedTutors] = useState([]);
   const [users, setUsers] = useState([]);
-  const [unShiredFakultet, setUnShiredFakultet] = useState("");
   const data = JSON.parse(localStorage.getItem("data"));
 
   const unShifredTxt = (key, content) => {
@@ -20,41 +19,11 @@ const TopshiriqlarQoshishZamdekan = () => {
     return res;
   };
 
-  useEffect(() => {
-    if (data) {
-      setUnShiredFakultet(
-        unShifredTxt(process.env.REACT_APP_SHIFRED_FAKULTET, data?.fakultet)
-      );
-    }
-  }, [data]);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      try {
-        const response = await APIUsers.getFakUsers(unShiredFakultet);
-        console.log(response.data);
-        
-        const sortedData = response.data.filter((item) => !item.admin);
-        setUsers(sortedData);
-      } catch (error) {
-        console.error("Failed to fetch admins", error);
-      }
-    };
-    getUsers();
-  }, [unShiredFakultet]);
-
-  // Fakultet Select orqali filtrlangan tutor
-  const filteredTutors = useMemo(() => {
-    setSelectAll(false);
-    setSelectedTutors([]);
-    return users;
-  }, [users]);
-
-  // Checkbox Hammasini tanlash
+  // Checkbox Hammasini tanlash forEach
   const handleSelectAll = (checked) => {
     setSelectAll(checked);
     if (checked) {
-      setSelectedTutors(filteredTutors.map((tutor) => tutor.id));
+      setSelectedTutors(users?.map((tutor) => tutor.id));
     } else {
       setSelectedTutors([]);
     }
@@ -71,7 +40,7 @@ const TopshiriqlarQoshishZamdekan = () => {
 
   useEffect(() => {
     let filtredTutorIdArray = [];
-    filteredTutors.forEach(
+    users?.forEach(
       (item) => (filtredTutorIdArray = [...filtredTutorIdArray, item.id])
     );
     if (
@@ -86,11 +55,10 @@ const TopshiriqlarQoshishZamdekan = () => {
         setSelectAll(false);
       }
     }
-  }, [filteredTutors, selectedTutors, selectAll]);
+  }, [users, selectedTutors, selectAll]);
 
   const formik = useFormik({
     initialValues: {
-      topshiriq_users: "",
       title: "",
       body: "",
       max_baxo: "",
@@ -102,9 +70,6 @@ const TopshiriqlarQoshishZamdekan = () => {
       tugash_vaqti: "",
     },
     validationSchema: Yup.object({
-      topshiriq_users: Yup.string().required(
-        "Kamida bitta tyutor tanlanishi shart!"
-      ),
       title: Yup.string().required("Sarlavha kiritilishi shart!"),
       body: Yup.string().required("Batafsil ma'lumot kiritilishi kerak!"),
       max_baxo: Yup.string().required("Maximal ball kiritilishi kerak!"),
@@ -117,7 +82,6 @@ const TopshiriqlarQoshishZamdekan = () => {
         ),
     }),
     onSubmit: async (values) => {
-      console.log(selectedTutors);
       const dataToPost = {
         topshiriq_users: selectedTutors,
         title: values.title,
@@ -136,6 +100,29 @@ const TopshiriqlarQoshishZamdekan = () => {
     },
   });
 
+  const removeLoopGetTutor = useRef(false);
+
+  // Get Tutors By FakID
+  useEffect(() => {
+    if (!removeLoopGetTutor.current) {
+      removeLoopGetTutor.current = true;
+
+      const fakultetId = unShifredTxt(
+        process.env.REACT_APP_SHIFRED_FAKULTET,
+        data?.fakultet
+      );
+
+      (async () => {
+        try {
+          const response = await APIUsers.getFakTutors(fakultetId);
+          setUsers(response?.data);
+        } catch (error) {
+          console.error("Failed to fetch admins", error);
+        }
+      })();
+    }
+  }, [data]);
+
   return (
     <div className="bg-base-200 rounded shadow p-1 md:p-2 lg:p-4">
       <h1 className="text-lg font-bold mb-4">Qaysi tutorlarga yuborish:</h1>
@@ -146,8 +133,8 @@ const TopshiriqlarQoshishZamdekan = () => {
           <thead className="bg-base-200 sticky top-0 z-10">
             <tr>
               <th>№</th>
-              <th>Isim Familya</th>
-              <th>Fakulteti</th>
+              <th>Familiya</th>
+              <th>Ism</th>
               <th>
                 <label className="cursor-pointer flex items-center justify-center gap-2">
                   <input
@@ -162,7 +149,7 @@ const TopshiriqlarQoshishZamdekan = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((tutor, index) => (
+            {users?.map((tutor, index) => (
               <tr key={tutor.id} className="hover">
                 <td className="py-2">{index + 1}</td>
                 <td className="py-2">{tutor.last_name}</td>

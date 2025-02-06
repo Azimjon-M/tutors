@@ -92,7 +92,7 @@ const Login = () => {
                                     ),
                                     fakultet: ShifredTxt(
                                         process.env.REACT_APP_SHIFRED_FAKULTET,
-                                        data.fakultet.name
+                                        data.fakultet.id
                                     )
                                 });
                                 localStorage.setItem("data", jsonData);
