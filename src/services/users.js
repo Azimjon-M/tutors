@@ -6,6 +6,8 @@ const get = () => axiosInstance.get(endPoint);
 
 const getRole = (role) => axiosInstance.get(`${endPoint}?role=${role}`);
 
+const getFakUsers = (fakultet) => axiosInstance.get(`${endPoint}?fakultet=${fakultet}`);
+
 const getbyId = (id) => axiosInstance.get(`${endPoint}${id}/`);
 
 const post = (item) => {
@@ -18,6 +20,6 @@ const put = (id, item) => axiosInstance.put(`${endPoint}${id}/`, item);
 
 const del = (id) => axiosInstance.delete(`${endPoint}${id}/`);
 
-const APIUsers = {get, getRole, getbyId, post, patch, put, del};
+const APIUsers = {get, getRole, getFakUsers, getbyId, post, patch, put, del};
 
 export default APIUsers;
