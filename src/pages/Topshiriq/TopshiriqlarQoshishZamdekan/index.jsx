@@ -3,11 +3,30 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import APITopshiriq from "../../../services/topshiriq";
 import APIUsers from "../../../services/users";
+import CryptoJS from "crypto-js";
 
 const TopshiriqlarQoshishZamdekan = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedTutors, setSelectedTutors] = useState([]);
   const [users, setUsers] = useState([]);
+  const [unShiredFakultet, setUnShiredFakultet] = useState("");
+  const data = JSON.parse(localStorage.getItem("data"));
+
+  const unShifredTxt = (key, content) => {
+    const res = CryptoJS.AES.decrypt(content, key)
+      .toString(CryptoJS.enc.Utf8)
+      .trim()
+      .replace(/^"|"$/g, "");
+    return res;
+  };
+
+  useEffect(() => {
+    if (data) {
+      setUnShiredFakultet(
+        unShifredTxt(process.env.REACT_APP_SHIFRED_FAKULTET, data?.fakultet)
+      );
+    }
+  }, [data]);
 
   const tutors = useMemo(
     () => [
@@ -26,9 +45,9 @@ const TopshiriqlarQoshishZamdekan = () => {
 
   const getUsers = async () => {
     try {
-      const response = await APIUsers.get();
+      const response = await APIUsers.getFakUsers("Matematika");
+      // const response = await APIUsers.getFakUsers(unShiredFakultet);
       const sortedData = response.data.filter((item) => !item.admin);
-
       setUsers(sortedData);
     } catch (error) {
       console.error("Failed to fetch admins", error);
@@ -86,22 +105,24 @@ const TopshiriqlarQoshishZamdekan = () => {
 
   const formik = useFormik({
     initialValues: {
-      users: "",
-      // title: "",
-      // details: "",
-      topshiriq_turi: "majburiy",
-      // numberValue: "",
-      // file1: null,
-      // file2: null,
-      // file3: null,
-      // file4: null,
-      // urinishlar_soni: "",
+      topshiriq_users: "",
+      title: "",
+      body: "",
+      max_baxo: "",
+      file1: null,
+      file2: null,
+      file3: null,
+      file4: null,
       boshlanish_vaqti: "",
       tugash_vaqti: "",
     },
     validationSchema: Yup.object({
+      topshiriq_users: Yup.string().required(
+        "Kamida bitta tyutor tanlanishi shart!"
+      ),
       title: Yup.string().required("Sarlavha kiritilishi shart!"),
-      details: Yup.string().required("Batafsil ma'lumot kiritilishi kerak!"),
+      body: Yup.string().required("Batafsil ma'lumot kiritilishi kerak!"),
+      max_baxo: Yup.string().required("Maximal ball kiritilishi kerak!"),
       boshlanish_vaqti: Yup.date().required("Boshlanish sanasini kiriting!"),
       tugash_vaqti: Yup.date()
         .required("Tugash sanasini kiriting!")
@@ -113,9 +134,10 @@ const TopshiriqlarQoshishZamdekan = () => {
     onSubmit: async (values) => {
       console.log(selectedTutors);
       const dataToPost = {
-        users: selectedTutors,
-        urinishlar_soni: 2,
-        topshiriq_turi: "majburiy",
+        topshiriq_users: selectedTutors,
+        title: values.title,
+        body: values.body,
+        max_baxo: values.max_baxo,
         boshlanish_vaqti: values.boshlanish_vaqti,
         tugash_vaqti: values.tugash_vaqti,
       };
@@ -202,39 +224,37 @@ const TopshiriqlarQoshishZamdekan = () => {
             ) : null}
           </div>
           <div className="form-control mb-4">
-            <label htmlFor="numberValue" className="label">
+            <label htmlFor="max_baxo" className="label">
               <span className="label-text">Max ball</span>
             </label>
             <input
               type="number"
-              id="numberValue"
-              name="numberValue"
+              id="max_baxo"
+              name="max_baxo"
               className="input input-bordered w-[100px]"
-              {...formik.getFieldProps("numberValue")}
+              {...formik.getFieldProps("max_baxo")}
             />
-            {formik.touched.numberValue && formik.errors.numberValue ? (
+            {formik.touched.max_baxo && formik.errors.max_baxo ? (
               <span className="text-red-500 text-sm">
-                {formik.errors.numberValue}
+                {formik.errors.max_baxo}
               </span>
             ) : null}
           </div>
         </div>
         <div className="form-control mb-4">
-          <label htmlFor="details" className="label">
+          <label htmlFor="body" className="label">
             <span className="label-text">Batafsil</span>
           </label>
           <textarea
-            id="details"
-            name="details"
+            id="body"
+            name="body"
             rows="4"
             className="textarea textarea-bordered"
             placeholder="Batafsil ma'lumot kiriting"
-            {...formik.getFieldProps("details")}
+            {...formik.getFieldProps("body")}
           />
-          {formik.touched.details && formik.errors.details ? (
-            <span className="text-red-500 text-sm">
-              {formik.errors.details}
-            </span>
+          {formik.touched.body && formik.errors.body ? (
+            <span className="text-red-500 text-sm">{formik.errors.body}</span>
           ) : null}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
