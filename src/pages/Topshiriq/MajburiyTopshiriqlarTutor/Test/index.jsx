@@ -136,14 +136,61 @@ function TestTutor() {
   return (
     <div className="p-4 max-w-lg lg:max-w-5xl 2xl:max-w-6xl 3xl:max-w-7xl mx-auto">
       {!isStarted ? (
-        <div className="text-center">
-          <h2>Testga xush kelibsiz! Boshlash uchun tugmani bosing.</h2>
-          <button
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-            onClick={handleStart}
-          >
-            Boshlash
-          </button>
+        // <div className="text-center">
+        //   <h2>Testga xush kelibsiz! Boshlash uchun tugmani bosing.</h2>
+        //   <button
+        //     className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
+        //     onClick={handleStart}
+        //   >
+        //     Boshlash
+        //   </button>
+        // </div>
+        <div className="h-[85vh] flex justify-center items-center font-sans">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full text-center">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4 max-w-[500px] mx-auto">
+              Kitob o‘qiganingizni sinab ko‘rish uchun testga hozirmisiz?
+            </h1>
+            <p className="text-xl text-gray-600 mb-6">
+              [Kitob nomi yoki mavzusi]
+            </p>
+
+            <div className="text-left mb-6">
+              <p className="text-lg font-semibold text-gray-700">
+                Testga kirish:
+              </p>
+              <ul className="list-none pl-4">
+                <li className="text-md text-gray-600">
+                  Test kuni: <span className="font-bold">[Test sanasi]</span>
+                </li>
+                <li className="text-md text-gray-600">
+                  Test davomiyligi:{" "}
+                  <span className="font-bold">[Test davomiyligi] minut</span>
+                </li>
+                <li className="text-md text-gray-600">
+                  Urinishlar soni: <span className="font-bold">1ta</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-md text-gray-600 mb-4">Testga tayyorlaning:</p>
+              <ul className="pl-8 text-gray-600">
+                <li>Kitobni oxirigacha o‘qib chiqing.</li>
+                <li>Savollarga diqqat bilan javob bering.</li>
+                <li>
+                  Testni yakunlashdan oldin barcha savollarni tekshirib chiqing.
+                </li>
+              </ul>
+            </div>
+
+            <button
+              className={`bg-blue-500 text-white py-2 px-6 rounded-full text-xl font-semibold hover:bg-blue-600 transition duration-300 ease-in-out cursor-not-allowed opacity-70`}
+              onClick={handleStart}
+              // disabled
+            >
+              Testni boshlash
+            </button>
+          </div>
         </div>
       ) : (
         <>
@@ -221,7 +268,15 @@ function TestTutor() {
                   <div
                     key={index}
                     className={`w-10 h-10 flex items-center justify-center rounded-full cursor-pointer border-2 ${
-                      selectedAnswers[index]
+                      currentIndex === index
+                        ? `${
+                            selectedAnswers[index]
+                              ? "bg-green-300"
+                              : "bg-green-400"
+                          }`
+                        : ""
+                    } ${
+                      selectedAnswers[index] || currentIndex === index
                         ? "bg-blue-400 text-white"
                         : "bg-gray-300"
                     }`}
