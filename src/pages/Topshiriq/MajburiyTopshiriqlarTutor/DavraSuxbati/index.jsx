@@ -20,7 +20,7 @@ function DavraSuxbati() {
           {/* Title section */}
           <div className="p-1 md:p-5 text-center md:text-left">
             <h2 className="text-xl text-gray-600">
-              Davra suhbati
+              Talabalar turar joyiga tashrif sahifasi
             </h2>
             <h1 className="text-2xl text-gray-600 mt-2">
               Hush kelibsiz😃,{" "}
@@ -45,9 +45,9 @@ function DavraSuxbati() {
 
           {/* End time */}
           <div className="lg:flex items-center justify-center border-l-2 hidden">
-            <div class="relative text-center size-44">
+            <div className="relative text-center size-44">
               <svg
-                class="size-full -rotate-90"
+                className="size-full -rotate-90"
                 viewBox="0 0 36 36"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -56,8 +56,8 @@ function DavraSuxbati() {
                   cy="18"
                   r="16"
                   fill="none"
-                  class="stroke-current text-indigo-200 dark:text-neutral-700"
-                  stroke-width="1"
+                  className="stroke-current text-indigo-200 dark:text-neutral-700"
+                  strokeWidth="1"
                 ></circle>
 
                 <circle
@@ -65,16 +65,16 @@ function DavraSuxbati() {
                   cy="18"
                   r="16"
                   fill="none"
-                  class="stroke-current text-indigo-500 dark:text-blue-500"
-                  stroke-width="2"
-                  stroke-dasharray="100"
-                  stroke-dashoffset="40"
-                  stroke-linecap="round"
+                  className="stroke-current text-indigo-500 dark:text-blue-500"
+                  strokeWidth="2"
+                  strokeDasharray="100"
+                  strokeDashoffset="40"
+                  strokeLinecap="round"
                 ></circle>
               </svg>
 
-              <div class="text-center absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <span class="text-center text-4xl font-bold text-indigo-500 dark:text-blue-500">
+              <div className="text-center absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                <span className="text-center text-4xl font-bold text-indigo-500 dark:text-blue-500">
                   124
                 </span>
                 <p className="text-center text-4xl font-bold text-indigo-500 dark:text-blue-500">
@@ -88,15 +88,15 @@ function DavraSuxbati() {
         {/* End time */}
         <div className="mt-5 p-3 rounded-md bg-white lg:hidden">
           <div
-            class="flex relative h-6 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+            className="flex relative h-6 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
             role="progressbar"
             aria-valuenow="25"
             aria-valuemin="0"
             aria-valuemax="100"
           >
-            <div class="flex flex-col justify-center overflow-hidden bg-indigo-300 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-indigo-500 w-2/4"></div>
-            <div class="text-center absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-              <span class="text-center text-base font-bold text-indigo-600 dark:text-indigo-400">
+            <div className="flex flex-col justify-center overflow-hidden bg-indigo-300 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-indigo-500 w-2/4"></div>
+            <div className="text-center absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+              <span className="text-center text-base font-bold text-indigo-600 dark:text-indigo-400">
                 Tugash vaqti: 124 soat
               </span>
             </div>
@@ -170,16 +170,16 @@ function DavraSuxbati() {
                   >
                     Qo'shimcha xujjat fayl
                     <svg
-                      class="shrink-0 size-4"
+                      className="shrink-0 size-4"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
                       <path d="m9 18 6-6-6-6" />
                     </svg>
@@ -253,16 +253,16 @@ function DavraSuxbati() {
                   >
                     Qo'shimcha xujjat fayl
                     <svg
-                      class="shrink-0 size-4"
+                      className="shrink-0 size-4"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
                       <path d="m9 18 6-6-6-6" />
                     </svg>
