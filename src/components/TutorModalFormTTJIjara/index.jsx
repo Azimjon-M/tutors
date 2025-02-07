@@ -91,7 +91,10 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
           {({ setFieldValue }) => (
             <Form>
               <div className="mb-4">
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Sarlavha
                 </label>
                 <Field
@@ -100,11 +103,18 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
                   name="title"
                   className="w-full px-3 py-2 border rounded-lg bg-gray-50"
                 />
-                <ErrorMessage name="title" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="title"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <div className="mb-4">
-                <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="last_name"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Tavsif
                 </label>
                 <Field
@@ -114,12 +124,19 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
                   rows="4"
                   className="w-full px-3 py-2 border rounded-lg bg-gray-50"
                 />
-                <ErrorMessage name="last_name" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="last_name"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label htmlFor="rasm1" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="rasm1"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Rasm 1
                   </label>
                   <input
@@ -135,12 +152,21 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
                         alert("Faqat rasmlar yuklash mumkin!");
                         event.target.value = "";
                       }
+                      // Kamera orqali olish shartligini tekshirish
+                      if (!event.target.capture) {
+                        alert("Iltimos, faqat kameradan rasmga oling!");
+                        event.target.value = "";
+                        return;
+                      }
                     }}
                     className="w-full px-3 py-2 border rounded-lg bg-gray-50"
                   />
                 </div>
                 <div>
-                  <label htmlFor="rasm2" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="rasm2"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Rasm 2
                   </label>
                   <input
@@ -156,19 +182,31 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
                         alert("Faqat rasmlar yuklash mumkin!");
                         event.target.value = "";
                       }
+                      // Kamera orqali olish shartligini tekshirish
+                      if (!event.target.capture) {
+                        alert("Iltimos, faqat kameradan rasmga oling!");
+                        event.target.value = "";
+                        return;
+                      }
                     }}
                     className="w-full px-3 py-2 border rounded-lg bg-gray-50"
                   />
                 </div>
               </div>
 
-              {location && <p className="text-sm text-gray-600 mb-2">Manzil koordinatalari: {location}</p>}
+              {location && (
+                <p className="text-sm text-gray-600 mb-2">
+                  Manzil koordinatalari: {location}
+                </p>
+              )}
               <Field type="hidden" name="location" value={location} />
 
               <button
                 type="submit"
                 className={`w-full mt-4 py-2 px-4 rounded-md text-white font-semibold ${
-                  edit ? "bg-teal-500 hover:bg-teal-600" : "bg-indigo-500 hover:bg-indigo-600"
+                  edit
+                    ? "bg-teal-500 hover:bg-teal-600"
+                    : "bg-indigo-500 hover:bg-indigo-600"
                 }`}
               >
                 {edit ? "Tahrirlash" : "Qo'shish"}
