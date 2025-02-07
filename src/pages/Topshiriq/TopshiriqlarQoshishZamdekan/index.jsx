@@ -82,24 +82,24 @@ const TopshiriqlarQoshishZamdekan = () => {
         ),
     }),
     onSubmit: async (values) => {
-      const formData = new FormData();
-
       // Oddiy text ma'lumotlarni qo‘shish
-      formData.append("topshiriq_users", JSON.stringify(selectedTutors));
-      formData.append("title", values.title);
-      formData.append("body", values.body);
-      formData.append("max_baxo", values.max_baxo);
-      formData.append("boshlanish_vaqti", values.boshlanish_vaqti);
-      formData.append("tugash_vaqti", values.tugash_vaqti);
-    
+      const dataToPost = {
+        topshiriq_users: selectedTutors,
+        title: values.title,
+        body: values.body,
+        max_baxo: values.max_baxo,
+        boshlanish_vaqti: values.boshlanish_vaqti,
+        tugash_vaqti: values.tugash_vaqti,
+      };
+
       // Fayllarni qo‘shish (faqat mavjudlarini)
-      if (values.file1) formData.append("file1", values.file1[0]); 
-      if (values.file2) formData.append("file2", values.file2[0]); 
-      if (values.file3) formData.append("file3", values.file3[0]); 
-      if (values.file4) formData.append("file4", values.file4[0]);
+      // if (values.file1) formData.append("file1", values.file1);
+      // if (values.file2) formData.append("file2", values.file2);
+      // if (values.file3) formData.append("file3", values.file3);
+      // if (values.file4) formData.append("file4", values.file4);
 
       try {
-        await APITopshiriq.post(formData);
+        await APITopshiriq.post(dataToPost);
         alert("Muvaffaqiyatli qo'shildi.!");
         // resetForm();
       } catch (error) {
