@@ -7,17 +7,11 @@ import { BsEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
 import APIGetToken from "../../services/getToken";
 import APIGetUser from "../../services/getUser";
 
-import CryptoJS from "crypto-js";
 import LoadnigTxt from "../../components/LoadingTxt";
+import Encryption from "../../components/Encryption";
+import Decryption from "../../components/Decryption";
 
 const Login = () => {
-    const ShifredTxt = (key, content) => {
-        const shifredTxt = CryptoJS.AES.encrypt(
-            JSON.stringify(content),
-            String(key)
-        ).toString();
-        return shifredTxt;
-    };
 
     const [eye, setEye] = useState(false);
     const [isLoading, setIsLoading] = useState("");
@@ -55,7 +49,27 @@ const Login = () => {
                         username: values.username,
                         password: values.password,
                     });
-                    if (res.data && res.data.access) {
+
+                    
+                    if (res.data && res.data.access && res.data.refresh) {
+                        // getEndTime of RefToken
+                        const decodeJWT = (token) => {
+                            const base64Url = token.split('.')[1]; // Payload qismi
+                            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                            const jsonPayload = decodeURIComponent(
+                                atob(base64)
+                                    .split('')
+                                    .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                                    .join('')
+                            );
+                            return JSON.parse(jsonPayload);
+                        };
+                        const decoded = decodeJWT(res.data.refresh);
+                        const expiresAt = new Date(decoded.exp * 1000); // Token tugash vaqti
+                        const formattedExpiration = {
+                            date: expiresAt.toISOString().split('T')[0], // "YYYY-MM-DD"
+                            hour: expiresAt.toTimeString().split(' ')[0].slice(0, 5), // "HH:MM"
+                        };
                         try {
                             const resUser = await APIGetUser.get(
                                 values.username,
@@ -63,37 +77,41 @@ const Login = () => {
                             );
                             if (resUser.data) {
                                 const [data] = resUser.data;
-                                console.log(data)
                                 const jsonData = JSON.stringify({
-                                    username: ShifredTxt(
-                                        process.env.REACT_APP_SHIFRED_USERNAME,
-                                        values.username
+                                    username: Encryption(
+                                        values.username,
+                                        process.env.REACT_APP_SHIFRED_USERNAME
                                     ),
-                                    password: ShifredTxt(
-                                        process.env.REACT_APP_SHIFRED_PASSWORD,
-                                        values.password
+                                    password: Encryption(
+                                        values.password,
+                                        process.env.REACT_APP_SHIFRED_PASSWORD
                                     ),
                                     remember: values.remember,
-                                    first_name: ShifredTxt(
-                                        process.env.REACT_APP_SHIFRED_FIRSTNAME,
-                                        data.first_name
+                                    first_name: Encryption(
+                                        data.first_name,
+                                        process.env.REACT_APP_SHIFRED_FIRSTNAME
                                     ),
-                                    last_name: ShifredTxt(
-                                        process.env.REACT_APP_SHIFRED_LASTNAME,
-                                        data.last_name
+                                    last_name: Encryption(
+                                        data.last_name,
+                                        process.env.REACT_APP_SHIFRED_LASTNAME
                                     ),
-                                    token: ShifredTxt(
-                                        process.env.REACT_APP_ENCRYPTION_KEY,
-                                        res.data.access
+                                    token: Encryption(
+                                        res.data.access,
+                                        process.env.REACT_APP_ENCRYPTION_KEY
                                     ),
-                                    role: ShifredTxt(
-                                        process.env.REACT_APP_SHIFRED_ROLE,
-                                        data.role
+                                    refToken: Encryption(
+                                        res.data.refresh,
+                                        process.env.REACT_APP_ENCRYPTION_REFKEY
                                     ),
-                                    fakultet: ShifredTxt(
-                                        process.env.REACT_APP_SHIFRED_FAKULTET,
-                                        data.fakultet.id
-                                    )
+                                    role: Encryption(
+                                        data.role,
+                                        process.env.REACT_APP_SHIFRED_ROLE
+                                    ),
+                                    fakultet: Encryption(
+                                        data.fakultet.id,
+                                        process.env.REACT_APP_SHIFRED_FAKULTET
+                                    ),
+                                    endRefToken: formattedExpiration,
                                 });
                                 localStorage.setItem("data", jsonData);
                                 navigate("/analitka");
@@ -123,14 +141,6 @@ const Login = () => {
         },
     });
 
-    const unShifredTxt = (key, content) => {
-        const res = CryptoJS.AES.decrypt(content, key)
-            .toString(CryptoJS.enc.Utf8)
-            .trim()
-            .replace(/^"|"$/g, "");
-        return res;
-    };
-
     const handleClickPassword = () => {
         const btn = document.getElementById("password");
         btn.type = btn.type === "text" ? "password" : "text";
@@ -141,13 +151,13 @@ const Login = () => {
         if (data?.remember && !removeLoop.current) {
             console.log(data?.remember);
             formik.setValues({
-                username: unShifredTxt(
-                    process.env.REACT_APP_SHIFRED_USERNAME,
-                    data?.username
+                username: Decryption(
+                    data?.username,
+                    process.env.REACT_APP_SHIFRED_USERNAME
                 ),
-                password: unShifredTxt(
-                    process.env.REACT_APP_SHIFRED_PASSWORD,
-                    data?.password
+                password: Decryption(
+                    data?.password,
+                    process.env.REACT_APP_SHIFRED_PASSWORD
                 ),
                 remember: formik.values.remember,
             });
