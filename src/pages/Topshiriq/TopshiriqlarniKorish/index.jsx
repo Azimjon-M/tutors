@@ -13,8 +13,7 @@ const TopshiriqlarniKorish = () => {
     const faceData = [
         {
             id: 1,
-            title: "Matematika Darslari IJIOJ ijiojoi IJIJIJ iji",
-            info: "Geometriya haqida qo'shimcha ma'lumotlarv kjsika ajsikjdioa ijio ihduiah sdhauisdhuia sdhuiahsduihauid hu",
+            title: "Matematika Darslari IJIOJ ijiojoi IJIJIJ iji вoaj oi",
             kategorya: "Majburiy",
             maxBal: "10",
             start: formatDateToISO("01.02.2024"),
@@ -23,7 +22,6 @@ const TopshiriqlarniKorish = () => {
         {
             id: 2,
             title: "Ingliz Tili",
-            info: "Grammar topshiriqlari",
             kategorya: "O'z tashabbusi",
             maxBal: "6",
             start: formatDateToISO("03.02.2024"),
@@ -32,7 +30,6 @@ const TopshiriqlarniKorish = () => {
         {
             id: 3,
             title: "Fizika",
-            info: "Mexanika bo'yicha masalalar",
             kategorya: "Qo'shimcha",
             maxBal: "3",
             start: formatDateToISO("05.02.2024"),
@@ -267,7 +264,6 @@ const TopshiriqlarniKorish = () => {
                             <tr className="text-sm bg-gray-100">
                                 <th className="">№</th>
                                 <th className="">Nomi</th>
-                                <th className="">Batafsil</th>
                                 <th className="">Kategorya</th>
                                 <th className="">Max bal</th>
                                 <th className="">Boshlanish</th>
@@ -285,14 +281,9 @@ const TopshiriqlarniKorish = () => {
                                     <td className=" text-center">
                                         {index + 1}
                                     </td>
-                                    <td className="max-w-[200px]">
+                                    <td className="max-w-[500px]">
                                         <div className="w-full px-4 line-clamp-1">
                                             {item.title}
-                                        </div>
-                                    </td>
-                                    <td className="max-w-[300px]">
-                                        <div className="w-full px-4 line-clamp-1">
-                                            {item.info}
                                         </div>
                                     </td>
                                     <td className=" text-center">

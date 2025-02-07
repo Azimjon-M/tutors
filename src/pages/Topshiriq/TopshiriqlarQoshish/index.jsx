@@ -4,6 +4,8 @@ import * as Yup from "yup";
 
 const TopshiriqlarQoshish = () => {
     const [selectAll, setSelectAll] = useState(false);
+    const [firstSubmitted, setFirstSubmitted] = useState(false);
+    const [nonSelected, setNonSelected] = useState(false);
     const [selectedTutors, setSelectedTutors] = useState([]);
     const [filterFak, setFilterFak] = useState("");
 
@@ -80,17 +82,16 @@ const TopshiriqlarQoshish = () => {
 
     // ************* topshiriq Forma ******************
     const kategory = [
-        { id: 1, name: "Kategoryani tanlang!", disabled: true },
-        { id: 3, name: "O‘z sohasi" },
-        { id: 4, name: "Qo‘shimcha" },
+        { id: 1, name: "O'z sohasi" },
+        { id: 2, name: "Qo'shimcha" },
     ];
 
     const formik = useFormik({
         initialValues: {
             title: "",
             details: "",
-            category: 1,
-            numberValue: "",
+            category: 0,
+            maxBall: 0,
             file1: null,
             file2: null,
             file3: null,
@@ -99,27 +100,45 @@ const TopshiriqlarQoshish = () => {
             endDate: "",
         },
         validationSchema: Yup.object({
-            title: Yup.string().required("Sarlavha kiritilishi shart!"),
-            details: Yup.string().required(
-                "Batafsil ma'lumot kiritilishi kerak!"
-            ),
-            startDate: Yup.date().required("Boshlanish sanasini kiriting!"),
+            title: Yup.string().required("Kiritilishi shart!"),
+            details: Yup.string().required("Kiritilishi shart!"),
+            category: Yup.number().min(1, "Kiritilishi shart!"),
+            maxBall: Yup.number().min(0.001, "Kiritilishi shart!"),
+            startDate: Yup.date().required("Kiritilishi shart!"),
             endDate: Yup.date()
-                .required("Tugash sanasini kiriting!")
+                .required("Kiritilishi shart!")
                 .min(
                     Yup.ref("startDate"),
                     "Tugash sanasi boshlanish sanasidan keyin bo‘lishi kerak!"
                 ),
         }),
         onSubmit: (values) => {
-            console.log(values);
+            if (!selectedTutors.length) {
+                setNonSelected(true);
+            } else {
+                const data = {...values, tutorsId: selectedTutors}
+                console.log(data);
+            }
+
+            setFirstSubmitted(true);
         },
     });
-    
+
+    useEffect(() => {
+        if (firstSubmitted) {
+            if (selectedTutors.length >= 1) {
+                setNonSelected(false);
+            } else {
+                setNonSelected(true);
+            }
+        }
+    }, [selectedTutors, firstSubmitted]);
 
     return (
         <div className="bg-base-200 rounded shadow p-1 md:p-2 lg:p-4">
-            <h1 className="text-lg font-bold mb-4">Qaysi tutorlarga yuborish:</h1>
+            <h1 className="text-lg font-bold mb-4">
+                Qaysi tutorlarga yuborish:
+            </h1>
             <div className="flex flex-col justify-end items-end mb-4">
                 <label
                     htmlFor="facultyFilter"
@@ -145,7 +164,11 @@ const TopshiriqlarQoshish = () => {
             </div>
 
             {/* Jadval */}
-            <div className="overflow-x-auto max-h-[30vh] lg:max-h-[40vh] border rounded-lg shadow-md">
+            <div
+                className={`overflow-x-auto max-h-[30vh] lg:max-h-[40vh] border rounded-lg shadow-md ${
+                    nonSelected && "border-2 border-red-600"
+                }`}
+            >
                 <table className="table table-zebra w-full text-center select-none">
                     <thead className="bg-base-200 sticky top-0 z-10">
                         <tr>
@@ -196,10 +219,13 @@ const TopshiriqlarQoshish = () => {
                     </tbody>
                 </table>
             </div>
+            {nonSelected && (
+                <div className="text-center text-[red] font-medium">
+                    Tutorlardan birini tanlashingiz shart!
+                </div>
+            )}
 
-            <h1 className="text-lg font-bold mt-8">
-                Topshiriq yuborish:
-            </h1>
+            <h1 className="text-lg font-bold mt-8">Topshiriq yuborish:</h1>
 
             <form onSubmit={formik.handleSubmit}>
                 <div className="form-control mb-4">
@@ -252,6 +278,9 @@ const TopshiriqlarQoshish = () => {
                             value={formik.values.category}
                             onChange={formik.handleChange}
                         >
+                            <option value="0" disabled>
+                                Kategoryani tanlang!
+                            </option>
                             {kategory?.map((item) => (
                                 <option
                                     key={item.id}
@@ -271,22 +300,19 @@ const TopshiriqlarQoshish = () => {
                         ) : null}
                     </div>
                     <div className="form-control mb-4">
-                        <label htmlFor="numberValue" className="label">
-                            <span className="label-text">
-                                Max ball
-                            </span>
+                        <label htmlFor="maxBall" className="label">
+                            <span className="label-text">Max ball</span>
                         </label>
                         <input
                             type="number"
-                            id="numberValue"
-                            name="numberValue"
+                            id="maxBall"
+                            name="maxBall"
                             className="input input-bordered w-[100px]"
-                            {...formik.getFieldProps("numberValue")}
+                            {...formik.getFieldProps("maxBall")}
                         />
-                        {formik.touched.numberValue &&
-                        formik.errors.numberValue ? (
+                        {formik.touched.maxBall && formik.errors.maxBall ? (
                             <span className="text-red-500 text-sm">
-                                {formik.errors.numberValue}
+                                {formik.errors.maxBall}
                             </span>
                         ) : null}
                     </div>
