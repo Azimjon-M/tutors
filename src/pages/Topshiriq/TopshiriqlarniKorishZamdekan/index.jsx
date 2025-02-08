@@ -1,78 +1,94 @@
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import React, { useState } from "react";
-import * as Yup from "yup";
+import APITopshiriq from "../../../services/topshiriq";
 
 const TopshiriqlarniKorishZamdekan = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [tasks, setTasks] = useState([]);
+  const [selectedTask, setSelectedTask] = useState(null);
 
-  const formatDateToISO = (date) => {
-    const [day, month, year] = date.split(".");
-    return `${year}-${month}-${day}`;
+  // 📌 GET - Barcha topshiriqlarni olish
+  const getTasks = async () => {
+    try {
+      const response = await APITopshiriq.get();
+      setTasks(response.data);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
   };
 
-  const faceData = [
-    {
-      id: 1,
-      title: "Matematika Darslari IJIOJ ijiojoi IJIJIJ iji",
-      info: "Geometriya haqida qo'shimcha ma'lumotlarv kjsika ajsikjdioa ijio ihduiah sdhauisdhuia sdhuiahsduihauid hu",
-      kategorya: "Qo'shimcha",
-      maxBal: "10",
-      start: formatDateToISO("01.02.2024"),
-      finish: formatDateToISO("02.02.2024"),
-    },
-    {
-      id: 2,
-      title: "Ingliz Tili",
-      info: "Grammar topshiriqlari",
-      kategorya: "Qo'shimcha",
-      maxBal: "6",
-      start: formatDateToISO("03.02.2024"),
-      finish: formatDateToISO("04.02.2024"),
-    },
-    {
-      id: 3,
-      title: "Fizika",
-      info: "Mexanika bo'yicha masalalar",
-      kategorya: "Qo'shimcha",
-      maxBal: "3",
-      start: formatDateToISO("05.02.2024"),
-      finish: formatDateToISO("06.02.2024"),
-    },
-  ];
+  useEffect(() => {
+    getTasks();
+  }, []);
 
-  // ***********************************************************
-
+  // 📌 EDIT - Topshiriqni tahrirlash
   const formik = useFormik({
     initialValues: {
       title: "",
-      details: "",
-      category: 1,
-      numberValue: "",
-      file1: null,
-      file2: null,
-      file3: null,
-      file4: null,
-      endDate: "",
+      body: "",
+      max_baxo: "",
+      tugash_vaqti: "",
     },
-    validationSchema: Yup.object({
-      title: Yup.string().required("Sarlavha kiritilishi shart!"),
-      details: Yup.string().required("Batafsil ma'lumot kiritilishi kerak!"),
-      endDate: Yup.date()
-        .required("Tugash sanasini kiriting!")
-        .min(
-          Yup.ref("startDate"),
-          "Tugash sanasi boshlanish sanasidan keyin bo‘lishi kerak!"
-        ),
-    }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      if (selectedTask) {
+        try {
+          const textData = {
+            title: values.title,
+            body: values.body,
+            max_baxo: values.max_baxo,
+            tugash_vaqti: values.tugash_vaqti,
+          };
+          await APITopshiriq.patch(selectedTask.id, textData);
+
+          // Agar fayllar mavjud bo'lsa, ularni alohida PATCH qilish
+          const formData = new FormData();
+          if (values.file1) formData.append("file1", values.file1);
+          if (values.file2) formData.append("file2", values.file2);
+          if (values.file3) formData.append("file3", values.file3);
+          if (values.file4) formData.append("file4", values.file4);
+
+          if (
+            formData.has("file1") ||
+            formData.has("file2") ||
+            formData.has("file3") ||
+            formData.has("file4")
+          ) {
+            await APITopshiriq.patch(selectedTask.id, formData);
+          }
+          getTasks();
+          setIsOpenModal(false);
+        } catch (error) {
+          console.error("Error updating task:", error);
+        }
+      }
     },
   });
 
-  const onDelete = (id) => {
+  const onEdit = (task) => {
+    setSelectedTask(task);
+    setIsOpenModal(true);
+    formik.setValues({
+      title: task.title,
+      body: task.body,
+      max_baxo: task.max_baxo,
+      tugash_vaqti: task.tugash_vaqti,
+      file1: task.file1,
+      file2: task.file2,
+      file3: task.file3,
+      file4: task.file4,
+    });
+  };
+
+  // 📌 DELETE - Topshiriqni o‘chirish
+  const onDelete = async (taskId) => {
     const confrim = window.confirm("O'chirishni istaysizmi ?");
     if (confrim) {
-      console.log(id);
+      try {
+        await APITopshiriq.del(taskId);
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+      } catch (error) {
+        console.error("Error deleting task:", error);
+      }
     }
   };
 
@@ -80,7 +96,7 @@ const TopshiriqlarniKorishZamdekan = () => {
     <div className="relative z-0">
       <div
         className={`${
-          isOpenModal ? "z-20 opacity-100" : "-z-10 opacity-0"
+          isOpenModal ? "z-20" : "hidden"
         } w-[100%] h-[100vh] absolute top-[-1.5rem] left-0 bg-[#00000093] transition-[opacity] ease-linear duration-150`}
       >
         <div className="flex justify-end pl-4 pt-4 pr-4">
@@ -116,38 +132,38 @@ const TopshiriqlarniKorishZamdekan = () => {
                 ) : null}
               </div>
               <div className="form-control mb-4">
-                <label htmlFor="numberValue" className="label">
+                <label htmlFor="max_baxo" className="label">
                   <span className="label-text">Max ball</span>
                 </label>
                 <input
                   type="number"
-                  id="numberValue"
-                  name="numberValue"
+                  id="max_baxo"
+                  name="max_baxo"
                   className="input input-bordered w-[100px]"
-                  {...formik.getFieldProps("numberValue")}
+                  {...formik.getFieldProps("max_baxo")}
                 />
-                {formik.touched.numberValue && formik.errors.numberValue ? (
+                {formik.touched.max_baxo && formik.errors.max_baxo ? (
                   <span className="text-red-500 text-sm">
-                    {formik.errors.numberValue}
+                    {formik.errors.max_baxo}
                   </span>
                 ) : null}
               </div>
             </div>
             <div className="form-control mb-4">
-              <label htmlFor="details" className="label">
+              <label htmlFor="body" className="label">
                 <span className="label-text">Batafsil</span>
               </label>
               <textarea
-                id="details"
-                name="details"
+                id="body"
+                name="body"
                 rows="4"
                 className="textarea textarea-bordered"
                 placeholder="Batafsil ma'lumot kiriting"
-                {...formik.getFieldProps("details")}
+                {...formik.getFieldProps("body")}
               />
-              {formik.touched.details && formik.errors.details ? (
+              {formik.touched.body && formik.errors.body ? (
                 <span className="text-red-500 text-sm">
-                  {formik.errors.details}
+                  {formik.errors.body}
                 </span>
               ) : null}
             </div>
@@ -178,19 +194,19 @@ const TopshiriqlarniKorishZamdekan = () => {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
               <div className="form-control">
-                <label htmlFor="endDate" className="label">
+                <label htmlFor="tugash_vaqti" className="label">
                   <span className="label-text">Tugash sanasi</span>
                 </label>
                 <input
                   type="date"
-                  id="endDate"
-                  name="endDate"
+                  id="tugash_vaqti"
+                  name="tugash_vaqti"
                   className="input input-bordered"
-                  {...formik.getFieldProps("endDate")}
+                  {...formik.getFieldProps("tugash_vaqti")}
                 />
-                {formik.touched.endDate && formik.errors.endDate ? (
+                {formik.touched.tugash_vaqti && formik.errors.tugash_vaqti ? (
                   <span className="text-red-500 text-sm">
-                    {formik.errors.endDate}
+                    {formik.errors.tugash_vaqti}
                   </span>
                 ) : null}
               </div>
@@ -214,7 +230,6 @@ const TopshiriqlarniKorishZamdekan = () => {
                 <th className="">№</th>
                 <th className="">Nomi</th>
                 <th className="">Batafsil</th>
-                <th className="">Kategorya</th>
                 <th className="">Max bal</th>
                 <th className="">Boshlanish</th>
                 <th className="">Tugash</th>
@@ -223,26 +238,25 @@ const TopshiriqlarniKorishZamdekan = () => {
               </tr>
             </thead>
             <tbody>
-              {faceData.map((item, index) => (
+              {tasks.map((task, index) => (
                 <tr
-                  key={item.id}
+                  key={task.id}
                   className="hover:bg-[#ececec] border-b-[1px] border-gray-200"
                 >
                   <td className=" text-center">{index + 1}</td>
                   <td className="max-w-[200px]">
-                    <div className="w-full px-4 line-clamp-1">{item.title}</div>
+                    <div className="w-full px-4 line-clamp-1">{task.title}</div>
                   </td>
                   <td className="max-w-[300px]">
-                    <div className="w-full px-4 line-clamp-1">{item.info}</div>
+                    <div className="w-full px-4 line-clamp-1">{task.body}</div>
                   </td>
-                  <td className=" text-center">{item.kategorya}</td>
-                  <td className=" text-center">{item.maxBal}</td>
-                  <td className=" text-center">{item.start}</td>
-                  <td className=" text-center">{item.finish}</td>
+                  <td className=" text-center">{task.max_baxo}</td>
+                  <td className=" text-center">{task.boshlanish_vaqti}</td>
+                  <td className=" text-center">{task.tugash_vaqti}</td>
                   <td className=" text-center">
                     <button
                       className="btn btn-sm btn-info"
-                      onClick={() => setIsOpenModal(true)}
+                      onClick={() => onEdit(task)}
                     >
                       Tahrirlash
                     </button>
@@ -250,7 +264,7 @@ const TopshiriqlarniKorishZamdekan = () => {
                   <td className=" text-center">
                     <button
                       className="btn btn-sm btn-error"
-                      onClick={() => onDelete(item.id)}
+                      onClick={() => onDelete(task.id)}
                     >
                       O'chirish
                     </button>

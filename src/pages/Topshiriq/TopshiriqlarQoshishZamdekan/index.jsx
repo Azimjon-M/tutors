@@ -82,7 +82,7 @@ const TopshiriqlarQoshishZamdekan = () => {
           "Tugash sanasi boshlanish sanasidan keyin bo‘lishi kerak!"
         ),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       if (!selectedTutors.length) {
         setNonSelected(true);
       } else {
@@ -109,11 +109,11 @@ const TopshiriqlarQoshishZamdekan = () => {
               if (values.file3) formData.append("file3", values.file3);
               if (values.file4) formData.append("file4", values.file4);
               await APITopshiriq.patch(createdDataId, formData);
-              console.log("Fayl qo‘shildi!");
             }
             alert("Muvaffaqiyatli qo'shildi.!");
           }
-          // resetForm();
+          resetForm();
+          setSelectedTutors([]);
         } catch (error) {
           console.error("Failed to add/update user", error);
         }
