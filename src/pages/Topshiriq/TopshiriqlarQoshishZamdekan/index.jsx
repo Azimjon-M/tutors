@@ -9,6 +9,7 @@ const TopshiriqlarQoshishZamdekan = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedTutors, setSelectedTutors] = useState([]);
   const [users, setUsers] = useState([]);
+  const [nonSelected, setNonSelected] = useState(false);
   const data = JSON.parse(localStorage.getItem("data"));
 
   const unShifredTxt = (key, content) => {
@@ -82,28 +83,40 @@ const TopshiriqlarQoshishZamdekan = () => {
         ),
     }),
     onSubmit: async (values) => {
-      // Oddiy text ma'lumotlarni qo‘shish
-      const dataToPost = {
-        topshiriq_users: selectedTutors,
-        title: values.title,
-        body: values.body,
-        max_baxo: values.max_baxo,
-        boshlanish_vaqti: values.boshlanish_vaqti,
-        tugash_vaqti: values.tugash_vaqti,
-      };
+      if (!selectedTutors.length) {
+        setNonSelected(true);
+      } else {
+        // Oddiy text ma'lumotlarni qo‘shish
+        const dataToPost = {
+          topshiriq_users: selectedTutors,
+          title: values.title,
+          body: values.body,
+          max_baxo: values.max_baxo,
+          boshlanish_vaqti: values.boshlanish_vaqti,
+          tugash_vaqti: values.tugash_vaqti,
+        };
 
-      // Fayllarni qo‘shish (faqat mavjudlarini)
-      // if (values.file1) formData.append("file1", values.file1);
-      // if (values.file2) formData.append("file2", values.file2);
-      // if (values.file3) formData.append("file3", values.file3);
-      // if (values.file4) formData.append("file4", values.file4);
-
-      try {
-        await APITopshiriq.post(dataToPost);
-        alert("Muvaffaqiyatli qo'shildi.!");
-        // resetForm();
-      } catch (error) {
-        console.error("Failed to add/update user", error);
+        try {
+          const response = await APITopshiriq.post(dataToPost);
+          if (response.status === 201) {
+            const createdDataId = response.data.id;
+            // 2. Fayl tanlangan bo‘lsa, PATCH orqali faylni qo‘shish
+            if (values.file1 || values.file2 || values.file3 || values.file4) {
+              const formData = new FormData();
+              // Fayllarni qo‘shish (faqat mavjudlarini)
+              if (values.file1) formData.append("file1", values.file1);
+              if (values.file2) formData.append("file2", values.file2);
+              if (values.file3) formData.append("file3", values.file3);
+              if (values.file4) formData.append("file4", values.file4);
+              await APITopshiriq.patch(createdDataId, formData);
+              console.log("Fayl qo‘shildi!");
+            }
+            alert("Muvaffaqiyatli qo'shildi.!");
+          }
+          // resetForm();
+        } catch (error) {
+          console.error("Failed to add/update user", error);
+        }
       }
     },
   });
@@ -180,6 +193,11 @@ const TopshiriqlarQoshishZamdekan = () => {
           </tbody>
         </table>
       </div>
+      {nonSelected && (
+        <div className="text-center text-[red] font-medium">
+          Tutorlardan birini tanlashingiz shart!
+        </div>
+      )}
 
       <h1 className="text-lg font-bold mt-8">Topshiriq yuborish:</h1>
 
