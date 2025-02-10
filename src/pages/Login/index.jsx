@@ -12,7 +12,6 @@ import Encryption from "../../components/Encryption";
 import Decryption from "../../components/Decryption";
 
 const Login = () => {
-
     const [eye, setEye] = useState(false);
     const [isLoading, setIsLoading] = useState("");
     const [errMessage, setErrMessage] = useState("");
@@ -114,6 +113,9 @@ const Login = () => {
                                     endRefToken: formattedExpiration,
                                 });
                                 localStorage.setItem("data", jsonData);
+                                if (window.innerWidth >= 1024) {
+                                    localStorage.setItem("isOpen", "open")
+                                }
                                 navigate("/analitka");
                             }
                         } catch (err) {

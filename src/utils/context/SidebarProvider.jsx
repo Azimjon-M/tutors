@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createContext } from "react";
 
 export const SidebarContext = createContext({
@@ -10,12 +10,6 @@ export const SidebarContext = createContext({
 });
 const SidebarProvider = ({ children }) => {
     const [isOpen, setIsOpen] = useState(true);
-
-    // localstorage ga qarab sidbarni boshlang'ich holatini belgilaydi
-    useEffect(() => {
-        const isOpenFromStorage = localStorage.getItem("isOpen");
-        setIsOpen(!!isOpenFromStorage);
-    }, []);
 
     const setOpen = () => {
         setIsOpen(true);
