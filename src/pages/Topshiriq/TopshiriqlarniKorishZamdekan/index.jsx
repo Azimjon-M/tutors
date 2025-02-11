@@ -28,10 +28,15 @@ const TopshiriqlarniKorishZamdekan = () => {
       body: "",
       max_baxo: "",
       tugash_vaqti: "",
+      file1: null,
+      file2: null,
+      file3: null,
+      file4: null,
     },
     onSubmit: async (values) => {
       if (selectedTask) {
         try {
+          // 📝 Text ma'lumotlarni yuborish
           const textData = {
             title: values.title,
             body: values.body,
@@ -40,13 +45,14 @@ const TopshiriqlarniKorishZamdekan = () => {
           };
           await APITopshiriq.patch(selectedTask.id, textData);
 
-          // Agar fayllar mavjud bo'lsa, ularni alohida PATCH qilish
+          // 📁 Fayllarni yuborish
           const formData = new FormData();
           if (values.file1) formData.append("file1", values.file1);
           if (values.file2) formData.append("file2", values.file2);
           if (values.file3) formData.append("file3", values.file3);
           if (values.file4) formData.append("file4", values.file4);
 
+          // Agar hech bo'lmasa bitta fayl mavjud bo'lsa, PATCH qilish
           if (
             formData.has("file1") ||
             formData.has("file2") ||
@@ -55,6 +61,8 @@ const TopshiriqlarniKorishZamdekan = () => {
           ) {
             await APITopshiriq.patch(selectedTask.id, formData);
           }
+
+          // 🆕 Yangilangan ma'lumotlarni olish
           getTasks();
           setIsOpenModal(false);
         } catch (error) {
