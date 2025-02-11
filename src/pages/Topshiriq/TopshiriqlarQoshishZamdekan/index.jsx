@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import APITopshiriq from "../../../services/topshiriq";
+import APITopshiriq from "../../../services/adminQoshimchaTopshiriq.js";
 import APIUsers from "../../../services/users";
 import CryptoJS from "crypto-js";
 

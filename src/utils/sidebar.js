@@ -39,16 +39,8 @@ import TogarakTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/Togarak";
 import OilagaXatTutor from "../pages/Topshiriq/MajburiyTopshiriqlarTutor/OilagaXat";
 import MajTopQoshish from "../pages/Topshiriq/MajTopQoshish/index";
 
-// Majburiy topshiriq Superadmin 
-// import IjaragaTashrif from "../pages/Topshiriq/MajburiyTopshiriqlar/IjaragaTashrif";
-// import TutorSoati from "../pages/Topshiriq/MajburiyTopshiriqlar/TutorlikSoati";
-// import DavraSuxbati from "../pages/Topshiriq/MajburiyTopshiriqlar/DavraSuxbati";
-// import Tadbirlar from "../pages/Topshiriq/MajburiyTopshiriqlar/Tadbirlar";
-// import TTJdaTadbirlar from "../pages/Topshiriq/MajburiyTopshiriqlar/TTJdaTadbirlar";
-// import IqtidorliTalabalar from "../pages/Topshiriq/MajburiyTopshiriqlar/IqtidorliTalabalar";
-// import TestTutor1 from "../pages/Topshiriq/MajburiyTopshiriqlar/TestTutor";
-// import Togarak from "../pages/Topshiriq/MajburiyTopshiriqlar/Togarak";
-// import OilagaXat from "../pages/Topshiriq/MajburiyTopshiriqlar/OilagaXat";
+// Qoshimcha topshiriq  
+import QoshimchaTopshiriqTutor from "../pages/Topshiriq/QoshimchaTopshiriqTutor";
 
 const sidebar = [
   {
@@ -272,7 +264,7 @@ const sidebar = [
     title: "Qo'shimcha topshiriq",
     path: "/qoshimcha-topshiriq",
     icon: VscGraph,
-    element: BaholashMezonlari,
+    element: QoshimchaTopshiriqTutor,
     role: [`"${userRole.tutor}"`],
   },
   {

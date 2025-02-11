@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import APITopshiriq from "../../../services/topshiriq";
+import APITopshiriq from "../../../services/adminQoshimchaTopshiriq.js";
 
 const TopshiriqlarniKorishZamdekan = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -36,31 +36,19 @@ const TopshiriqlarniKorishZamdekan = () => {
     onSubmit: async (values) => {
       if (selectedTask) {
         try {
-          // 📝 Text ma'lumotlarni yuborish
-          const textData = {
-            title: values.title,
-            body: values.body,
-            max_baxo: values.max_baxo,
-            tugash_vaqti: values.tugash_vaqti,
-          };
-          await APITopshiriq.patch(selectedTask.id, textData);
 
           // 📁 Fayllarni yuborish
           const formData = new FormData();
+          if (values.title) formData.append("title", values.title);
+          if (values.body) formData.append("body", values.body);
+          if (values.max_baxo) formData.append("max_baxo", values.max_baxo);
+          if (values.tugash_vaqti)
+            formData.append("tugash_vaqti", values.tugash_vaqti);
           if (values.file1) formData.append("file1", values.file1);
           if (values.file2) formData.append("file2", values.file2);
           if (values.file3) formData.append("file3", values.file3);
           if (values.file4) formData.append("file4", values.file4);
-
-          // Agar hech bo'lmasa bitta fayl mavjud bo'lsa, PATCH qilish
-          if (
-            formData.has("file1") ||
-            formData.has("file2") ||
-            formData.has("file3") ||
-            formData.has("file4")
-          ) {
-            await APITopshiriq.patch(selectedTask.id, formData);
-          }
+          await APITopshiriq.patch(selectedTask.id, formData);
 
           // 🆕 Yangilangan ma'lumotlarni olish
           getTasks();
