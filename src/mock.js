@@ -7,9 +7,10 @@ export const data = [
         taskCompleted: 0,
         taskTotal: 2,
         deadline: "1 hafta",
+        maxScore: 10,
         status: true,
         isRated: true,
-        maxScore: 10,
+
         gradingTime: true,
     },
     {
@@ -154,5 +155,32 @@ export const data = [
         isRated: true,
         maxScore: 0,
         gradingTime: true,
+    },
+];
+
+export const dataTopKorTable = [
+    {
+        id: 1,
+        title: "Matematika Darslari IJIOJ ijiojoi IJIJIJ iji вoaj oi",
+        kategorya: "Majburiy",
+        maxBal: "10",
+        start: "01-02-2024",
+        finish: "02-02-2024",
+    },
+    {
+        id: 2,
+        title: "Ingliz Tili",
+        kategorya: "O'z tashabbusi",
+        maxBal: "6",
+        start: "03-02-2024",
+        finish: "04-02-2024",
+    },
+    {
+        id: 3,
+        title: "Fizika",
+        kategorya: "Qo'shimcha",
+        maxBal: "3",
+        start: "05-02-2024",
+        finish: "06-02-2024",
     },
 ];
