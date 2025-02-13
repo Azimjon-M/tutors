@@ -5,7 +5,7 @@ import laptopGirl from "../../../assets/fon/laptop-girl.png";
 // import { MdOutlineCloudDownload } from "react-icons/md";
 // import { CiEdit } from "react-icons/ci";
 import { MdReadMore } from "react-icons/md";
-import TutorModalFormCom from "../../../components/TutorModalFormCom";
+import TutorModalFormQoshimcha from "../../../components/TutorModalFormQoshimcha";
 
 function QoshimchaTopshiriqTutor() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,7 +31,10 @@ function QoshimchaTopshiriqTutor() {
     setSelectedTask(task);
   };
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  const handleUpload = (task) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
+  };
   const handleCloseModal = () => setIsModalOpen(false);
 
   return (
@@ -138,7 +141,7 @@ function QoshimchaTopshiriqTutor() {
                       </button>
                       <button
                         className="flex items-center gap-1 px-4 py-1 rounded-md bg-green-500 text-white text-sm md:text-base font-semibold mr-3"
-                        onClick={handleOpenModal}
+                        onClick={() => handleUpload(task)}
                       >
                         Yuklash <MdReadMore className="inline text-xl" />
                       </button>
@@ -154,7 +157,7 @@ function QoshimchaTopshiriqTutor() {
         </div>
 
         {/* Modal form for uploading tasks */}
-        <TutorModalFormCom
+        <TutorModalFormQoshimcha
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           task={selectedTask}
@@ -173,7 +176,7 @@ function QoshimchaTopshiriqTutor() {
             <p className="py-4">{selectedTask?.body}</p>
             <ul>
               <li className={`${selectedTask?.file1 ? "" : "hidden"}`}>
-              1.{" "}
+                1.{" "}
                 <a
                   href={selectedTask?.file1}
                   className="link italic"
@@ -184,7 +187,7 @@ function QoshimchaTopshiriqTutor() {
                 </a>
               </li>
               <li className={`${selectedTask?.file2 ? "" : "hidden"}`}>
-              2.{" "}
+                2.{" "}
                 <a
                   href={selectedTask?.file2}
                   className="link italic"
@@ -195,7 +198,7 @@ function QoshimchaTopshiriqTutor() {
                 </a>
               </li>
               <li className={`${selectedTask?.file3 ? "" : "hidden"}`}>
-              3.{" "}
+                3.{" "}
                 <a
                   href={selectedTask?.file3}
                   className="link italic"
@@ -206,7 +209,7 @@ function QoshimchaTopshiriqTutor() {
                 </a>
               </li>
               <li className={`${selectedTask?.file4 ? "" : "hidden"}`}>
-                  4.{" "}
+                4.{" "}
                 <a
                   href={selectedTask?.file4}
                   className="link italic"
