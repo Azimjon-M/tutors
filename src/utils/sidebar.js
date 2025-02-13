@@ -89,7 +89,7 @@ const sidebar = [
     children: [
       {
         id: 5 - 1,
-        title: "Topshiriqlar ko'rish",
+        title: "Topshiriq ko'rish",
         path: "/topshiriqlar-korish",
         icon: RiFileList3Line,
         element: TopshiriqlarniKorish,
