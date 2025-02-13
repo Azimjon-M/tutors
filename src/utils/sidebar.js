@@ -41,6 +41,7 @@ import MajTopQoshish from "../pages/Topshiriq/MajTopQoshish/index";
 
 // Qoshimcha topshiriq  
 import QoshimchaTopshiriqTutor from "../pages/Topshiriq/QoshimchaTopshiriqTutor";
+import TutorTashabbusi from "../pages/Topshiriq/TutorTashabbusi";
 
 const sidebar = [
   {
@@ -272,7 +273,7 @@ const sidebar = [
     title: "Tutor tashabbusi",
     path: "/tutor-tashabbusi",
     icon: VscGraph,
-    element: BaholashMezonlari,
+    element: TutorTashabbusi,
     role: [`"${userRole.tutor}"`],
   },
   // /TUTOR

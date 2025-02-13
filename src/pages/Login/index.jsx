@@ -77,6 +77,10 @@ const Login = () => {
                             if (resUser.data) {
                                 const [data] = resUser.data;
                                 const jsonData = JSON.stringify({
+                                    id: Encryption(
+                                        values.id,
+                                        process.env.REACT_APP_SHIFRED_ID
+                                    ),
                                     username: Encryption(
                                         values.username,
                                         process.env.REACT_APP_SHIFRED_USERNAME
