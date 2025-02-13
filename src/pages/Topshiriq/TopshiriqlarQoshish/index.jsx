@@ -1,52 +1,31 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import APISuperAdminQoshTop from "../../../services/superadminQoshTop";
+import APIGetUserRole from "../../../services/getUser";
+import Loading from "../../../components/Loading";
 
 const TopshiriqlarQoshish = () => {
     const [selectAll, setSelectAll] = useState(false);
-    const [firstSubmitted, setFirstSubmitted] = useState(false);
-    const [nonSelected, setNonSelected] = useState(false);
     const [selectedTutors, setSelectedTutors] = useState([]);
+    const [tutor, setTutor] = useState([]);
+    const [nonSelected, setNonSelected] = useState(false);
     const [filterFak, setFilterFak] = useState("");
+    const data = JSON.parse(localStorage.getItem("data"));
+    const [isLoading, setIsLoading] = useState(false);
 
-    const tutors = useMemo(
-        () => [
-            { id: 1, name: "Abdulla Karimov", fak: "Fiz-Mat" },
-            { id: 2, name: "Muhammad Aliyev", fak: "Fiz-Mat" },
-            { id: 3, name: "Saida Rasulova", fak: "Ona-tili" },
-            { id: 4, name: "Abdulla Karimov", fak: "Ona-tili" },
-            { id: 5, name: "Muhammad Aliyev", fak: "Ximya" },
-            { id: 6, name: "Saida Rasulova", fak: "Ximya" },
-            { id: 7, name: "Abdulla Karimov", fak: "Sanat" },
-            { id: 8, name: "Muhammad Aliyev", fak: "Sanat" },
-            { id: 9, name: "Saida Rasulova", fak: "Kimyo" },
-        ],
-        []
-    );
+    const remFirsWorking = useRef(false);
 
-    const faculties = useMemo(() => {
-        const facultiesSet = new Set();
-        tutors.forEach((tutor) => facultiesSet.add(tutor.fak));
-        return Array.from(facultiesSet);
-    }, [tutors]);
+    const kategory = [
+        { id: 1, name: "O'z sohasi" },
+        { id: 2, name: "Qo'shimcha" },
+    ];
 
-    // Fakultet Select orqali filtrlangan tutor
-    const filteredTutors = useMemo(() => {
-        setSelectAll(false);
-        setSelectedTutors([]);
-        if (filterFak === "Hammasi") {
-            return tutors;
-        }
-        return filterFak
-            ? tutors.filter((tutor) => tutor.fak === filterFak)
-            : tutors;
-    }, [filterFak, tutors]);
-
-    // Checkbox Hammasini tanlash
+    // Checkbox Hammasini tanlash forEach
     const handleSelectAll = (checked) => {
         setSelectAll(checked);
         if (checked) {
-            setSelectedTutors(filteredTutors.map((tutor) => tutor.id));
+            setSelectedTutors(tutor?.map((tutor) => tutor.id));
         } else {
             setSelectedTutors([]);
         }
@@ -61,9 +40,130 @@ const TopshiriqlarQoshish = () => {
         }
     };
 
+    const faculties = useMemo(() => {
+        const facultiesSet = new Set();
+        tutor.forEach((tutor) => facultiesSet.add(tutor.fakultet.name));
+        return Array.from(facultiesSet);
+    }, [tutor]);
+
+    // Fakultet Select orqali filtrlangan tutor
+    const filteredTutors = useMemo(() => {
+        setSelectAll(false);
+        setSelectedTutors([]);
+        if (filterFak === "Hammasi") {
+            return tutor;
+        }
+        return filterFak
+            ? tutor.filter((tutor) => tutor.fakultet.name === filterFak)
+            : tutor;
+    }, [filterFak, tutor]);
+
+    const formik = useFormik({
+        initialValues: {
+            title: "",
+            body: "",
+            category: 0,
+            max_baxo: "",
+            file1: null,
+            file2: null,
+            file3: null,
+            file4: null,
+            boshlanish_vaqti: "",
+            tugash_vaqti: "",
+        },
+        validationSchema: Yup.object({
+            title: Yup.string().required("Sarlavha kiritilishi shart!"),
+            body: Yup.string().required("Batafsil ma'lumot kiritilishi kerak!"),
+            category: Yup.number()
+                .min(1)
+                .required("Batafsil ma'lumot kiritilishi kerak!"),
+            max_baxo: Yup.string().required("Maximal ball kiritilishi kerak!"),
+            boshlanish_vaqti: Yup.date().required(
+                "Boshlanish sanasini kiriting!"
+            ),
+            tugash_vaqti: Yup.date().required("Tugash sanasini kiriting!"),
+        }),
+        onSubmit: async (values, { resetForm }) => {
+            if (!selectedTutors.length) {
+                setNonSelected(true);
+                remFirsWorking.current = true;
+            } else {
+                setIsLoading(true);
+                // Oddiy text ma'lumotlarni qo‘shish
+                const dataToPost = {
+                    topshiriq_users: selectedTutors,
+                    title: values.title,
+                    body: values.body,
+                    max_baxo: values.max_baxo,
+                    boshlanish_vaqti: values.boshlanish_vaqti,
+                    tugash_vaqti: values.tugash_vaqti,
+                };
+
+                try {
+                    const response = await APISuperAdminQoshTop.post(
+                        dataToPost
+                    );
+                    if (response.status === 201) {
+                        const createdDataId = response.data.id;
+                        // 2. Fayl tanlangan bo‘lsa, PATCH orqali faylni qo‘shish
+                        if (
+                            values.file1 ||
+                            values.file2 ||
+                            values.file3 ||
+                            values.file4
+                        ) {
+                            const formData = new FormData();
+                            // Fayllarni qo‘shish (faqat mavjudlarini)
+                            if (values.file1)
+                                formData.append("file1", values.file1);
+                            if (values.file2)
+                                formData.append("file2", values.file2);
+                            if (values.file3)
+                                formData.append("file3", values.file3);
+                            if (values.file4)
+                                formData.append("file4", values.file4);
+                            await APISuperAdminQoshTop.patch(
+                                createdDataId,
+                                formData
+                            );
+                        }
+                        alert("Muvaffaqiyatli qo'shildi.!");
+                    }
+                    resetForm();
+                    setSelectedTutors([]);
+                } catch (error) {
+                    console.error("Failed to add/update user", error);
+                } finally {
+                    setIsLoading(false);
+                    remFirsWorking.current = false;
+                }
+            }
+        },
+    });
+
+    const removeLoopGetTutor = useRef(false);
+
+    // Get Tutors By FakID
+    useEffect(() => {
+        if (!removeLoopGetTutor.current) {
+            setIsLoading(true);
+            removeLoopGetTutor.current = true;
+            (async () => {
+                try {
+                    const response = await APIGetUserRole.getTutor();
+                    setTutor(response?.data);
+                } catch (error) {
+                    console.error("Failed to fetch admins", error);
+                } finally {
+                    setIsLoading(false);
+                }
+            })();
+        }
+    }, [data]);
+
     useEffect(() => {
         let filtredTutorIdArray = [];
-        filteredTutors.forEach(
+        tutor?.forEach(
             (item) => (filtredTutorIdArray = [...filtredTutorIdArray, item.id])
         );
         if (
@@ -78,64 +178,22 @@ const TopshiriqlarQoshish = () => {
                 setSelectAll(false);
             }
         }
-    }, [filteredTutors, selectedTutors, selectAll]);
+    }, [tutor, selectedTutors, selectAll]);
 
-    // ************* topshiriq Forma ******************
-    const kategory = [
-        { id: 1, name: "O'z sohasi" },
-        { id: 2, name: "Qo'shimcha" },
-    ];
-
-    const formik = useFormik({
-        initialValues: {
-            title: "",
-            details: "",
-            category: 0,
-            maxBall: 0,
-            file1: null,
-            file2: null,
-            file3: null,
-            file4: null,
-            startDate: "",
-            endDate: "",
-        },
-        validationSchema: Yup.object({
-            title: Yup.string().required("Kiritilishi shart!"),
-            details: Yup.string().required("Kiritilishi shart!"),
-            category: Yup.number().min(1, "Kiritilishi shart!"),
-            maxBall: Yup.number().min(0.001, "Kiritilishi shart!"),
-            startDate: Yup.date().required("Kiritilishi shart!"),
-            endDate: Yup.date()
-                .required("Kiritilishi shart!")
-                .min(
-                    Yup.ref("startDate"),
-                    "Tugash sanasi boshlanish sanasidan keyin bo‘lishi kerak!"
-                ),
-        }),
-        onSubmit: (values) => {
+    useEffect(() => {
+        if (remFirsWorking.current) {
             if (!selectedTutors.length) {
                 setNonSelected(true);
             } else {
-                const data = {...values, tutorsId: selectedTutors}
-                console.log(data);
-            }
-
-            setFirstSubmitted(true);
-        },
-    });
-
-    useEffect(() => {
-        if (firstSubmitted) {
-            if (selectedTutors.length >= 1) {
                 setNonSelected(false);
-            } else {
-                setNonSelected(true);
             }
         }
-    }, [selectedTutors, firstSubmitted]);
+    }, [selectedTutors]);
 
+    // overflow-hidden
     return (
         <div className="bg-base-200 rounded shadow p-1 md:p-2 lg:p-4">
+            {isLoading && <Loading />}
             <h1 className="text-lg font-bold mb-4">
                 Qaysi tutorlarga yuborish:
             </h1>
@@ -156,7 +214,7 @@ const TopshiriqlarQoshish = () => {
                         Hammasi
                     </option>
                     {faculties.map((faculty, index) => (
-                        <option key={index} value={faculty}>
+                        <option key={index + 1} value={faculty}>
                             {faculty}
                         </option>
                     ))}
@@ -165,7 +223,7 @@ const TopshiriqlarQoshish = () => {
 
             {/* Jadval */}
             <div
-                className={`overflow-x-auto max-h-[30vh] lg:max-h-[40vh] border rounded-lg shadow-md ${
+                className={`overflow-auto max-h-[30vh] lg:max-h-[40vh] border rounded-lg shadow-md ${
                     nonSelected && "border-2 border-red-600"
                 }`}
             >
@@ -194,8 +252,8 @@ const TopshiriqlarQoshish = () => {
                         {filteredTutors.map((tutor, index) => (
                             <tr key={tutor.id} className="hover">
                                 <td className="py-2">{index + 1}</td>
-                                <td className="py-2">{tutor.name}</td>
-                                <td className="py-2">{tutor.fak}</td>
+                                <td className="py-2">{tutor.first_name}</td>
+                                <td className="py-2">{tutor.fakultet.name}</td>
                                 <td className="py-2">
                                     <label className="cursor-pointer flex items-center justify-center gap-2">
                                         <input
@@ -247,20 +305,20 @@ const TopshiriqlarQoshish = () => {
                     ) : null}
                 </div>
                 <div className="form-control mb-4">
-                    <label htmlFor="details" className="label">
+                    <label htmlFor="body" className="label">
                         <span className="label-text">Batafsil</span>
                     </label>
                     <textarea
-                        id="details"
-                        name="details"
+                        id="body"
+                        name="body"
                         rows="4"
                         className="textarea textarea-bordered"
                         placeholder="Batafsil ma'lumot kiriting"
-                        {...formik.getFieldProps("details")}
+                        {...formik.getFieldProps("body")}
                     />
-                    {formik.touched.details && formik.errors.details ? (
+                    {formik.touched.body && formik.errors.body ? (
                         <span className="text-red-500 text-sm">
-                            {formik.errors.details}
+                            {formik.errors.body}
                         </span>
                     ) : null}
                 </div>
@@ -278,16 +336,11 @@ const TopshiriqlarQoshish = () => {
                             value={formik.values.category}
                             onChange={formik.handleChange}
                         >
-                            <option value="0" disabled>
+                            <option value={0} disabled>
                                 Kategoryani tanlang!
                             </option>
                             {kategory?.map((item) => (
-                                <option
-                                    key={item.id}
-                                    value={item.id}
-                                    selected={item.selected}
-                                    disabled={item.disabled}
-                                >
+                                <option key={item.id} value={item.id}>
                                     {item.name}
                                 </option>
                             ))}
@@ -300,19 +353,19 @@ const TopshiriqlarQoshish = () => {
                         ) : null}
                     </div>
                     <div className="form-control mb-4">
-                        <label htmlFor="maxBall" className="label">
+                        <label htmlFor="max_baxo" className="label">
                             <span className="label-text">Max ball</span>
                         </label>
                         <input
                             type="number"
-                            id="maxBall"
-                            name="maxBall"
+                            id="max_baxo"
+                            name="max_baxo"
                             className="input input-bordered w-[100px]"
-                            {...formik.getFieldProps("maxBall")}
+                            {...formik.getFieldProps("max_baxo")}
                         />
-                        {formik.touched.maxBall && formik.errors.maxBall ? (
+                        {formik.touched.max_baxo && formik.errors.max_baxo ? (
                             <span className="text-red-500 text-sm">
-                                {formik.errors.maxBall}
+                                {formik.errors.max_baxo}
                             </span>
                         ) : null}
                     </div>
@@ -349,38 +402,40 @@ const TopshiriqlarQoshish = () => {
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                     <div className="form-control">
-                        <label htmlFor="startDate" className="label">
+                        <label htmlFor="boshlanish_vaqti" className="label">
                             <span className="label-text">
                                 Boshlanish sanasi
                             </span>
                         </label>
                         <input
                             type="date"
-                            id="startDate"
-                            name="startDate"
+                            id="boshlanish_vaqti"
+                            name="boshlanish_vaqti"
                             className="input input-bordered"
-                            {...formik.getFieldProps("startDate")}
+                            {...formik.getFieldProps("boshlanish_vaqti")}
                         />
-                        {formik.touched.startDate && formik.errors.startDate ? (
+                        {formik.touched.boshlanish_vaqti &&
+                        formik.errors.boshlanish_vaqti ? (
                             <span className="text-red-500 text-sm">
-                                {formik.errors.startDate}
+                                {formik.errors.boshlanish_vaqti}
                             </span>
                         ) : null}
                     </div>
                     <div className="form-control">
-                        <label htmlFor="endDate" className="label">
+                        <label htmlFor="tugash_vaqti" className="label">
                             <span className="label-text">Tugash sanasi</span>
                         </label>
                         <input
                             type="date"
-                            id="endDate"
-                            name="endDate"
+                            id="tugash_vaqti"
+                            name="tugash_vaqti"
                             className="input input-bordered"
-                            {...formik.getFieldProps("endDate")}
+                            {...formik.getFieldProps("tugash_vaqti")}
                         />
-                        {formik.touched.endDate && formik.errors.endDate ? (
+                        {formik.touched.tugash_vaqti &&
+                        formik.errors.tugash_vaqti ? (
                             <span className="text-red-500 text-sm">
-                                {formik.errors.endDate}
+                                {formik.errors.tugash_vaqti}
                             </span>
                         ) : null}
                     </div>

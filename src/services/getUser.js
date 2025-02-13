@@ -12,6 +12,8 @@ const get = (username, token) => {
     return axiosInstance.get(`${ep}?username=${username}`, config);
 };
 
-const APIGetUserRole = { get };
+const getTutor = () =>  axiosInstance.get(`${ep}?role=tutor`);
+
+const APIGetUserRole = { get, getTutor };
 
 export default APIGetUserRole;

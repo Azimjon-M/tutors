@@ -2,7 +2,7 @@ import React from "react";
 
 const Loading = () => {
     return (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-[100vw] h-[100vh] fixed top-0 left-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
             <div className="socket">
                 <div className="gel center-gel">
                     <div className="hex-brick h1"></div>
