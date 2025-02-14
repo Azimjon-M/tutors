@@ -1,20 +1,20 @@
 import axiosInstance from ".";
 
-const endPoint = "topshiriq/superadmin_qoshimcha_topshiriq/";
+const ep = "topshiriq/superadmin_qoshimcha_topshiriq/";
 
-const get = () => axiosInstance.get(endPoint);
+const get = () => axiosInstance.get(ep);
 
-const getbyId = (id) => axiosInstance.get(`${endPoint}${id}/`);
+const getbyId = (id) => axiosInstance.get(`${ep}${id}/`);
 
 const post = (item) => {
-    return axiosInstance.post(`${endPoint}`, item);
+    return axiosInstance.post(`${ep}`, item);
 }
 
-const patch = (id, item) => axiosInstance.patch(`${endPoint}${id}/`, item);
+const patch = (id, item) => axiosInstance.patch(`${ep}${id}/`, item);
 
-// const put = (id, item) => axiosInstance.put(`${endPoint}${id}/`, item);
+// const put = (id, item) => axiosInstance.put(`${ep}${id}/`, item);
 
-const del = (id) => axiosInstance.delete(`${endPoint}${id}/`);
+const del = (id) => axiosInstance.delete(`${ep}${id}/`);
 
 const APISuperAdminQoshTop = {get, getbyId, post, patch, del};
 

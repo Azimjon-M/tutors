@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import APISuperAdminQoshTop from "../../../services/superadminQoshTop";
+import APISuperadminOzSoxa from "../../../services/superadminOzSoxa";
 import APIGetUserRole from "../../../services/getUser";
 import Loading from "../../../components/Loading";
 
@@ -17,8 +18,8 @@ const TopshiriqlarQoshish = () => {
     const remFirsWorking = useRef(false);
 
     const kategory = [
-        { id: 1, name: "O'z sohasi" },
-        { id: 2, name: "Qo'shimcha" },
+        { id: 1, name: "Qo'shimcha" },
+        { id: 2, name: "O'z sohasi" },
     ];
 
     // Checkbox Hammasini tanlash forEach
@@ -99,43 +100,91 @@ const TopshiriqlarQoshish = () => {
                     tugash_vaqti: values.tugash_vaqti,
                 };
 
-                try {
-                    const response = await APISuperAdminQoshTop.post(
-                        dataToPost
-                    );
-                    if (response.status === 201) {
-                        const createdDataId = response.data.id;
-                        // 2. Fayl tanlangan bo‘lsa, PATCH orqali faylni qo‘shish
-                        if (
-                            values.file1 ||
-                            values.file2 ||
-                            values.file3 ||
-                            values.file4
-                        ) {
-                            const formData = new FormData();
-                            // Fayllarni qo‘shish (faqat mavjudlarini)
-                            if (values.file1)
-                                formData.append("file1", values.file1);
-                            if (values.file2)
-                                formData.append("file2", values.file2);
-                            if (values.file3)
-                                formData.append("file3", values.file3);
-                            if (values.file4)
-                                formData.append("file4", values.file4);
-                            await APISuperAdminQoshTop.patch(
-                                createdDataId,
-                                formData
+                switch (Number(values.category)) {
+                    case 1:
+                        try {
+                            const response = await APISuperAdminQoshTop.post(
+                                dataToPost
                             );
+                            if (response.status === 201) {
+                                const createdDataId = response.data.id;
+                                // 2. Fayl tanlangan bo‘lsa, PATCH orqali faylni qo‘shish
+                                if (
+                                    values.file1 ||
+                                    values.file2 ||
+                                    values.file3 ||
+                                    values.file4
+                                ) {
+                                    const formData = new FormData();
+                                    // Fayllarni qo‘shish (faqat mavjudlarini)
+                                    if (values.file1)
+                                        formData.append("file1", values.file1);
+                                    if (values.file2)
+                                        formData.append("file2", values.file2);
+                                    if (values.file3)
+                                        formData.append("file3", values.file3);
+                                    if (values.file4)
+                                        formData.append("file4", values.file4);
+                                    await APISuperAdminQoshTop.patch(
+                                        createdDataId,
+                                        formData
+                                    );
+                                }
+                                alert("Muvaffaqiyatli qo'shildi.!");
+                            }
+                            resetForm();
+                            setSelectedTutors([]);
+                        } catch (error) {
+                            console.error("Failed to add/update user", error);
+                        } finally {
+                            setIsLoading(false);
+                            remFirsWorking.current = false;
                         }
-                        alert("Muvaffaqiyatli qo'shildi.!");
-                    }
-                    resetForm();
-                    setSelectedTutors([]);
-                } catch (error) {
-                    console.error("Failed to add/update user", error);
-                } finally {
-                    setIsLoading(false);
-                    remFirsWorking.current = false;
+                        break;
+                    case 2:
+                        try {
+                            const response = await APISuperadminOzSoxa.post(
+                                dataToPost
+                            );
+                            if (response.status === 201) {
+                                const createdDataId = response.data.id;
+                                // 2. Fayl tanlangan bo‘lsa, PATCH orqali faylni qo‘shish
+                                if (
+                                    values.file1 ||
+                                    values.file2 ||
+                                    values.file3 ||
+                                    values.file4
+                                ) {
+                                    const formData = new FormData();
+                                    // Fayllarni qo‘shish (faqat mavjudlarini)
+                                    if (values.file1)
+                                        formData.append("file1", values.file1);
+                                    if (values.file2)
+                                        formData.append("file2", values.file2);
+                                    if (values.file3)
+                                        formData.append("file3", values.file3);
+                                    if (values.file4)
+                                        formData.append("file4", values.file4);
+                                    await APISuperadminOzSoxa.patch(
+                                        createdDataId,
+                                        formData
+                                    );
+                                }
+                                alert("Muvaffaqiyatli qo'shildi.!");
+                            }
+                            resetForm();
+                            setSelectedTutors([]);
+                        } catch (error) {
+                            console.error("Failed to add/update user", error);
+                        } finally {
+                            setIsLoading(false);
+                            remFirsWorking.current = false;
+                        }
+                        break;
+                    default:
+                        console.log("working default mode");
+                        setIsLoading(false);
+                        break;
                 }
             }
         },
