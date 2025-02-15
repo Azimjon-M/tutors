@@ -42,6 +42,7 @@ import MajTopQoshish from "../pages/Topshiriq/MajTopQoshish/index";
 // Qoshimcha topshiriq  
 import QoshimchaTopshiriqTutor from "../pages/Topshiriq/QoshimchaTopshiriqTutor";
 import TutorTashabbusi from "../pages/Topshiriq/TutorTashabbusi";
+import TutorStatistikaQoshish from "../pages/TutorStatistikaQoshish";
 
 const sidebar = [
   {
@@ -274,6 +275,14 @@ const sidebar = [
     path: "/tutor-tashabbusi",
     icon: VscGraph,
     element: TutorTashabbusi,
+    role: [`"${userRole.tutor}"`],
+  },
+  {
+    id: 10,
+    title: "Statistika qo'shish",
+    path: "/tutor-statistika-qoshish",
+    icon: VscGraph,
+    element: TutorStatistikaQoshish,
     role: [`"${userRole.tutor}"`],
   },
   // /TUTOR
