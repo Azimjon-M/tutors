@@ -50,7 +50,7 @@ const Login = () => {
                     });
 
                     
-                    if (res.data && res.data.access && res.data.refresh) {
+                    if (res.data && res?.data?.access && res?.data?.refresh) {
                         // getEndTime of RefToken
                         const decodeJWT = (token) => {
                             const base64Url = token.split('.')[1]; // Payload qismi
@@ -63,7 +63,7 @@ const Login = () => {
                             );
                             return JSON.parse(jsonPayload);
                         };
-                        const decoded = decodeJWT(res.data.refresh);
+                        const decoded = decodeJWT(res?.data?.refresh);
                         const expiresAt = new Date(decoded.exp * 1000); // Token tugash vaqti
                         const formattedExpiration = {
                             date: expiresAt.toISOString().split('T')[0], // "YYYY-MM-DD"
@@ -72,7 +72,7 @@ const Login = () => {
                         try {
                             const resUser = await APIGetUser.get(
                                 values.username,
-                                res.data.access
+                                res?.data?.access
                             );
                             if (resUser.data) {
                                 const [data] = resUser.data;
@@ -91,27 +91,27 @@ const Login = () => {
                                     ),
                                     remember: values.remember,
                                     first_name: Encryption(
-                                        data.first_name,
+                                        data?.first_name,
                                         process.env.REACT_APP_SHIFRED_FIRSTNAME
                                     ),
                                     last_name: Encryption(
-                                        data.last_name,
+                                        data?.last_name,
                                         process.env.REACT_APP_SHIFRED_LASTNAME
                                     ),
                                     token: Encryption(
-                                        res.data.access,
+                                        res?.data?.access,
                                         process.env.REACT_APP_ENCRYPTION_KEY
                                     ),
                                     refToken: Encryption(
-                                        res.data.refresh,
+                                        res?.data?.refresh,
                                         process.env.REACT_APP_ENCRYPTION_REFKEY
                                     ),
                                     role: Encryption(
-                                        data.role,
+                                        data?.role,
                                         process.env.REACT_APP_SHIFRED_ROLE
                                     ),
                                     fakultet: Encryption(
-                                        data.fakultet.id,
+                                        data?.fakultet?.id,
                                         process.env.REACT_APP_SHIFRED_FAKULTET
                                     ),
                                     endRefToken: formattedExpiration,
