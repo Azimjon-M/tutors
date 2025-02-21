@@ -1,6 +1,6 @@
 import axiosInstance from ".";
 
-const ep = "/"; // ep yozilishi kerak
+const ep = "topshiriq/superadmin_oz_sohasida_topshiriq/"; // ep yozilishi kerak
 
 const get = () => axiosInstance.get(ep);
 
