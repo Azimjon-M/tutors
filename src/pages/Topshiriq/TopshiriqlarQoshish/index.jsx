@@ -16,13 +16,14 @@ const TopshiriqlarQoshish = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const remFirsWorking = useRef(false);
+    const removeLoopGetTutor = useRef(false);
 
     const kategory = [
         { id: 1, name: "Qo'shimcha" },
         { id: 2, name: "O'z sohasi" },
     ];
 
-    // Checkbox Hammasini tanlash forEach
+    // Checkbox Hammasini tanlash forEach name
     const handleSelectAll = (checked) => {
         setSelectAll(checked);
         if (checked) {
@@ -43,7 +44,10 @@ const TopshiriqlarQoshish = () => {
 
     const faculties = useMemo(() => {
         const facultiesSet = new Set();
-        tutor.forEach((tutor) => facultiesSet.add(tutor.fakultet.name));
+        console.log([tutor][0].fakultet);
+        
+
+        tutor?.forEach((tutor) => facultiesSet?.add(tutor?.fakultet?.name));
         return Array.from(facultiesSet);
     }, [tutor]);
 
@@ -55,7 +59,7 @@ const TopshiriqlarQoshish = () => {
             return tutor;
         }
         return filterFak
-            ? tutor.filter((tutor) => tutor.fakultet.name === filterFak)
+            ? tutor.filter((tutor) => tutor?.fakultet?.name === filterFak)
             : tutor;
     }, [filterFak, tutor]);
 
@@ -189,9 +193,6 @@ const TopshiriqlarQoshish = () => {
             }
         },
     });
-
-    const removeLoopGetTutor = useRef(false);
-
     // Get Tutors By FakID
     useEffect(() => {
         if (!removeLoopGetTutor.current) {
@@ -302,7 +303,7 @@ const TopshiriqlarQoshish = () => {
                             <tr key={tutor.id} className="hover">
                                 <td className="py-2">{index + 1}</td>
                                 <td className="py-2">{tutor.first_name}</td>
-                                <td className="py-2">{tutor.fakultet.name}</td>
+                                <td className="py-2">{tutor?.fakultet?.name}</td>
                                 <td className="py-2">
                                     <label className="cursor-pointer flex items-center justify-center gap-2">
                                         <input

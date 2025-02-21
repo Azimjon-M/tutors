@@ -298,6 +298,16 @@ const sidebar = [
       `"${userRole.tutor}"`,
     ],
   },
+  // {
+  //   id: 11,
+  //   title: "Baholash Mezonlari",
+  //   path: "/baholash-mezonlari",
+  //   icon: VscGraph,
+  //   element: BaholashMezonlari,
+  //   role: [
+  //     `"${userRole.superAdmin}"`,
+  //   ],
+  // },
 ];
 
 export default sidebar;
