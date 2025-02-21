@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import APIOzXoshishi from "../../../services/ozXohishBilanTutor";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import CryptoJS from "crypto-js";
 import rasm1 from "../../../assets/fon/university-events.jpg";
 import rasm2 from "../../../assets/fon/university-events-two.jpg";
 
 const TutorTashabbusi = () => {
   const [showModal, setShowModal] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const data = JSON.parse(localStorage.getItem("data"));
   const [initialValues] = useState({
     user: "",
     title: "",
@@ -15,6 +18,22 @@ const TutorTashabbusi = () => {
     file2: "",
     file3: "",
   });
+
+  const unShifredTxt = (key, content) => {
+    const res = CryptoJS.AES.decrypt(content, key)
+        .toString(CryptoJS.enc.Utf8)
+        .trim()
+        .replace(/^"|"$/g, "");
+    return res;
+};
+
+useEffect(() => {
+    if (data) {
+        setUserId(
+            unShifredTxt(process.env.REACT_APP_SHIFRED_ID, data?.id)
+        );
+    }
+}, [data]);
 
   const validationSchema = Yup.object({
     title: Yup.string().required("Sarlavha nomi majburiy"),
@@ -41,7 +60,7 @@ const TutorTashabbusi = () => {
 
   const handleSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
-    formData.append("user", values.title);
+    formData.append("user", userId);
     formData.append("title", values.title);
     formData.append("body", values.body);
     if (values.file1) formData.append("file1", values.file1);
