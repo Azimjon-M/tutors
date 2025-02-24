@@ -43,6 +43,9 @@ import MajTopQoshish from "../pages/Topshiriq/MajTopQoshish/index";
 import QoshimchaTopshiriqTutor from "../pages/Topshiriq/QoshimchaTopshiriqTutor";
 import TutorTashabbusi from "../pages/Topshiriq/TutorTashabbusi";
 import TutorStatistikaQoshish from "../pages/TutorStatistikaQoshish";
+import { FiSettings } from "react-icons/fi";
+import Guruxlar from "../pages/Guruxlar";
+import Yonalishlar from "../pages/Yonalishlar";
 
 const sidebar = [
   {
@@ -298,16 +301,49 @@ const sidebar = [
       `"${userRole.tutor}"`,
     ],
   },
-  // {
-  //   id: 11,
-  //   title: "Baholash Mezonlari",
-  //   path: "/baholash-mezonlari",
-  //   icon: VscGraph,
-  //   element: BaholashMezonlari,
-  //   role: [
-  //     `"${userRole.superAdmin}"`,
-  //   ],
-  // },
+  {
+    id: 12,
+    title: "Sozlamalar",
+    icon: FiSettings,
+    element: BaholashMezonlari,
+    role: [
+      `"${userRole.superAdmin}"`,
+    ],
+    children: [
+      {
+        id: 12-1,
+        title: "Fakultet",
+        path: "/fakultet-crud",
+        icon: RiFileList3Line,
+        element: Fakultet,
+        role: [`"${userRole.superAdmin}"`],
+      },
+      {
+        id: 12-2,
+        title: "Yo'nalish",
+        path: "/yonalish-crud",
+        icon: RiFileList3Line,
+        element: Yonalishlar,
+        role: [`"${userRole.superAdmin}"`],
+      },
+      {
+        id: 12-3,
+        title: "Gurux",
+        path: "/gurux-crud",
+        icon: RiFileList3Line,
+        element: Guruxlar,
+        role: [`"${userRole.superAdmin}"`],
+      },
+      {
+        id: 12-4,
+        title: "Tyutor",
+        path: "/tutor-crud",
+        icon: RiFileList3Line,
+        element: Tutors,
+        role: [`"${userRole.superAdmin}"`],
+      },
+    ]
+  },
 ];
 
 export default sidebar;
