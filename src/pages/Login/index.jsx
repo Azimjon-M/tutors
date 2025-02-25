@@ -49,25 +49,36 @@ const Login = () => {
                         password: values.password,
                     });
 
-                    
                     if (res.data && res?.data?.access && res?.data?.refresh) {
                         // getEndTime of RefToken
                         const decodeJWT = (token) => {
-                            const base64Url = token.split('.')[1]; // Payload qismi
-                            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                            const base64Url = token.split(".")[1]; // Payload qismi
+                            const base64 = base64Url
+                                .replace(/-/g, "+")
+                                .replace(/_/g, "/");
                             const jsonPayload = decodeURIComponent(
                                 atob(base64)
-                                    .split('')
-                                    .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                                    .join('')
+                                    .split("")
+                                    .map(
+                                        (c) =>
+                                            "%" +
+                                            (
+                                                "00" +
+                                                c.charCodeAt(0).toString(16)
+                                            ).slice(-2)
+                                    )
+                                    .join("")
                             );
                             return JSON.parse(jsonPayload);
                         };
                         const decoded = decodeJWT(res?.data?.refresh);
                         const expiresAt = new Date(decoded.exp * 1000); // Token tugash vaqti
                         const formattedExpiration = {
-                            date: expiresAt.toISOString().split('T')[0], // "YYYY-MM-DD"
-                            hour: expiresAt.toTimeString().split(' ')[0].slice(0, 5), // "HH:MM"
+                            date: expiresAt.toISOString().split("T")[0], // "YYYY-MM-DD"
+                            hour: expiresAt
+                                .toTimeString()
+                                .split(" ")[0]
+                                .slice(0, 5), // "HH:MM"
                         };
                         try {
                             const resUser = await APIGetUser.get(
@@ -118,7 +129,7 @@ const Login = () => {
                                 });
                                 localStorage.setItem("data", jsonData);
                                 if (window.innerWidth >= 1024) {
-                                    localStorage.setItem("isOpen", "open")
+                                    localStorage.setItem("isOpen", "open");
                                 }
                                 navigate("/analitka");
                             }
@@ -238,6 +249,7 @@ const Login = () => {
                             name="password"
                             onChange={formik.handleChange}
                             value={formik.values.password}
+                            autoComplete="password"
                         />
                         <div
                             onClick={handleClickPassword}
@@ -272,7 +284,7 @@ const Login = () => {
                                 name="remember"
                                 type="checkbox"
                                 onChange={formik.handleChange}
-                                value={formik.values.remember}
+                                checked={formik.values.remember}
                                 className="checkbox checkbox-sm checkbox-accent"
                             />
                             <span className="label-text">Remember me</span>
