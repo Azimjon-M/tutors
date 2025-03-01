@@ -11,7 +11,7 @@ const TopshiriqlarQoshish = () => {
     const [selectedTutors, setSelectedTutors] = useState([]);
     const [tutor, setTutor] = useState([]);
     const [nonSelected, setNonSelected] = useState(false);
-    const [filterFak, setFilterFak] = useState("");
+    const [filterFak, setFilterFak] = useState(0);
     const data = JSON.parse(localStorage.getItem("data"));
     const [isLoading, setIsLoading] = useState(false);
 
@@ -44,9 +44,6 @@ const TopshiriqlarQoshish = () => {
 
     const faculties = useMemo(() => {
         const facultiesSet = new Set();
-        console.log([tutor][0].fakultet);
-        
-
         tutor?.forEach((tutor) => facultiesSet?.add(tutor?.fakultet?.name));
         return Array.from(facultiesSet);
     }, [tutor]);
@@ -134,7 +131,6 @@ const TopshiriqlarQoshish = () => {
                                         formData
                                     );
                                 }
-                                alert("Muvaffaqiyatli qo'shildi.!");
                             }
                             resetForm();
                             setSelectedTutors([]);
@@ -174,7 +170,6 @@ const TopshiriqlarQoshish = () => {
                                         formData
                                     );
                                 }
-                                alert("Muvaffaqiyatli qo'shildi.!");
                             }
                             resetForm();
                             setSelectedTutors([]);
@@ -260,7 +255,7 @@ const TopshiriqlarQoshish = () => {
                     value={filterFak}
                     onChange={(e) => setFilterFak(e.target.value)}
                 >
-                    <option key={0} value="Hammasi">
+                    <option key={0} defaultValue="Hammasi">
                         Hammasi
                     </option>
                     {faculties.map((faculty, index) => (
@@ -303,7 +298,9 @@ const TopshiriqlarQoshish = () => {
                             <tr key={tutor.id} className="hover">
                                 <td className="py-2">{index + 1}</td>
                                 <td className="py-2">{tutor.first_name}</td>
-                                <td className="py-2">{tutor?.fakultet?.name}</td>
+                                <td className="py-2">
+                                    {tutor?.fakultet?.name}
+                                </td>
                                 <td className="py-2">
                                     <label className="cursor-pointer flex items-center justify-center gap-2">
                                         <input

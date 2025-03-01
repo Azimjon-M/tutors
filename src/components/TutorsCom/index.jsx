@@ -91,6 +91,9 @@ const TutorsCom = () => {
                                     Foydalanuvchi paroli
                                 </th>
                                 <th scope="col" className="px-6 py-3">
+                                    Fakulteti
+                                </th>
+                                <th scope="col" className="px-6 py-3">
                                     Holati
                                 </th>
                                 <th
@@ -126,6 +129,7 @@ const TutorsCom = () => {
                                         {data.username}
                                     </td>
                                     <td className="px-6 py-2">{data.parol}</td>
+                                    <td className="px-6 py-2">{data.fakultet?.name}</td>
                                     <td className="px-6 py-2">
                                         <span
                                             className={`font-medium rounded px-3 py-[2px] ${
