@@ -40,6 +40,7 @@ import TutorStatistikaQoshish from "../pages/TutorStatistikaQoshish";
 import { FiSettings } from "react-icons/fi";
 import Guruxlar from "../pages/Guruxlar";
 import Yonalishlar from "../pages/Yonalishlar";
+import Kurslar from "../pages/Kurslar";
 
 const sidebar = [
     {
@@ -277,35 +278,42 @@ const sidebar = [
             {
                 id: 9 - 1,
                 title: "Fakultet",
-                path: "/fakultet-crud",
+                path: "/fakultet",
                 element: Fakultet,
                 role: [`"${userRole.superAdmin}"`],
             },
             {
                 id: 9 - 2,
                 title: "Yo'nalish",
-                path: "/yonalish-crud",
+                path: "/yonalish",
                 element: Yonalishlar,
                 role: [`"${userRole.superAdmin}"`],
             },
             {
                 id: 9 - 3,
-                title: "Gurux",
-                path: "/gurux-crud",
-                element: Guruxlar,
+                title: "Kurs",
+                path: "/kurs",
+                element: Kurslar,
                 role: [`"${userRole.superAdmin}"`],
             },
             {
                 id: 9 - 4,
-                title: "Admin",
-                path: "/admin-crud",
-                element: Admins,
+                title: "Gurux",
+                path: "/gurux",
+                element: Guruxlar,
                 role: [`"${userRole.superAdmin}"`],
             },
             {
                 id: 9 - 5,
+                title: "Admin",
+                path: "/admin",
+                element: Admins,
+                role: [`"${userRole.superAdmin}"`],
+            },
+            {
+                id: 9 - 6,
                 title: "Tyutor",
-                path: "/tutor-crud",
+                path: "/tutor",
                 element: Tutors,
                 role: [`"${userRole.superAdmin}"`],
             },
