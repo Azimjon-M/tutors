@@ -39,6 +39,7 @@ import TutorTashabbusi from "../pages/Topshiriq/TutorTashabbusi";
 import TutorStatistikaQoshish from "../pages/TutorStatistikaQoshish";
 import { FiSettings } from "react-icons/fi";
 import Guruxlar from "../pages/Guruxlar";
+import GuruhBiriktirish from "../pages/GuruhBiriktirish";
 import Yonalishlar from "../pages/Yonalishlar";
 import Kurslar from "../pages/Kurslar";
 
@@ -273,7 +274,7 @@ const sidebar = [
         id: 9,
         title: "Sozlamalar",
         icon: FiSettings,
-        role: [`"${userRole.superAdmin}"`],
+        role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
         children: [
             {
                 id: 9 - 1,
@@ -287,31 +288,38 @@ const sidebar = [
                 title: "Yo'nalish",
                 path: "/yonalish",
                 element: Yonalishlar,
-                role: [`"${userRole.superAdmin}"`],
+                role: [`"${userRole.admin}"`],
             },
             {
                 id: 9 - 3,
                 title: "Kurs",
                 path: "/kurs",
                 element: Kurslar,
-                role: [`"${userRole.superAdmin}"`],
+                role: [`"${userRole.admin}"`],
             },
             {
                 id: 9 - 4,
                 title: "Gurux",
                 path: "/gurux",
                 element: Guruxlar,
-                role: [`"${userRole.superAdmin}"`],
+                role: [`"${userRole.admin}"`],
             },
             {
                 id: 9 - 5,
+                title: "Gurux biriktirish",
+                path: "/gurux-biriktirish",
+                element: GuruhBiriktirish,
+                role: [`"${userRole.admin}"`],
+            },
+            {
+                id: 9 - 6,
                 title: "Admin",
                 path: "/admin",
                 element: Admins,
                 role: [`"${userRole.superAdmin}"`],
             },
             {
-                id: 9 - 6,
+                id: 9 - 7,
                 title: "Tyutor",
                 path: "/tutor",
                 element: Tutors,
