@@ -41,7 +41,7 @@ const Kurslar = () => {
     };
 
     getKurslar();
-  }, []);  
+  }, []);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required"),
@@ -54,19 +54,37 @@ const Kurslar = () => {
       yonalish: "",
     },
     validationSchema,
-    onSubmit: (values, { resetForm }) => {
-      console.log("Yangi yo‘nalish:", values.name);
-      setEdit(false);
-      resetForm();
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        if (edit) {
+          await APIKurslar.patch(values.id, values);
+        } else {
+          const response = await APIKurslar.post(values);
+          setDataKurslar([...dataKurslar, response.data]);
+        }
+        resetForm();
+        setEdit(false);
+      } catch (error) {
+        console.error("Ma'lumotni saqlashda xatolik:", error);
+      }
     },
   });
 
   const handleEdit = (data) => {
+    formik.setValues({
+      name: data.name,
+      yonalish: data.yonalish,
+    });
     setEdit(true);
   };
 
-  const handleDelete = (id) => {
-    // deleteMutation.mutate(id);
+  const handleDelete = async (id) => {
+    try {
+      await APIKurslar.del(id);
+      setDataKurslar((prev) => prev.filter((kurs) => kurs.id !== id));
+    } catch (error) {
+      console.error("Kursni o‘chirishda xatolik:", error);
+    }
   };
 
   return (
@@ -82,21 +100,21 @@ const Kurslar = () => {
             </h2>
             <div className="mb-4">
               <label
-                htmlFor="fakName"
+                htmlFor="yonalish"
                 className="block text-sm font-medium text-gray-700"
               >
                 Yo'nalishni tanlang!
               </label>
               <select
-                id="fakName"
-                name="fakName"
+                id="yonalish"
+                name="yonalish"
                 className="select select-bordered mt-1"
-                value={formik.values.fakName}
+                value={formik.values.yonalish}
                 onChange={formik.handleChange}
               >
                 <option disabled={true}>Yo'nalishni tanlang!</option>
                 {dataYonalish.map((item) => (
-                  <option key={item.id} value={item.name}>
+                  <option key={item.id} value={item.id}>
                     {item.name}
                   </option>
                 ))}
