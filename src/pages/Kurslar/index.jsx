@@ -83,6 +83,7 @@ const Kurslar = () => {
       try {
         if (edit) {
           await APIKurslar.patch(values.id, values);
+          getYonalishByFakId();
         } else {
           const response = await APIKurslar.post(values);
           setDataKurslar([...dataKurslar, response.data]);
@@ -96,10 +97,11 @@ const Kurslar = () => {
     },
   });
 
-  const handleEdit = (data) => {
+  const handleEdit = (kurs) => {
     formik.setValues({
-      name: data.name,
-      yonalish: data.yonalish,
+      id: kurs.id,
+      name: kurs.name,
+      yonalish: kurs.yonalish,
     });
     setEdit(true);
   };
@@ -136,9 +138,14 @@ const Kurslar = () => {
                 name="yonalish"
                 className="select select-bordered mt-1"
                 value={formik.values.yonalish}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  formik.setFieldValue("yonalish", e.target.value);
+                }}
               >
-                <option disabled={true}>Yo'nalishni tanlang!</option>
+                <option value="" disabled>
+                  Yo'nalishni tanlang!
+                </option>
                 {dataYonalish.map((item) => (
                   <option key={item.id} value={item.id}>
                     {item.name}
