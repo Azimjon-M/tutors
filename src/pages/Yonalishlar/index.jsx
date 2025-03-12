@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { RiPencilFill } from "react-icons/ri";
 import { MdDeleteForever } from "react-icons/md";
 import APIYonalish from "../../services/yonalish";
+import APIFakultet from "../../services/fakultet";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import CryptoJS from "crypto-js";
@@ -11,7 +12,7 @@ const Yonalish = () => {
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
   const [fakId, setFakId] = useState(null);
-  const [dataYonalish, setDataYonalish] = useState([]);
+  const [dataYonalishByFakId, setDataYonalishByFakId] = useState([]);
   const [isLoadingYonalish, setIsLoadingYonalish] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -31,37 +32,39 @@ const Yonalish = () => {
     }
   }, [data]);
 
-  const getYonalish = async () => {
+  const getYonalishByFakId = useCallback(async () => {
     setIsLoadingYonalish(true);
     setIsError(false);
     try {
-      const res = await APIYonalish.get();
-      setDataYonalish(res?.data || []);
+      const res = await APIFakultet.getbyFakId(fakId);
+      setDataYonalishByFakId(res?.data[0]?.yonalishlar || []);
     } catch (error) {
       console.error("Ma'lumotlarni yuklashda xatolik:", error);
       setIsError(true);
     } finally {
       setIsLoadingYonalish(false);
     }
-  };
-
+  }, [fakId]); // fakId o'zgarganda funksiya yangilanadi
+  
   useEffect(() => {
-    getYonalish();
-  }, []);
+    if (fakId) {
+      getYonalishByFakId();
+    }
+  }, [fakId, getYonalishByFakId]);  
 
   const handleEdit = (data) => {
     setEdit(true);
     setId(data.id);
     formik.setValues({
       name: data.name,
-      fakName: fakId,
+      fakultet: fakId,
     });
   };
 
   const handleDelete = async (id) => {
     try {
       await APIYonalish.del(id);
-      getYonalish();
+      getYonalishByFakId();
     } catch (error) {
       console.error("O‘chirishda xatolik:", error);
     }
@@ -74,17 +77,22 @@ const Yonalish = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      fakName: fakId,
+      fakultet: fakId,
     },
     validationSchema,
     onSubmit: async (values) => {
       try {
+        const formData = new FormData();
+        formData.append("fakultet", fakId);
+        formData.append("name", values.name);
+
         if (edit) {
-          await APIYonalish.patch(id, values);
+          await APIYonalish.patch(id, formData);
         } else {
-          await APIYonalish.post(values);
+          await APIYonalish.post(formData);
         }
-        getYonalish();
+
+        getYonalishByFakId();
         formik.resetForm();
         setEdit(false);
         setId(null);
@@ -140,7 +148,7 @@ const Yonalish = () => {
           </div>
         ) : (
           <div className="space-y-3 max-h-[600px] overflow-y-auto">
-            {dataYonalish.map((data) => (
+            {dataYonalishByFakId.map((data) => (
               <div
                 key={data.id}
                 className="flex justify-between items-center px-3 py-2 border rounded-lg shadow-md"

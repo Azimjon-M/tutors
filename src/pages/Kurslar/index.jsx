@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { RiPencilFill } from "react-icons/ri";
 import { MdDeleteForever } from "react-icons/md";
-import APIYonalish from "../../services/yonalish";
+import APIFakultet from "../../services/fakultet";
 import APIKurslar from "../../services/kurslar";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import CryptoJS from "crypto-js";
 
 const Kurslar = () => {
   const [dataYonalish, setDataYonalish] = useState([]);
@@ -12,21 +13,45 @@ const Kurslar = () => {
   const [edit, setEdit] = useState(false);
   const [isLoadingKurslar, setIsLoadingKurslar] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [fakId, setFakId] = useState(null);
+  const data = JSON.parse(localStorage.getItem("data"));
 
-  //   Get yonalishlar
+  const unShifredTxt = (key, content) => {
+    const res = CryptoJS.AES.decrypt(content, key)
+      .toString(CryptoJS.enc.Utf8)
+      .trim()
+      .replace(/^"|"$/g, "");
+    return res;
+  };
+
   useEffect(() => {
-    const getYonalish = async () => {
-      try {
-        const response = await APIYonalish.get();
-        setDataYonalish(response.data);
-      } catch (error) {
-        console.error("Yo‘nalishlarni yuklashda xatolik:", error);
-        setIsError(true);
-      }
-    };
+    if (data) {
+      setFakId(
+        unShifredTxt(process.env.REACT_APP_SHIFRED_FAKULTET, data?.fakultet)
+      );
+    }
+  }, [data]);
 
-    getYonalish();
-  }, []);
+  //   Get yonalishlar by fakId
+  const getYonalishByFakId = useCallback(async () => {
+    setIsLoadingKurslar(true);
+    setIsError(false);
+    try {
+      const res = await APIFakultet.getbyFakId(fakId);
+      setDataYonalish(res?.data[0]?.yonalishlar || []);
+    } catch (error) {
+      console.error("Ma'lumotlarni yuklashda xatolik:", error);
+      setIsError(true);
+    } finally {
+      setIsLoadingKurslar(false);
+    }
+  }, [fakId]);
+
+  useEffect(() => {
+    if (fakId) {
+      getYonalishByFakId();
+    }
+  }, [fakId, getYonalishByFakId]);
 
   // Get kurslar
   useEffect(() => {
@@ -61,6 +86,7 @@ const Kurslar = () => {
         } else {
           const response = await APIKurslar.post(values);
           setDataKurslar([...dataKurslar, response.data]);
+          getYonalishByFakId();
         }
         resetForm();
         setEdit(false);
@@ -158,29 +184,41 @@ const Kurslar = () => {
           </div>
         ) : (
           <div className="space-y-3 max-h-[600px] overflow-y-auto">
-            {dataKurslar.map((data) => (
+            {dataYonalish?.map((data) => (
               <div
                 key={data.id}
-                className="flex justify-between items-center px-3 py-2 border rounded-lg shadow-md hover:shadow-lg"
+                className="flex justify-between items-start px-3 py-2 border rounded-lg shadow-md hover:shadow-lg"
               >
                 <p className="text-sky-700 font-medium line-clamp-1">
                   {data.name}
                 </p>
-                <div className="flex space-x-2">
-                  <button
-                    type="button"
-                    className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
-                    onClick={() => handleEdit(data)}
-                  >
-                    <RiPencilFill />
-                  </button>
-                  <button
-                    type="button"
-                    className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
-                    onClick={() => handleDelete(data.id)}
-                  >
-                    <MdDeleteForever />
-                  </button>
+                <div>
+                  {data.kurslar.map((kurs) => (
+                    <div
+                      key={kurs.id}
+                      className="flex justify-between items-center px-3 py-2 border rounded-lg shadow-md hover:shadow-lg"
+                    >
+                      <p className="text-sky-700 font-medium line-clamp-1 mr-5">
+                        {kurs.name}
+                      </p>
+                      <div className="flex space-x-2">
+                        <button
+                          type="button"
+                          className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
+                          onClick={() => handleEdit(kurs)}
+                        >
+                          <RiPencilFill />
+                        </button>
+                        <button
+                          type="button"
+                          className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
+                          onClick={() => handleDelete(kurs.id)}
+                        >
+                          <MdDeleteForever />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
