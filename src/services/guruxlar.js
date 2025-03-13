@@ -1,6 +1,6 @@
 import axiosInstance from ".";
 
-const endPoint = "users/kurs/";
+const endPoint = "users/guruh/";
 
 const get = () => axiosInstance.get(endPoint);
 
@@ -16,6 +16,6 @@ const put = (id, item) => axiosInstance.put(`${endPoint}${id}/`, item);
 
 const del = (id) => axiosInstance.delete(`${endPoint}${id}/`);
 
-const APIKurslar = {get, getbyId, post, patch, put, del};
+const APIGuruxlar = {get, getbyId, post, patch, put, del};
 
-export default APIKurslar;
+export default APIGuruxlar;
