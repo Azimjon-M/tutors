@@ -10,6 +10,7 @@ import CryptoJS from "crypto-js";
 const Guruxlar = () => {
   const [dataKurslar, setDataKurslar] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [kursId, setKursId] = useState(null);
   const [dataGuruhlar, setDataGuruhlar] = useState([]);
   const [edit, setEdit] = useState(false);
   const [isLoadingGuruhlar, setIsLoadingGuruhlar] = useState(true);
@@ -56,18 +57,20 @@ const Guruxlar = () => {
 
   // Get kurslar
   useEffect(() => {
-    const getKurslar = async () => {
-      try {
-        const response = await APIGuruxlar.get();
-        setDataGuruhlar(response.data);
-        setIsLoadingGuruhlar(false);
-      } catch (error) {
-        console.error("Fakultetlarni yuklashda xatolik:", error);
-      }
-    };
+    if (dataGuruhlar.length === 0) {
+      const getGuruhlar = async () => {
+        try {
+          const response = await APIGuruxlar.get();
+          setDataGuruhlar(response.data);
+          setIsLoadingGuruhlar(false);
+        } catch (error) {
+          console.error("Fakultetlarni yuklashda xatolik:", error);
+        }
+      };
 
-    getKurslar();
-  }, []);
+      getGuruhlar();
+    }
+  }, [dataGuruhlar]);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required"),
@@ -77,7 +80,7 @@ const Guruxlar = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      kurs: "",
+      kurs: kursId || "", // Kurs ID ni shunday qilib yuboring
     },
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -99,22 +102,36 @@ const Guruxlar = () => {
     },
   });
 
-  const handleEdit = (kurs) => {
+  const handleEdit = (guruh, kursId) => {
     formik.setValues({
-      id: kurs.id,
-      name: kurs.name,
-      yonalish: kurs.yonalish,
+      id: guruh.id,
+      name: guruh.name,
+      kurs: kursId,
     });
     setEdit(true);
+    setOpenModal(true);
+    setKursId(kursId);
   };
 
   const handleDelete = async (id) => {
     try {
       await APIGuruxlar.del(id);
-      setDataGuruhlar((prev) => prev.filter((kurs) => kurs.id !== id));
+      setDataGuruhlar((prev) => prev.filter((guruh) => guruh.id !== id));
     } catch (error) {
-      console.error("Kursni o‘chirishda xatolik:", error);
+      console.error("Guruhni o‘chirishda xatolik:", error);
     }
+  };
+
+  const handleModal = (id) => {
+    setOpenModal(true);
+    setKursId(id);
+    formik.setFieldValue("kurs", id);
+  };
+
+  const closeModal = () => {
+    setOpenModal(false);
+    formik.resetForm();
+    setEdit(false);
   };
 
   return (
@@ -153,28 +170,32 @@ const Guruxlar = () => {
                         </p>
                         <div>
                           <button
-                            onClick={() => setOpenModal(true)}
+                            type="button"
+                            onClick={() => handleModal(kurs.id)}
                             className="w-full py-2 px-4 rounded-md text-white font-semibold border border-blue-500 bg-blue-500 hover:bg-blue-600 active:bg-blue-100 active:border-blue-600 active:text-blue-600"
                           >
-                            Guruh qo'shish
+                            + Qo'shish
                           </button>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         {kurs.guruhlar.map((guruh) => (
-                          <div className="flex items-center px-3 py-1 border rounded-md bg-white gap-3">
+                          <div
+                            className="flex items-center px-3 py-1 border rounded-md bg-white gap-3"
+                            key={guruh.id}
+                          >
                             {guruh.name}
                             <button
                               type="button"
                               className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
-                              onClick={() => handleEdit(kurs)}
+                              onClick={() => handleEdit(guruh, kurs.id)}
                             >
                               <RiPencilFill />
                             </button>
                             <button
                               type="button"
                               className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
-                              onClick={() => handleDelete(kurs.id)}
+                              onClick={() => handleDelete(guruh.id)}
                             >
                               <MdDeleteForever />
                             </button>
@@ -197,9 +218,18 @@ const Guruxlar = () => {
         >
           <form onSubmit={formik.handleSubmit}>
             <div className="p-4 border rounded-lg shadow">
-              <h2 className="text-lg font-semibold text-gray-600 mb-4">
-                {edit ? "Guruhni tahrirlash" : "Guruh qo'shish"}
-              </h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold text-gray-600">
+                  {edit ? "Guruhni tahrirlash" : "Guruh qo'shish"}
+                </h2>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="text-red-500 transition-all rotate-0 hover:rotate-180 text-xs"
+                >
+                  ✖️
+                </button>
+              </div>
               <div className="mb-4">
                 <label
                   htmlFor="name"
