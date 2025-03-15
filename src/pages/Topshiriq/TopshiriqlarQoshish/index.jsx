@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import APISuperAdminQoshTop from "../../../services/superadminQoshTop";
 import APISuperadminOzSoxa from "../../../services/superadminOzSoxa";
-import APIGetUserRole from "../../../services/getUser";
+import APIGetTutor from "../../../services/getUser";
 import Loading from "../../../components/Loading";
 
 const TopshiriqlarQoshish = () => {
@@ -194,7 +194,7 @@ const TopshiriqlarQoshish = () => {
             removeLoopGetTutor.current = true;
             (async () => {
                 try {
-                    const response = await APIGetUserRole.getTutor();
+                    const response = await APIGetTutor.getTutor();
                     setTutor(response?.data);
                 } catch (error) {
                     console.error("Failed to fetch admins", error);

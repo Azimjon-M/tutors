@@ -7,18 +7,18 @@ const Calendar = ({ holidays }) => {
     // Bayram rangini aniqlash
     const holidayClass = (holiday, isToday) => {
         const currentDate = new Date().setHours(0, 0, 0, 0); // Bugungi kunni solishtirish uchun
-        const startTime = new Date(holiday.startTime).setHours(0, 0, 0, 0);
-        const endTime = new Date(holiday.endtime).setHours(23, 59, 59, 999);
+        const boshlanish_vaqti = new Date(holiday.boshlanish_vaqti).setHours(0, 0, 0, 0);
+        const tugash_vaqti = new Date(holiday.tugash_vaqti).setHours(23, 59, 59, 999);
 
         // Agar bugungi kun bayram kuni ichida bo'lsa, ustunlik beramiz
-        if (isToday && currentDate >= startTime && currentDate <= endTime) {
+        if (isToday && currentDate >= boshlanish_vaqti && currentDate <= tugash_vaqti) {
             return "btn btn-info text-white"; // Hozirgi kun bayram kuni
         }
 
         // Bayramning holatini aniqlash
-        if (currentDate < startTime) {
+        if (currentDate < boshlanish_vaqti) {
             return "btn btn-success text-white"; // Keladigan bayramlar
-        } else if (currentDate > endTime) {
+        } else if (currentDate > tugash_vaqti) {
             return "btn btn-error text-white"; // O'tgan bayramlar
         } else {
             return "btn btn-warning text-white"; // Hozirgi bayramlar
@@ -30,10 +30,10 @@ const Calendar = ({ holidays }) => {
         const dayTime = new Date(day).setHours(0, 0, 0, 0); // Kunni solishtirish uchun vaqtni nolga o'rnatamiz
 
         for (let holiday of holidays) {
-            const startTime = new Date(holiday.startTime).setHours(0, 0, 0, 0);
-            const endTime = new Date(holiday.endtime).setHours(23, 59, 59, 999); // Kun oxirigacha
+            const boshlanish_vaqti = new Date(holiday.boshlanish_vaqti).setHours(0, 0, 0, 0);
+            const tugash_vaqti = new Date(holiday.tugash_vaqti).setHours(23, 59, 59, 999); // Kun oxirigacha
 
-            if (dayTime >= startTime && dayTime <= endTime) {
+            if (dayTime >= boshlanish_vaqti && dayTime <= tugash_vaqti) {
                 return holiday;
             }
         }
