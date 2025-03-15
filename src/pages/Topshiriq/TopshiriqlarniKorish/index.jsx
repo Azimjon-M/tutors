@@ -6,7 +6,7 @@ import QoshimchaTopshiriqTutor from "../MajburiyTopshiriqlarKorish/QoshimchaTops
 import SoxagaOidTopshiriq from "../MajburiyTopshiriqlarKorish/SoxagaOidTopshiriq"
 
 const TopshiriqlarniKorish = () => {
-    const [activeTab, setActiveTab] = useState("ttjTashrif");
+    const [activeTab, setActiveTab] = useState("majTop");
     const renderContent = () => {
         switch (activeTab) {
             case "majTop":

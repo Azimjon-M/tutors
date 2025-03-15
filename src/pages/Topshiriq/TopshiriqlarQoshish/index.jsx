@@ -78,6 +78,7 @@ const TopshiriqlarQoshish = () => {
             body: Yup.string().required("Batafsil ma'lumot kiritilishi kerak!"),
             category: Yup.number()
                 .min(1)
+                .max(2)
                 .required("Batafsil ma'lumot kiritilishi kerak!"),
             max_baxo: Yup.string().required("Maximal ball kiritilishi kerak!"),
             boshlanish_vaqti: Yup.date().required(
@@ -181,9 +182,7 @@ const TopshiriqlarQoshish = () => {
                         }
                         break;
                     default:
-                        console.log("working default mode");
                         setIsLoading(false);
-                        break;
                 }
             }
         },

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Calendar from "../../../../components/Calendar";
+import Get from "../../../../services/getTimeTashkent";
 
 const TTJgaTashrif = () => {
     const formik = useFormik({
@@ -31,6 +32,15 @@ const TTJgaTashrif = () => {
         { startTime: "2025-02-10", endtime: "2025-02-15" },
         { startTime: "2025-02-17", endtime: "2025-02-22" },
     ];
+
+    const getTime = async () => {
+        const res = await Get();
+        console.log(res);
+    };
+
+    useEffect(() => {
+        getTime();
+    }, []);
 
     return (
         <div className="bg-base-200 rounded shadow p-1 md:p-2 lg:p-4">
@@ -142,7 +152,9 @@ const TTJgaTashrif = () => {
             </form>
 
             <div className="my-10">
-                <h1 className="text-lg font-bold">Jo'natilgan ma'lumotlar jadvali</h1>
+                <h1 className="text-lg font-bold">
+                    Jo'natilgan ma'lumotlar jadvali
+                </h1>
                 <Calendar holidays={holidays} />
             </div>
         </div>
