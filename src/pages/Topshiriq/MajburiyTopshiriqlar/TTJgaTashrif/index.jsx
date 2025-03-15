@@ -1,45 +1,74 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Calendar from "../../../../components/Calendar";
-import Get from "../../../../services/getTimeTashkent";
+import APIGetTutor from "../../../../services/getUser";
+import APISuperadminMajTop from "../../../../services/superadminMajTop";
 
 const TTJgaTashrif = () => {
+    const [tutorsUID, setTutorsUID] = useState([]);
+    const [dataTop, setDataTop] = useState([]);
+    const pageKey = "ttjga_tashrif"
+
+    const getTutor = async () => {
+        try {
+            const res = await APIGetTutor.getTutor();
+            const newRes = [];
+            res.data.forEach((item) => newRes.push(`${item.id}`));
+            setTutorsUID(newRes);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const getMajTop = async () => {
+        try {
+            const res = await APISuperadminMajTop.get();
+            const newRes = res.data.filter((item) => item.majburiy_topshiriq_turi === pageKey)
+            setDataTop(newRes);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     const formik = useFormik({
         initialValues: {
-            muddat: "",
-            maxBal: "",
-            vazifaSoni: "",
-            startDate: "",
-            endDate: "",
+            max_baxo: "",
+            topshiriq_soni: "",
+            boshlanish_vaqti: "",
+            tugash_vaqti: "",
         },
         validationSchema: Yup.object({
-            muddat: Yup.string().required("Kiritilishi shart!"),
-            maxBal: Yup.number().required("Kiritilishi shart!"),
-            vazifaSoni: Yup.number().required("Kiritilishi shart!"),
-            startDate: Yup.date().required("Kiritilishi shart!"),
-            endDate: Yup.date().required("Kiritilishi shart!"),
+            max_baxo: Yup.number().required("Kiritilishi shart!"),
+            topshiriq_soni: Yup.number().required("Kiritilishi shart!"),
+            boshlanish_vaqti: Yup.date().required("Kiritilishi shart!"),
+            tugash_vaqti: Yup.date().required("Kiritilishi shart!"),
         }),
-        onSubmit: (values) => {
-            console.log(values);
+        onSubmit: async (values) => {
+            if (tutorsUID?.length > 0) {
+                const data = {
+                    majburiy_topshiriq_turi: pageKey,
+                    topshiriq_users: tutorsUID,
+                    ...values,
+                };
+                try {
+                    await APISuperadminMajTop.post(data);
+                    getMajTop();
+                } catch (err) {
+                    console.log(err);
+                }
+            } else {
+                window.location.reload();
+            }
         },
     });
 
-    const holidays = [
-        { startTime: "2025-01-20", endtime: "2025-01-25" },
-        { startTime: "2025-01-27", endtime: "2025-02-01" },
-        { startTime: "2025-02-03", endtime: "2025-02-08" },
-        { startTime: "2025-02-10", endtime: "2025-02-15" },
-        { startTime: "2025-02-17", endtime: "2025-02-22" },
-    ];
-
-    const getTime = async () => {
-        const res = await Get();
-        console.log(res);
-    };
+    useEffect(() => {
+        getTutor();
+    }, []);
 
     useEffect(() => {
-        getTime();
+        getMajTop();
     }, []);
 
     return (
@@ -48,59 +77,41 @@ const TTJgaTashrif = () => {
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex justify-between gap-2">
                     <div className="w-full form-control mb-4">
-                        <label htmlFor="muddat" className="label">
-                            <span className="label-text">Muddati</span>
-                        </label>
-                        <input
-                            type="text"
-                            id="muddat"
-                            name="muddat"
-                            className="input input-bordered"
-                            placeholder="Muddati kiriting: 1 hafta, 1 oy, ..."
-                            {...formik.getFieldProps("muddat")}
-                        />
-                        {formik.touched.muddat && formik.errors.muddat ? (
-                            <span className="text-red-500 text-sm">
-                                {formik.errors.muddat}
-                            </span>
-                        ) : null}
-                    </div>
-                    <div className="w-full form-control mb-4">
-                        <label htmlFor="vazifaSoni" className="label">
+                        <label htmlFor="topshiriq_soni" className="label">
                             <span className="label-text">
                                 Muddat ichida nechta vazifa yuklashi
                             </span>
                         </label>
                         <input
                             type="number"
-                            id="vazifaSoni"
-                            name="vazifaSoni"
+                            id="topshiriq_soni"
+                            name="topshiriq_soni"
                             className="input input-bordered"
                             placeholder="Sonini kiriting"
-                            {...formik.getFieldProps("vazifaSoni")}
+                            {...formik.getFieldProps("topshiriq_soni")}
                         />
-                        {formik.touched.vazifaSoni &&
-                        formik.errors.vazifaSoni ? (
+                        {formik.touched.topshiriq_soni &&
+                        formik.errors.topshiriq_soni ? (
                             <span className="text-red-500 text-sm">
-                                {formik.errors.vazifaSoni}
+                                {formik.errors.topshiriq_soni}
                             </span>
                         ) : null}
                     </div>
                     <div className="w-full form-control mb-4">
-                        <label htmlFor="maxBal" className="label">
+                        <label htmlFor="max_baxo" className="label">
                             <span className="label-text">Max ball</span>
                         </label>
                         <input
                             type="number"
-                            id="maxBal"
-                            name="maxBal"
+                            id="max_baxo"
+                            name="max_baxo"
                             className="input input-bordered"
                             placeholder="Ballni kiriting"
-                            {...formik.getFieldProps("maxBal")}
+                            {...formik.getFieldProps("max_baxo")}
                         />
-                        {formik.touched.maxBal && formik.errors.maxBal ? (
+                        {formik.touched.max_baxo && formik.errors.max_baxo ? (
                             <span className="text-red-500 text-sm">
-                                {formik.errors.maxBal}
+                                {formik.errors.max_baxo}
                             </span>
                         ) : null}
                     </div>
@@ -108,38 +119,40 @@ const TTJgaTashrif = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                     <div className="form-control">
-                        <label htmlFor="startDate" className="label">
+                        <label htmlFor="boshlanish_vaqti" className="label">
                             <span className="label-text">
                                 Boshlanish sanasi
                             </span>
                         </label>
                         <input
                             type="date"
-                            id="startDate"
-                            name="startDate"
+                            id="boshlanish_vaqti"
+                            name="boshlanish_vaqti"
                             className="input input-bordered"
-                            {...formik.getFieldProps("startDate")}
+                            {...formik.getFieldProps("boshlanish_vaqti")}
                         />
-                        {formik.touched.startDate && formik.errors.startDate ? (
+                        {formik.touched.boshlanish_vaqti &&
+                        formik.errors.boshlanish_vaqti ? (
                             <span className="text-red-500 text-sm">
-                                {formik.errors.startDate}
+                                {formik.errors.boshlanish_vaqti}
                             </span>
                         ) : null}
                     </div>
                     <div className="form-control">
-                        <label htmlFor="endDate" className="label">
+                        <label htmlFor="tugash_vaqti" className="label">
                             <span className="label-text">Tugash sanasi</span>
                         </label>
                         <input
                             type="date"
-                            id="endDate"
-                            name="endDate"
+                            id="tugash_vaqti"
+                            name="tugash_vaqti"
                             className="input input-bordered"
-                            {...formik.getFieldProps("endDate")}
+                            {...formik.getFieldProps("tugash_vaqti")}
                         />
-                        {formik.touched.endDate && formik.errors.endDate ? (
+                        {formik.touched.tugash_vaqti &&
+                        formik.errors.tugash_vaqti ? (
                             <span className="text-red-500 text-sm">
-                                {formik.errors.endDate}
+                                {formik.errors.tugash_vaqti}
                             </span>
                         ) : null}
                     </div>
@@ -155,7 +168,7 @@ const TTJgaTashrif = () => {
                 <h1 className="text-lg font-bold">
                     Jo'natilgan ma'lumotlar jadvali
                 </h1>
-                <Calendar holidays={holidays} />
+                <Calendar holidays={dataTop} />
             </div>
         </div>
     );
