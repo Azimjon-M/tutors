@@ -1,9 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
-// import { RiPencilFill } from "react-icons/ri";
 import APIFakultet from "../../services/fakultet";
 import APIUsers from "../../services/users";
 import { useFormik } from "formik";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import CryptoJS from "crypto-js";
 
 const GuruhBiriktirish = () => {
