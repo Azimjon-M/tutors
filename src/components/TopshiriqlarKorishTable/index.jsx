@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const TopshiriqlarKorishTable = ({ data }) => {
+const TopshiriqlarKorishTable = (props) => {
+    console.log(props);
+    
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     const formik = useFormik({
@@ -27,12 +29,12 @@ const TopshiriqlarKorishTable = ({ data }) => {
         },
     });
 
-    const onDelete = (id) => {
-        const confrim = window.confirm("O'chirishni istaysizmi ?");
-        if (confrim) {
-            console.log(id);
-        }
-    };
+    // const onDelete = (id) => {
+    //     const confrim = window.confirm("O'chirishni istaysizmi ?");
+    //     if (confrim) {
+    //         console.log(id);
+    //     }
+    // };
     return (
         <div className="relative z-10">
             <div
@@ -196,7 +198,7 @@ const TopshiriqlarKorishTable = ({ data }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data?.map((item, index) => (
+                            {/* {data?.map((item, index) => (
                                 <tr
                                     key={item.id}
                                     className="hover:bg-[#ececec] border-b-[1px] border-gray-200"
@@ -238,7 +240,7 @@ const TopshiriqlarKorishTable = ({ data }) => {
                                         </button>
                                     </td>
                                 </tr>
-                            ))}
+                            ))} */}
                         </tbody>
                     </table>
                 </div>
