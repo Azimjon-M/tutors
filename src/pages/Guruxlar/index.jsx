@@ -212,7 +212,7 @@ const Guruxlar = () => {
 
         {/* Modal */}
         <div
-          className={`max-w-xl fixed top-[50%] bg-white rounded-lg ${
+          className={`w-[335px] md:w-[500px] fixed top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-white rounded-lg ${
             !openModal && "hidden"
           }`}
         >

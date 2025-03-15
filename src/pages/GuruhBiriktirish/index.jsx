@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { RiPencilFill } from "react-icons/ri";
+// import { RiPencilFill } from "react-icons/ri";
 import APIFakultet from "../../services/fakultet";
 import APIUsers from "../../services/users";
 import { useFormik } from "formik";
@@ -9,12 +9,13 @@ import CryptoJS from "crypto-js";
 const GuruhBiriktirish = () => {
   const [dataKurslar, setDataKurslar] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [kursId, setKursId] = useState(null);
   const [dataUsers, setDataUsers] = useState([]);
   const [edit, setEdit] = useState(false);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [userId, setUserId] = useState(null);
   const [fakId, setFakId] = useState(null);
+  const [selectedGroups, setSelectedGroups] = useState([]);
   const data = JSON.parse(localStorage.getItem("data"));
 
   const unShifredTxt = (key, content) => {
@@ -33,7 +34,6 @@ const GuruhBiriktirish = () => {
     }
   }, [data]);
 
-  //   Get yonalishlar by fakId
   const getYonalishByFakId = useCallback(async () => {
     setIsLoadingUsers(true);
     setIsError(false);
@@ -48,62 +48,67 @@ const GuruhBiriktirish = () => {
     }
   }, [fakId]);
 
+  const getUsers = useCallback(async () => {
+    setIsLoadingUsers(true);
+    try {
+      const response = await APIUsers.getFakTutors(fakId);
+      setDataUsers(response.data);
+    } catch (error) {
+      console.error("Fakultetlarni yuklashda xatolik:", error);
+    } finally {
+      setIsLoadingUsers(false);
+    }
+  }, [fakId]);
+
   useEffect(() => {
     if (fakId) {
       getYonalishByFakId();
+      getUsers();
     }
-  }, [fakId, getYonalishByFakId]);
+  }, [fakId, getYonalishByFakId, getUsers]);
 
-  // Get tutors
-  useEffect(() => {
-    const getUsers = async () => {
-      try {
-        const response = await APIUsers.getFakTutors(fakId);
-        setDataUsers(response.data);
-        setIsLoadingUsers(false);
-      } catch (error) {
-        console.error("Fakultetlarni yuklashda xatolik:", error);
-      }
-    };
-    getUsers();
-  }, [fakId]);
+  // const validationSchema = Yup.object().shape({
+  //   guruh: Yup.string().required("Required"),
+  // });
 
-  const validationSchema = Yup.object().shape({
-    guruh: Yup.string().required("Required"),
-  });
+  // Guruh checkboxlarining o'zgarishini boshqarish
+  const handleCheckboxChange = (guruhId, isChecked) => {
+    setSelectedGroups((prev) =>
+      isChecked ? [...prev, guruhId] : prev.filter((id) => id !== guruhId)
+    );
+    formik.setFieldValue(
+      "guruh",
+      isChecked
+        ? [...formik.values.guruh, guruhId]
+        : formik.values.guruh.filter((id) => id !== guruhId)
+    );
+  };
 
   const formik = useFormik({
     initialValues: {
       guruh: [],
     },
-    validationSchema,
+    // validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        console.log("Tanlangan guruhlar:", values.guruh);
-        await APIUsers.patch(values.id, values.guruh);
-        getYonalishByFakId();
+        // PATCH request to APIUsers
+        await APIUsers.patch(userId, {
+          guruh: selectedGroups,
+        });
+        alert("Guruhlar muvaffaqiyatli yangilandi!");
+        getUsers();
         resetForm();
-        setOpenModal(false);
-        setEdit(false);
+        closeModal();
+        setSelectedGroups([]);
       } catch (error) {
         console.error("Ma'lumotni saqlashda xatolik:", error);
       }
     },
   });
 
-  const handleEdit = (guruh) => {
-    formik.setValues({
-      id: guruh.id,
-      guruh: kursId,
-    });
-    setEdit(true);
-    setOpenModal(true);
-    setKursId(kursId);
-  };
-
   const handleModal = (id) => {
     setOpenModal(true);
-    setKursId(id);
+    setUserId(id);
     formik.setFieldValue("kurs", id);
   };
 
@@ -150,19 +155,13 @@ const GuruhBiriktirish = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    {user.guruhlar?.map((guruh) => (
+                    {user.guruh?.map((guruhItem) => (
                       <div
                         className="flex items-center px-3 py-1 border rounded-md bg-white gap-3"
-                        key={guruh.id}
+                        key={guruhItem.id}
                       >
-                        {guruh.name}
-                        <button
-                          type="button"
-                          className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
-                          onClick={() => handleEdit(guruh, user.id)}
-                        >
-                          <RiPencilFill />
-                        </button>
+                        {guruhItem.kurs.yonalish.name} {guruhItem.kurs.name}
+                        -kurs {guruhItem.name}
                       </div>
                     ))}
                   </div>
@@ -174,7 +173,7 @@ const GuruhBiriktirish = () => {
 
         {/* Modal */}
         <div
-          className={`w-[325px] fixed top-[20%] bg-white rounded-lg ${
+          className={`w-[335px] md:w-[500px] fixed top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-white rounded-lg ${
             !openModal && "hidden"
           }`}
         >
@@ -189,39 +188,37 @@ const GuruhBiriktirish = () => {
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="text-red-500 transition-all rotate-0 hover:rotate-180 text-xs"
+                    className="text-red-500 transition-transform transform hover:rotate-180 text-xs"
                   >
                     ✖️
                   </button>
                 </div>
-                <table className="table">
+                <table className="w-full border-collapse border border-gray-300">
                   {/* head */}
-                  <thead>
+                  <thead className="bg-gray-100">
                     <tr>
-                      <th>Yo'nalish</th>
-                      <th>Kurs</th>
-                      <th>Guruh</th>
-                      <th>
+                      <th className="border p-2">Yo'nalish</th>
+                      <th className="border p-2">Kurs</th>
+                      <th className="border p-2">Guruh</th>
+                      <th className="border p-2">
                         <label>
                           <input
                             type="checkbox"
                             className="checkbox"
                             onChange={(e) => {
-                              if (e.target.checked) {
-                                formik.setFieldValue(
-                                  "guruh",
-                                  dataKurslar.flatMap((yonalish) =>
-                                    yonalish.kurslar.flatMap((kurs) =>
-                                      kurs.guruhlar?.map((guruh) => guruh.id)
+                              formik.setFieldValue(
+                                "guruh",
+                                e.target.checked
+                                  ? dataKurslar.flatMap((yonalish) =>
+                                      yonalish.kurslar.flatMap((kurs) =>
+                                        kurs.guruhlar?.map((guruh) => guruh.id)
+                                      )
                                     )
-                                  )
-                                );
-                              } else {
-                                formik.setFieldValue("guruh", []);
-                              }
+                                  : []
+                              );
                             }}
                             checked={
-                              formik.values.guruh?.length ===
+                              formik.values.guruh.length ===
                               dataKurslar.flatMap((yonalish) =>
                                 yonalish.kurslar.flatMap((kurs) =>
                                   kurs.guruhlar.map((guruh) => guruh.id)
@@ -234,35 +231,32 @@ const GuruhBiriktirish = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {dataKurslar?.map((yonalish) =>
-                      yonalish.kurslar?.map((kurs) =>
-                        kurs.guruhlar?.map((guruh) => (
-                          <tr key={guruh.id}>
-                            <td>
-                              <div className="flex items-center gap-3">
-                                <div>
-                                  <div className="font-bold">
-                                    {yonalish?.name}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td>{kurs?.name}</td>
-                            <td>{guruh?.name}</td>
-                            <th>
+                    {dataKurslar.map((yonalish) =>
+                      yonalish.kurslar.map((kurs) =>
+                        kurs.guruhlar.map((guruh) => (
+                          <tr key={guruh.id} className="border">
+                            <td className="border p-2">{yonalish.name}</td>
+                            <td className="border p-2">{kurs.name}</td>
+                            <td className="border p-2">{guruh.name}</td>
+                            <td className="border p-2 text-center">
                               <label>
                                 <input
                                   type="checkbox"
                                   className="checkbox"
                                   name="guruh"
                                   value={guruh.id}
-                                  onChange={formik.handleChange}
-                                  checked={formik.values.guruh?.includes(
+                                  onChange={(e) =>
+                                    handleCheckboxChange(
+                                      guruh.id,
+                                      e.target.checked
+                                    )
+                                  }
+                                  checked={formik.values.guruh.includes(
                                     guruh.id
                                   )}
                                 />
                               </label>
-                            </th>
+                            </td>
                           </tr>
                         ))
                       )
@@ -270,13 +264,36 @@ const GuruhBiriktirish = () => {
                   </tbody>
                 </table>
               </div>
-              {/* End table */}
+
+              {/* Tanlangan guruh nomlari */}
+              <div className="mt-4 p-2 border rounded-md bg-gray-100">
+                <h3 className="font-semibold text-gray-600 mb-2">
+                  Tanlangan guruhlar:
+                </h3>
+                {formik.values.guruh.length > 0 ? (
+                  <ul className="list-disc list-inside text-gray-700">
+                    {dataKurslar.flatMap((yonalish) =>
+                      yonalish.kurslar.flatMap((kurs) =>
+                        kurs.guruhlar
+                          .filter((guruh) =>
+                            formik.values.guruh.includes(guruh.id)
+                          )
+                          .map((guruh) => <li key={guruh.id}>{guruh.name}</li>)
+                      )
+                    )}
+                  </ul>
+                ) : (
+                  <p className="text-gray-500">Hech qanday guruh tanlanmagan</p>
+                )}
+              </div>
+
+              {/* Submit button */}
               <button
                 type="submit"
-                className={`w-full py-2 px-4 rounded-md text-white font-semibold ${
+                className={`w-full mt-4 py-2 px-4 rounded-md text-white font-semibold transition-all ${
                   edit
-                    ? "border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
-                    : "border border-blue-500 bg-blue-500 hover:bg-blue-600 active:bg-blue-100 active:border-blue-600 active:text-blue-600"
+                    ? "border border-teal-500 bg-teal-500 hover:bg-teal-600 focus:ring focus:ring-teal-300"
+                    : "border border-blue-500 bg-blue-500 hover:bg-blue-600 focus:ring focus:ring-blue-300"
                 }`}
               >
                 {edit ? "Saqlash" : "Yuborish"}
