@@ -1,11 +1,12 @@
 // icons
-import { AiOutlineBarChart, AiOutlinePieChart } from "react-icons/ai";
+import { AiOutlinePieChart } from "react-icons/ai";
 import { RiFileList3Line } from "react-icons/ri";
 import { VscGraph } from "react-icons/vsc";
 import { BsPersonAdd } from "react-icons/bs";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import { SiOpensourceinitiative } from "react-icons/si";
 import { MdOutlineTask } from "react-icons/md";
+import { MdOutlineCreditScore } from "react-icons/md";
 // Components
 import {
   Admins,
@@ -112,7 +113,7 @@ const sidebar = [
   {
     id: 3,
     title: "Baholash",
-    icon: AiOutlineBarChart,
+    icon: MdOutlineCreditScore,
     role: [`"${userRole.superAdmin}"`, `"${userRole.admin}"`],
     children: [
       {
