@@ -6,7 +6,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { MdOutlinePersonAddAlt } from "react-icons/md";
 import CryptoJS from "crypto-js";
 
-const TutorStatistikaQoshish = () => {
+const TutorSardorQoshish = () => {
   const [openModal, setOpenModal] = useState(false);
   // const [students, setStudents] = useState({});
   // const [groupName, setGroupName] = useState("");
@@ -267,150 +267,26 @@ const TutorStatistikaQoshish = () => {
                   </div>
                 </div>
               </div>
-
-              <div className="border-b border-gray-900/10 pb-4">
-                {/* Jinsi */}
-                <fieldset>
-                  <legend className="text-sm/6 font-semibold text-gray-900">
-                    Jinsi
-                  </legend>
-                  <div className="mt-6 flex items-center space-x-6">
-                    <div className="flex items-center gap-x-3">
-                      <input
-                        defaultChecked
-                        id="ogil"
-                        name="jins"
-                        type="radio"
-                        className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
-                      />
-                      <label
-                        htmlFor="ogil"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        O'g'il
-                      </label>
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="block text-sm/6 font-medium text-gray-900"
+                >
+                  Telefon
+                </label>
+                <div className="mt-2">
+                  <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                    <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
+                      +998
                     </div>
-                    <div className="flex items-center gap-x-3">
-                      <input
-                        id="qiz"
-                        name="jins"
-                        type="radio"
-                        className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
-                      />
-                      <label
-                        htmlFor="qiz"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        Qiz
-                      </label>
-                    </div>
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="text"
+                      placeholder="00 000 00 00"
+                      className="input input-info input-sm block min-w-0 grow py-1 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                    />
                   </div>
-                </fieldset>
-              </div>
-              <div className="border-b border-gray-900/10 pb-4">
-                {/* Tolov */}
-                <fieldset>
-                  <legend className="text-sm/6 font-semibold text-gray-900">
-                    To'lov statusi
-                  </legend>
-                  <div className="mt-6 flex items-center space-x-6">
-                    <div className="flex items-center gap-x-3">
-                      <input
-                        defaultChecked
-                        id="grand"
-                        name="tolov"
-                        type="radio"
-                        className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
-                      />
-                      <label
-                        htmlFor="grand"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        Grand
-                      </label>
-                    </div>
-                    <div className="flex items-center gap-x-3">
-                      <input
-                        id="kontrakt"
-                        name="tolov"
-                        type="radio"
-                        className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
-                      />
-                      <label
-                        htmlFor="kontrakt"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        Kontrakt
-                      </label>
-                    </div>
-                  </div>
-                </fieldset>
-              </div>
-
-              {/* Ijtimoiy himoya */}
-              <div className="sm:col-span-3">
-                <label
-                  htmlFor="country"
-                  className="block text-sm/6 font-medium text-gray-900"
-                >
-                  Ijtimoiy himoya
-                </label>
-                <div className="mt-2 grid grid-cols-1">
-                  <select
-                    id="country"
-                    name="country"
-                    autoComplete="country-name"
-                    className="select select-info select-sm col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
-                  >
-                    <option>-- Ijtimoiy himoya --</option>
-                    <option>Yoshlar daftari</option>
-                    <option>Ayollar daftari</option>
-                    <option>Temir daftar</option>
-                  </select>
-                </div>
-              </div>
-              {/* Ijtimoiy daraja */}
-              <div className="sm:col-span-3">
-                <label
-                  htmlFor="country"
-                  className="block text-sm/6 font-medium text-gray-900"
-                >
-                  Ijtimoiy daraja
-                </label>
-                <div className="mt-2 grid grid-cols-1">
-                  <select
-                    id="country"
-                    name="country"
-                    autoComplete="country-name"
-                    className="select select-info select-sm col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
-                  >
-                    <option>-- Ijtimoiy daraja --</option>
-                    <option>Nogiron</option>
-                    <option>Chin yetim</option>
-                    <option>Yetim</option>
-                  </select>
-                </div>
-              </div>
-              {/* Iqtidorli talaba */}
-              <div className="sm:col-span-3">
-                <label
-                  htmlFor="country"
-                  className="block text-sm/6 font-medium text-gray-900"
-                >
-                  Iqtidorli talaba
-                </label>
-                <div className="mt-2 grid grid-cols-1">
-                  <select
-                    id="country"
-                    name="country"
-                    autoComplete="country-name"
-                    className="select select-info select-sm col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
-                  >
-                    <option>-- Iqtidorli talaba --</option>
-                    <option>Stipendiant</option>
-                    <option>Sportchi</option>
-                    <option>Boshqa</option>
-                  </select>
                 </div>
               </div>
             </div>
@@ -432,4 +308,4 @@ const TutorStatistikaQoshish = () => {
   );
 };
 
-export default TutorStatistikaQoshish;
+export default TutorSardorQoshish;
