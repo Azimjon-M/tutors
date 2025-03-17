@@ -10,7 +10,7 @@ const Sidebar = () => {
             <Panel />
             {/* page container */}
             <div className={`w-full overflow-y-auto`}>
-                <nav className="border-l border-gray-300 bg-gray-200 py-3 pl-4">
+                <nav className="sticky top-0 right-0 z-30 border-l border-gray-300 bg-gray-200 py-3 pl-4">
                     {/* navbar vazifasida */}
                     <Breadcrumb />
                 </nav>

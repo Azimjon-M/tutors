@@ -1,17 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const Calendar = ({ holidays }) => {
+const Calendar = ({ holidays, onMonthChange }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
     // Bayram rangini aniqlash
     const holidayClass = (holiday, isToday) => {
         const currentDate = new Date().setHours(0, 0, 0, 0); // Bugungi kunni solishtirish uchun
-        const boshlanish_vaqti = new Date(holiday.boshlanish_vaqti).setHours(0, 0, 0, 0);
-        const tugash_vaqti = new Date(holiday.tugash_vaqti).setHours(23, 59, 59, 999);
+        const boshlanish_vaqti = new Date(holiday.boshlanish_vaqti).setHours(
+            0,
+            0,
+            0,
+            0
+        );
+        const tugash_vaqti = new Date(holiday.tugash_vaqti).setHours(
+            23,
+            59,
+            59,
+            999
+        );
 
         // Agar bugungi kun bayram kuni ichida bo'lsa, ustunlik beramiz
-        if (isToday && currentDate >= boshlanish_vaqti && currentDate <= tugash_vaqti) {
+        if (
+            isToday &&
+            currentDate >= boshlanish_vaqti &&
+            currentDate <= tugash_vaqti
+        ) {
             return "btn btn-info text-white"; // Hozirgi kun bayram kuni
         }
 
@@ -30,8 +44,15 @@ const Calendar = ({ holidays }) => {
         const dayTime = new Date(day).setHours(0, 0, 0, 0); // Kunni solishtirish uchun vaqtni nolga o'rnatamiz
 
         for (let holiday of holidays) {
-            const boshlanish_vaqti = new Date(holiday.boshlanish_vaqti).setHours(0, 0, 0, 0);
-            const tugash_vaqti = new Date(holiday.tugash_vaqti).setHours(23, 59, 59, 999); // Kun oxirigacha
+            const boshlanish_vaqti = new Date(
+                holiday.boshlanish_vaqti
+            ).setHours(0, 0, 0, 0);
+            const tugash_vaqti = new Date(holiday.tugash_vaqti).setHours(
+                23,
+                59,
+                59,
+                999
+            ); // Kun oxirigacha
 
             if (dayTime >= boshlanish_vaqti && dayTime <= tugash_vaqti) {
                 return holiday;
@@ -80,11 +101,22 @@ const Calendar = ({ holidays }) => {
     // Oy va yilni o'zgartirish
     const changeMonth = (direction) => {
         if (direction === "next") {
+            if (currentMonth === 11) {
+                onMonthChange(currentYear+1, 0);
+            } else {
+                onMonthChange(currentYear, currentMonth+1);
+            }
             setCurrentMonth((prevMonth) =>
                 prevMonth === 11 ? 0 : prevMonth + 1
             );
             if (currentMonth === 11) setCurrentYear(currentYear + 1); // Yilni o'zgartirish
+
         } else if (direction === "prev") {
+            if (currentMonth === 0) {
+                onMonthChange(currentYear-1, 11);
+            } else {
+                onMonthChange(currentYear, currentMonth - 1);
+            }
             setCurrentMonth((prevMonth) =>
                 prevMonth === 0 ? 11 : prevMonth - 1
             );
@@ -122,6 +154,10 @@ const Calendar = ({ holidays }) => {
                 return "Oy";
         }
     };
+
+    useEffect(() => {
+        onMonthChange(new Date().getFullYear(), new Date().getMonth()); // Parentga o'zgarishlarni yuborish
+    }, [onMonthChange]);
 
     return (
         <div className="border rounded-lg shadow-xl p-4">
