@@ -17,6 +17,7 @@ const TutorStatistikaQoshish = () => {
   // const [studyType, setStudyType] = useState("kontrakt");
   const [dataUser, setDataUser] = useState([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
+  const [selectedOption, setSelectedOption] = useState("");
   // const [isError, setIsError] = useState(false);
   const [userId, setUserId] = useState(null);
   const data = JSON.parse(localStorage.getItem("data"));
@@ -94,6 +95,7 @@ const TutorStatistikaQoshish = () => {
   // Close modal
   const closeModal = () => {
     setOpenModal(false);
+    setSelectedOption("");
     formik.resetForm();
   };
 
@@ -394,24 +396,35 @@ const TutorStatistikaQoshish = () => {
               {/* Iqtidorli talaba */}
               <div className="sm:col-span-3">
                 <label
-                  htmlFor="country"
-                  className="block text-sm/6 font-medium text-gray-900"
+                  htmlFor="talaba"
+                  className="block text-sm font-medium text-gray-900"
                 >
                   Iqtidorli talaba
                 </label>
                 <div className="mt-2 grid grid-cols-1">
                   <select
-                    id="country"
-                    name="country"
-                    autoComplete="country-name"
-                    className="select select-info select-sm col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
+                    id="talaba"
+                    name="talaba"
+                    className="select select-info select-sm w-full appearance-none rounded-md bg-white py-1 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm"
+                    value={selectedOption}
+                    onChange={(e) => setSelectedOption(e.target.value)}
                   >
-                    <option>-- Iqtidorli talaba --</option>
-                    <option>Stipendiant</option>
-                    <option>Sportchi</option>
-                    <option>Boshqa</option>
+                    <option value="">-- Iqtidorli talaba --</option>
+                    <option value="Stipendiant">Stipendiant</option>
+                    <option value="Sportchi">Sportchi</option>
+                    <option value="Boshqa">Boshqa</option>
                   </select>
                 </div>
+
+                {selectedOption === "Boshqa" && (
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      placeholder="Iltimos, izoh kiriting..."
+                      className="input input-info input-sm w-full border text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    />
+                  </div>
+                )}
               </div>
             </div>
             {/* Submit button */}
