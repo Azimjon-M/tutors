@@ -102,6 +102,7 @@ const TutorSardorQoshish = () => {
   // Close modal
   const closeModal = () => {
     setOpenModal(false);
+    setPhone("")
     formik.resetForm();
   };
 
