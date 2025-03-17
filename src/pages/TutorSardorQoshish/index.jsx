@@ -133,12 +133,9 @@ const TutorSardorQoshish = () => {
                     <thead>
                       <tr>
                         <th>№</th>
-                        <th>F.I.Sh</th>
-                        <th>Jins</th>
-                        <th>To‘lov statusi</th>
-                        <th>Ijtimoiy himoya</th>
-                        <th>Ijtimoiy daraja</th>
-                        <th>Iqtidorli talaba</th>
+                        <th>Ism</th>
+                        <th>Familiya</th>
+                        <th>Telefon nomer</th>
                         <th className="text-center">Amallar</th>
                       </tr>
                     </thead>
@@ -148,9 +145,6 @@ const TutorSardorQoshish = () => {
                         <td>Cy Ganderton</td>
                         <td>Quality Control Specialist</td>
                         <td>Littel, Schaden and Vandervort</td>
-                        <td>Canada</td>
-                        <td>Canada</td>
-                        <td>12/16/2020</td>
                         <td className="flex space-x-2 justify-center">
                           <button
                             type="button"
@@ -173,9 +167,6 @@ const TutorSardorQoshish = () => {
                         <td>Hart Hagerty</td>
                         <td>Desktop Support Technician</td>
                         <td>Zemlak, Daniel and Leannon</td>
-                        <td>United States</td>
-                        <td>12/5/2020</td>
-                        <td>12/5/2020</td>
                         <td className="flex space-x-2 justify-center">
                           <button
                             type="button"
