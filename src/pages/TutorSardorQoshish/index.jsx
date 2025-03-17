@@ -8,18 +8,26 @@ import CryptoJS from "crypto-js";
 
 const TutorSardorQoshish = () => {
   const [openModal, setOpenModal] = useState(false);
-  // const [students, setStudents] = useState({});
-  // const [groupName, setGroupName] = useState("");
-  // const [selectedGroup, setSelectedGroup] = useState("");
-  // const [studentName, setStudentName] = useState("");
-  // const [gender, setGender] = useState("o'g'il");
-  // const [orphanStatus, setOrphanStatus] = useState("oddiy");
-  // const [studyType, setStudyType] = useState("kontrakt");
   const [dataUser, setDataUser] = useState([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
-  // const [isError, setIsError] = useState(false);
   const [userId, setUserId] = useState(null);
   const data = JSON.parse(localStorage.getItem("data"));
+  const [phone, setPhone] = useState("");
+
+  // Phone number
+  const formatPhoneNumber = (value) => {
+    let cleaned = value.replace(/\D/g, "");
+    if (cleaned.length > 2)
+      cleaned = cleaned.slice(0, 2) + " " + cleaned.slice(2);
+    if (cleaned.length > 6)
+      cleaned = cleaned.slice(0, 6) + " " + cleaned.slice(6);
+    if (cleaned.length > 9)
+      cleaned = cleaned.slice(0, 9) + " " + cleaned.slice(9);
+    return cleaned;
+  };
+  const handleChange = (e) => {
+    setPhone(formatPhoneNumber(e.target.value));
+  };
 
   // Unshifred id
   const unShifredTxt = (key, content) => {
@@ -258,27 +266,26 @@ const TutorSardorQoshish = () => {
                   </div>
                 </div>
               </div>
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm/6 font-medium text-gray-900"
-                >
-                  Telefon
-                </label>
-                <div className="mt-2">
-                  <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                    <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
-                      +998
-                    </div>
-                    <input
-                      id="phone"
-                      name="phone"
-                      type="text"
-                      placeholder="00 000 00 00"
-                      className="input input-info input-sm block min-w-0 grow py-1 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
-                    />
-                  </div>
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Telefon
+              </label>
+              <div class="relative mb-6">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-2 pointer-events-none text-gray-500">
+                  +998
                 </div>
+                <input
+                  type="text"
+                  id="phone-input"
+                  className="input input-info input-sm border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-12 px-3 py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="00 000 00 00"
+                  maxlength="12"
+                  inputMode="numeric"
+                  value={phone}
+                  onChange={handleChange}
+                />
               </div>
             </div>
             {/* Submit button */}
