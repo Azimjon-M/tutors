@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import APIOzXoshishi from "../../../services/ozXohishBilanTutor";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -9,6 +9,20 @@ const TutorTashabbusi = () => {
   const [userId, setUserId] = useState(null);
   const [tashabbuslar, setTashabbuslar] = useState(null);
   const data = JSON.parse(localStorage.getItem("data"));
+  const [file, setFile] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const clearFileInput = () => {
+    setFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const [initialValues] = useState({
     user: "",
     title: "",
@@ -76,11 +90,13 @@ const TutorTashabbusi = () => {
     formData.append("body", values.body);
     if (values.file1) formData.append("file1", values.file1);
     if (values.file2) formData.append("file2", values.file2);
-    if (values.file3) formData.append("file3", values.file3);
+    if (values.file3) formData.append("file3", file);
 
     try {
       await APIOzXoshishi.post(formData);
       resetForm();
+      clearFileInput();
+      getTasks();
       setShowModal(false);
     } catch (error) {
       console.error("Xatolik sodir bo'ldi!", error);
@@ -125,10 +141,19 @@ const TutorTashabbusi = () => {
           </div>
         </div>
         {/* 📌 Tashabbuslar */}
-        <div className={`${tashabbuslar?.length ? "border border-gray-300 space-y-3 rounded-md shadow-md shadow-gray-200 mt-5 p-3 mx-3" : "hidden"}`}>
+        <div
+          className={`${
+            tashabbuslar?.length
+              ? "border border-gray-300 space-y-3 rounded-md shadow-md shadow-gray-200 mt-5 p-3 mx-3"
+              : "hidden"
+          }`}
+        >
           {tashabbuslar &&
             tashabbuslar.map((tashabbus) => (
-              <div className="collapse collapse-arrow rounded-md bg-white">
+              <div
+                className="collapse collapse-arrow rounded-md bg-white"
+                key={tashabbus.id}
+              >
                 <input type="radio" name="my-accordion-2" />
                 <div className="collapse-title md:text-xl font-medium">
                   <div className="flex items-center justify-between">
@@ -315,10 +340,11 @@ const TutorTashabbusi = () => {
                   </label>
                   <Field
                     type="file"
+                    ref={fileInputRef}
                     id="file3"
                     name="file3"
                     className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
-                    onChange={(event) => setFieldValue("file3", event.target.files[0])}
+                    onChange={handleFileChange}
                   />
                   <ErrorMessage
                     name="file3"
