@@ -109,7 +109,7 @@ const TutorSardorQoshish = () => {
   return (
     <div className="max-w-7xl mx-auto p-3 md:p-6 rounded-lg">
       <h2 className="text-xl font-semibold mb-4 text-center">
-        Talabalar statistikasi
+        Guruh sardorlari
       </h2>
       {isLoadingUsers ? (
         <div className="font-bold text-sky-500 text-center">Yuklanmoqda...</div>
@@ -232,15 +232,15 @@ const TutorSardorQoshish = () => {
                 <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                   <div className="sm:col-span-3">
                     <label
-                      htmlFor="first-name"
+                      htmlFor="ism"
                       className="block text-sm/6 font-medium text-gray-900"
                     >
                       Ism
                     </label>
                     <div className="mt-2">
                       <input
-                        id="first-name"
-                        name="first-name"
+                        id="ism"
+                        name="ism"
                         type="text"
                         autoComplete="given-name"
                         className="input input-info input-sm block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
@@ -250,15 +250,15 @@ const TutorSardorQoshish = () => {
 
                   <div className="sm:col-span-3">
                     <label
-                      htmlFor="last-name"
+                      htmlFor="familya"
                       className="block text-sm/6 font-medium text-gray-900"
                     >
                       Familiya
                     </label>
                     <div className="mt-2">
                       <input
-                        id="last-name"
-                        name="last-name"
+                        id="familya"
+                        name="familya"
                         type="text"
                         autoComplete="family-name"
                         className="input input-info input-sm block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
@@ -268,21 +268,21 @@ const TutorSardorQoshish = () => {
                 </div>
               </div>
               <label
-                for="input-group-1"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                htmlFor="input-group-1"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Telefon
               </label>
-              <div class="relative mb-6">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-2 pointer-events-none text-gray-500">
+              <div className="relative mb-6">
+                <div className="absolute inset-y-0 start-0 flex items-center ps-2 pointer-events-none text-gray-500">
                   +998
                 </div>
                 <input
                   type="text"
-                  id="phone-input"
+                  id="input-group-1"
                   className="input input-info input-sm border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-12 px-3 py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="00 000 00 00"
-                  maxlength="12"
+                  maxLength="12"
                   inputMode="numeric"
                   value={phone}
                   onChange={handleChange}

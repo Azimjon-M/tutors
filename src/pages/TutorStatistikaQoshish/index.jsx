@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
 import APIUsers from "../../services/users";
+import APITalaba from "../../services/talaba";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import { RiPencilFill } from "react-icons/ri";
 import { MdDeleteForever } from "react-icons/md";
 import { MdOutlinePersonAddAlt } from "react-icons/md";
@@ -8,17 +10,14 @@ import CryptoJS from "crypto-js";
 
 const TutorStatistikaQoshish = () => {
   const [openModal, setOpenModal] = useState(false);
-  // const [students, setStudents] = useState({});
-  // const [groupName, setGroupName] = useState("");
-  // const [selectedGroup, setSelectedGroup] = useState("");
-  // const [studentName, setStudentName] = useState("");
-  // const [gender, setGender] = useState("o'g'il");
-  // const [orphanStatus, setOrphanStatus] = useState("oddiy");
-  // const [studyType, setStudyType] = useState("kontrakt");
+  const [fakultetId, setFakultetId] = useState("");
+  const [yonalishId, setYonalishId] = useState("");
+  const [kursId, setKursId] = useState("");
+  const [guruhId, setGuruhId] = useState("");
   const [dataUser, setDataUser] = useState([]);
+  const [dataTalabalar, setDataTalabalar] = useState([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
   const [selectedOption, setSelectedOption] = useState("");
-  // const [isError, setIsError] = useState(false);
   const [userId, setUserId] = useState(null);
   const data = JSON.parse(localStorage.getItem("data"));
 
@@ -49,26 +48,64 @@ const TutorStatistikaQoshish = () => {
     }
   }, [userId]);
 
+  // Get User
+  const getTalabalar = useCallback(async () => {
+    setIsLoadingUsers(true);
+    try {
+      const response = await APITalaba.getbyTutor(userId);
+      setDataTalabalar(response.data);
+      
+    } catch (error) {
+      console.error("Fakultetlarni yuklashda xatolik:", error);
+    } finally {
+      setIsLoadingUsers(false);
+    }
+  }, [userId]);
+  console.log(dataTalabalar);
+
   useEffect(() => {
     if (userId) {
       getUsers();
+      getTalabalar();
     }
-  }, [userId, getUsers]);
+  }, [userId, getUsers, getTalabalar]);
 
-  // Post and patch data
+  const validationSchema = Yup.object({
+    ism: Yup.string().required("Ism kiritilishi shart"),
+    familya: Yup.string().required("Familiya kiritilishi shart"),
+    jins: Yup.string().oneOf(["o`g`il", "qiz"], "Noto‘g‘ri jins"),
+    tolov_status: Yup.string().required("To'lov statusini tanlang"),
+  });
+
   const formik = useFormik({
     initialValues: {
-      guruh: [],
+      ism: "",
+      familya: "",
+      jins: "",
+      tolov_status: "",
+      ijtimoiy_ximoya: "",
+      ijtimoiy_daraja: "",
+      iqdidorli_talaba: "",
     },
-    // validationSchema,
+    validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        // PATCH request to APIUsers
-        // await APIUsers.patch(userId, {
-        //   guruh: selectedGroups,
-        // });
+        await APITalaba.post({
+          fakultet: fakultetId,
+          yonalish: yonalishId,
+          kurs: kursId,
+          guruh: guruhId,
+          tyutor: userId,
+          ism: values.ism,
+          familya: values.familya,
+          jins: values.jins,
+          tolov_status: values.tolov_status,
+          ijtimoiy_ximoya: values.ijtimoiy_ximoya,
+          ijtimoiy_daraja: values.ijtimoiy_daraja,
+          iqdidorli_talaba: values.iqdidorli_talaba,
+        });
         alert("Talaba muvaffaqiyatli qo'shildi!");
-        getUsers();
+        getTalabalar();
         resetForm();
         closeModal();
       } catch (error) {
@@ -78,23 +115,34 @@ const TutorStatistikaQoshish = () => {
   });
 
   // Tahrirlash
-  const handleEdit = () => {
+  const handleEdit = (talaba) => {
     setOpenModal(true);
+    getTalabalar();
   };
 
   // O'chirish
-  const handleDelete = () => {
-    setOpenModal(true);
+  const handleDelete = async (id) => {
+    alert("Chindan ham talabani o'chirmoqchimisiz?");
+    await APITalaba.del(id);
+    getTalabalar();
   };
 
   // Open modal
-  const handleOpenModal = (id) => {
+  const handleAddTalaba = (guruh) => {
+    setGuruhId(guruh.id);
+    setKursId(guruh.kurs.id);
+    setYonalishId(guruh.kurs.yonalish.id);
+    setFakultetId(guruh.kurs.yonalish.fakultet.id);
     setOpenModal(true);
   };
 
   // Close modal
   const closeModal = () => {
     setOpenModal(false);
+    setGuruhId("");
+    setKursId("");
+    setYonalishId("");
+    setFakultetId("");
     setSelectedOption("");
     formik.resetForm();
   };
@@ -122,7 +170,7 @@ const TutorStatistikaQoshish = () => {
                   </div>
                 </div>
                 <button
-                  onClick={handleOpenModal}
+                  onClick={() => handleAddTalaba(item)}
                   className="flex items-center font-semibold rounded-md bg-indigo-500 hover:bg-indigo-600 py-1 px-2 text-white z-10"
                 >
                   <MdOutlinePersonAddAlt className="mr-1" />
@@ -145,56 +193,35 @@ const TutorStatistikaQoshish = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th>1</th>
-                        <td>Cy Ganderton</td>
-                        <td>Quality Control Specialist</td>
-                        <td>Littel, Schaden and Vandervort</td>
-                        <td>Canada</td>
-                        <td>Canada</td>
-                        <td>12/16/2020</td>
-                        <td className="flex space-x-2 justify-center">
-                          <button
-                            type="button"
-                            className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
-                            onClick={() => handleEdit()}
-                          >
-                            <RiPencilFill />
-                          </button>
-                          <button
-                            type="button"
-                            className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
-                            onClick={() => handleDelete()}
-                          >
-                            <MdDeleteForever />
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>2</th>
-                        <td>Hart Hagerty</td>
-                        <td>Desktop Support Technician</td>
-                        <td>Zemlak, Daniel and Leannon</td>
-                        <td>United States</td>
-                        <td>12/5/2020</td>
-                        <td>12/5/2020</td>
-                        <td className="flex space-x-2 justify-center">
-                          <button
-                            type="button"
-                            className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
-                            onClick={() => handleEdit()}
-                          >
-                            <RiPencilFill />
-                          </button>
-                          <button
-                            type="button"
-                            className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
-                            onClick={() => handleDelete()}
-                          >
-                            <MdDeleteForever />
-                          </button>
-                        </td>
-                      </tr>
+                      {dataTalabalar?.map((talaba, index) => (
+                        <tr key={talaba.id}>
+                          <th>{index + 1}</th>
+                          <td>
+                            {talaba.familya} {talaba.ism}
+                          </td>
+                          <td>{talaba.jins}</td>
+                          <td>{talaba.tolov_status}</td>
+                          <td>{talaba.ijtimoiy_ximoya}</td>
+                          <td>{talaba.ijtimoiy_daraja}</td>
+                          <td>{talaba.iqdidorli_talaba}</td>
+                          <td className="flex space-x-2 justify-center">
+                            <button
+                              type="button"
+                              className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
+                              onClick={() => handleEdit(talaba)}
+                            >
+                              <RiPencilFill />
+                            </button>
+                            <button
+                              type="button"
+                              className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
+                              onClick={() => handleDelete(talaba.id)}
+                            >
+                              <MdDeleteForever />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -214,211 +241,200 @@ const TutorStatistikaQoshish = () => {
           onSubmit={formik.handleSubmit}
           className="p-4 border rounded-lg shadow"
         >
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-gray-600">
-                Talaba qo'shish
-              </h2>
-              <button
-                type="button"
-                onClick={closeModal}
-                className="text-red-500 transition-transform transform hover:rotate-180 text-xs"
-              >
-                ✖️
-              </button>
-            </div>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold text-gray-600">
+              Talaba qo'shish
+            </h2>
+            <button
+              type="button"
+              onClick={closeModal}
+              className="text-red-500 transition-transform transform hover:rotate-180 text-xs"
+            >
+              ✖️
+            </button>
           </div>
           <div className="p-4 border rounded-lg shadow">
             <div className="space-y-4">
               <div className="border-b border-gray-900/10 pb-3">
                 <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
+                  {/* Ism */}
                   <div className="sm:col-span-3">
                     <label
-                      htmlFor="first-name"
-                      className="block text-sm/6 font-medium text-gray-900"
+                      htmlFor="ism"
+                      className="block text-sm font-medium text-gray-900"
                     >
                       Ism
                     </label>
-                    <div className="mt-2">
-                      <input
-                        id="first-name"
-                        name="first-name"
-                        type="text"
-                        autoComplete="given-name"
-                        className="input input-info input-sm block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
-                      />
-                    </div>
+                    <input
+                      id="ism"
+                      name="ism"
+                      type="text"
+                      value={formik.values.ism}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="input input-info input-sm block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-gray-300"
+                    />
+                    {formik.touched.ism && formik.errors.ism && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {formik.errors.ism}
+                      </p>
+                    )}
                   </div>
-
+                  {/* Familiya */}
                   <div className="sm:col-span-3">
                     <label
-                      htmlFor="last-name"
-                      className="block text-sm/6 font-medium text-gray-900"
+                      htmlFor="familya"
+                      className="block text-sm font-medium text-gray-900"
                     >
                       Familiya
                     </label>
-                    <div className="mt-2">
-                      <input
-                        id="last-name"
-                        name="last-name"
-                        type="text"
-                        autoComplete="family-name"
-                        className="input input-info input-sm block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
-                      />
-                    </div>
+                    <input
+                      id="familya"
+                      name="familya"
+                      type="text"
+                      value={formik.values.familya}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="input input-info input-sm block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-gray-300"
+                    />
+                    {formik.touched.familya && formik.errors.familya && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {formik.errors.familya}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
 
-              <div className="border-b border-gray-900/10 pb-4">
-                {/* Jinsi */}
+              {/* Jinsi */}
+              <div className="border-b border-gray-900/10 pb-3">
                 <fieldset>
-                  <legend className="text-sm/6 font-semibold text-gray-900">
+                  <legend className="text-sm font-semibold text-gray-900">
                     Jinsi
                   </legend>
-                  <div className="mt-6 flex items-center space-x-6">
-                    <div className="flex items-center gap-x-3">
+                  <div className="mt-2 flex space-x-6">
+                    <label className="flex items-center gap-x-2">
                       <input
-                        defaultChecked
-                        id="ogil"
+                        type="radio"
                         name="jins"
-                        type="radio"
-                        className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
+                        value="o`g`il"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        checked={formik.values.jins === "o`g`il"}
                       />
-                      <label
-                        htmlFor="ogil"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        O'g'il
-                      </label>
-                    </div>
-                    <div className="flex items-center gap-x-3">
+                      O'g'il
+                    </label>
+                    <label className="flex items-center gap-x-2">
                       <input
-                        id="qiz"
+                        type="radio"
                         name="jins"
-                        type="radio"
-                        className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
+                        value="qiz"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        checked={formik.values.jins === "qiz"}
                       />
-                      <label
-                        htmlFor="qiz"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        Qiz
-                      </label>
-                    </div>
+                      Qiz
+                    </label>
                   </div>
-                </fieldset>
-              </div>
-              <div className="border-b border-gray-900/10 pb-4">
-                {/* Tolov */}
-                <fieldset>
-                  <legend className="text-sm/6 font-semibold text-gray-900">
-                    To'lov statusi
-                  </legend>
-                  <div className="mt-6 flex items-center space-x-6">
-                    <div className="flex items-center gap-x-3">
-                      <input
-                        defaultChecked
-                        id="grand"
-                        name="tolov"
-                        type="radio"
-                        className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
-                      />
-                      <label
-                        htmlFor="grand"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        Grand
-                      </label>
-                    </div>
-                    <div className="flex items-center gap-x-3">
-                      <input
-                        id="kontrakt"
-                        name="tolov"
-                        type="radio"
-                        className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
-                      />
-                      <label
-                        htmlFor="kontrakt"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        Kontrakt
-                      </label>
-                    </div>
-                  </div>
+                  {formik.touched.jins && formik.errors.jins && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {formik.errors.jins}
+                    </p>
+                  )}
                 </fieldset>
               </div>
 
-              {/* Ijtimoiy himoya */}
-              <div className="sm:col-span-3">
-                <label
-                  htmlFor="country"
-                  className="block text-sm/6 font-medium text-gray-900"
-                >
-                  Ijtimoiy himoya
-                </label>
-                <div className="mt-2 grid grid-cols-1">
-                  <select
-                    id="country"
-                    name="country"
-                    autoComplete="country-name"
-                    className="select select-info select-sm col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
-                  >
-                    <option>-- Ijtimoiy himoya --</option>
-                    <option>Yoshlar daftari</option>
-                    <option>Ayollar daftari</option>
-                    <option>Temir daftar</option>
-                  </select>
-                </div>
+              {/* To'lov statusi */}
+              <div className="border-b border-gray-900/10 pb-3">
+                <fieldset>
+                  <legend className="text-sm font-semibold text-gray-900">
+                    To'lov statusi
+                  </legend>
+                  <div className="mt-2 flex space-x-6">
+                    <label className="flex items-center gap-x-2">
+                      <input
+                        type="radio"
+                        name="tolov_status"
+                        value="grand"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        checked={formik.values.tolov_status === "grand"}
+                      />
+                      Grand
+                    </label>
+                    <label className="flex items-center gap-x-2">
+                      <input
+                        type="radio"
+                        name="tolov_status"
+                        value="kontrakt"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        checked={formik.values.tolov_status === "kontrakt"}
+                      />
+                      Kontrakt
+                    </label>
+                  </div>
+                  {formik.touched.tolov_status &&
+                    formik.errors.tolov_status && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {formik.errors.tolov_status}
+                      </p>
+                    )}
+                </fieldset>
               </div>
-              {/* Ijtimoiy daraja */}
-              <div className="sm:col-span-3">
-                <label
-                  htmlFor="country"
-                  className="block text-sm/6 font-medium text-gray-900"
-                >
-                  Ijtimoiy daraja
-                </label>
-                <div className="mt-2 grid grid-cols-1">
-                  <select
-                    id="country"
-                    name="country"
-                    autoComplete="country-name"
-                    className="select select-info select-sm col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6"
-                  >
-                    <option>-- Ijtimoiy daraja --</option>
-                    <option>Nogiron</option>
-                    <option>Chin yetim</option>
-                    <option>Yetim</option>
-                  </select>
-                </div>
-              </div>
-              {/* Iqtidorli talaba */}
-              <div className="sm:col-span-3">
-                <label
-                  htmlFor="talaba"
-                  className="block text-sm font-medium text-gray-900"
-                >
-                  Iqtidorli talaba
-                </label>
-                <div className="mt-2 grid grid-cols-1">
-                  <select
-                    id="talaba"
-                    name="talaba"
-                    className="select select-info select-sm w-full appearance-none rounded-md bg-white py-1 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm"
-                    value={selectedOption}
-                    onChange={(e) => setSelectedOption(e.target.value)}
-                  >
-                    <option value="">-- Iqtidorli talaba --</option>
-                    <option value="Stipendiant">Stipendiant</option>
-                    <option value="Sportchi">Sportchi</option>
-                    <option value="Boshqa">Boshqa</option>
-                  </select>
-                </div>
+
+              {/* Selectlar */}
+              <div className="space-y-4">
+                {[
+                  {
+                    name: "ijtimoiy_ximoya",
+                    label: "Ijtimoiy himoya",
+                    options: [
+                      "Yoshlar daftari",
+                      "Ayollar daftari",
+                      "Temir daftar",
+                    ],
+                  },
+                  {
+                    name: "ijtimoiy_daraja",
+                    label: "Ijtimoiy daraja",
+                    options: ["Nogiron", "Chin yetim", "Yetim"],
+                  },
+                  {
+                    name: "iqdidorli_talaba",
+                    label: "Iqtidorli talaba",
+                    options: ["Stipendiant", "Sportchi", "Boshqa"],
+                  },
+                ].map(({ name, label, options }) => (
+                  <div key={name}>
+                    <label
+                      htmlFor={name}
+                      className="block text-sm font-medium text-gray-900 mb-2"
+                    >
+                      {label}
+                    </label>
+                    <select
+                      id={name}
+                      name={name}
+                      value={formik.values[name]}
+                      onChange={formik.handleChange}
+                      className="select select-info select-sm w-full rounded-md bg-white px-3 text-gray-900 outline-gray-300"
+                    >
+                      <option value="">-- {label} --</option>
+                      {options.map((option, index) => (
+                        <option key={index} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
 
                 {selectedOption === "Boshqa" && (
                   <div className="mt-2">
                     <input
+                      id="iqdidorli_talaba"
+                      name="iqdidorli_talaba"
                       type="text"
                       placeholder="Iltimos, izoh kiriting..."
                       className="input input-info input-sm w-full border text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -427,16 +443,13 @@ const TutorStatistikaQoshish = () => {
                 )}
               </div>
             </div>
-            {/* Submit button */}
+
+            {/* Submit Button */}
             <button
               type="submit"
-              className={`w-full mt-4 py-2 px-4 rounded-md text-white font-semibold transition-all ${
-                // edit
-                // ? "border border-teal-500 bg-teal-500 hover:bg-teal-600 focus:ring focus:ring-teal-300"
-                "border border-blue-500 bg-blue-500 hover:bg-blue-600 focus:ring focus:ring-blue-300"
-              }`}
+              className="w-full mt-5 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
             >
-              Yuborish
+              Saqlash
             </button>
           </div>
         </form>
