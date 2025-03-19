@@ -29,9 +29,6 @@ const TTJgaTashrif = () => {
     };
 
     const getMajTop = useCallback(async (yearOrContext, month) => {
-        const res = await APISuperadminMajTop.get();
-        console.log(res.data);
-
         let year = yearOrContext;
         if (typeof yearOrContext === "object" && yearOrContext.queryKey) {
             const currentDate = new Date();
