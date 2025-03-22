@@ -18,6 +18,6 @@ export const Login = lazy(() => import("./Login"));
 export const NotAuthorized = lazy(() => import("./NotAuthorized"));
 export const SuperAdminStatistika = lazy(() => import("./SuperAdminStatistika"));
 export const Topshiriqlar = lazy(() => import("./Topshiriq/TopshiriqlarQoshish"));
-export const TopshiriqlarniKorish = lazy(() => import("./Topshiriq/TopshiriqlarniKorish"));
+export const TopshiriqlarniKorish = lazy(() => import("./Topshiriq/MajburiyTopshiriqlarKorish"));
 export const Tutors = lazy(() => import("./Tutors"));
 export const TutorStatistika = lazy(() => import("./TutorStatistika"));
