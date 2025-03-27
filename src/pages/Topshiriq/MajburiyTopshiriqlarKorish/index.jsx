@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import MajburiyTopshiriq from "../MajburiyTopshiriqlarKorish/MajburiyTopshiriq";
-import OzTashabbusliTopshiriq from "../MajburiyTopshiriqlarKorish/OzTashabbusliTopshiriq";
-import QoshimchaTopshiriqTutor from "../MajburiyTopshiriqlarKorish/QoshimchaTopshiriq";
-import SoxagaOidTopshiriq from "../MajburiyTopshiriqlarKorish/SoxagaOidTopshiriq"
+import MajburiyTopshiriq from "./MajburiyTopshiriq";
+import OzTashabbusliTopshiriq from "./OzTashabbusliTopshiriq";
+import QoshimchaTopshiriqTutor from "./QoshimchaTopshiriq";
+import SoxagaOidTopshiriq from "./SoxagaOidTopshiriq"
 
 const TopshiriqlarniKorish = () => {
     const [activeTab, setActiveTab] = useState("majTop");

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import TopshiriqlarKorishTable from "../../../../components/TopshiriqlarKorishTable";
-import APIMajburiyTop from "../../../../services/superadminMajburiyTop.js";
+import APISuperadminMajTop from "../../../../services/superadminMajTop.js";
 
 const MajburiyTopshiriq = () => {
     const [data, setData] = useState([]);
     const getData = async () => {
         try {
-            const res = await APIMajburiyTop.get();
+            const res = await APISuperadminMajTop.get();
             if (res) {
                 setData(res.data);
             }
@@ -14,10 +14,19 @@ const MajburiyTopshiriq = () => {
             console.log(err);
         }
     };
+
+    const handleDel = async (id) => {
+        try {
+            await APISuperadminMajTop.del(id);
+            getData();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     useEffect(() => {
         getData();
     }, []);
-    return <TopshiriqlarKorishTable data={data} />;
+    return <TopshiriqlarKorishTable data={data} handleDel={handleDel} />;
 };
 
 export default MajburiyTopshiriq;

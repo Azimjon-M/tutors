@@ -2,39 +2,42 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const TopshiriqlarKorishTable = (props) => {
-    console.log(props);
-    
-    const [isOpenModal, setIsOpenModal] = useState(false);
+const TopshiriqlarKorishTable = ({ data, handleDel }) => {
+    const [isOpenModal, setIsOpenModal] = useState(null);
 
     const formik = useFormik({
         initialValues: {
-            title: "",
-            details: "",
-            maxBal: "",
-            file1: null,
-            file2: null,
-            file3: null,
-            file4: null,
-            endDate: "",
+            max_baxo: "",
+            tugash_vaqti: "",
         },
         validationSchema: Yup.object({
-            title: Yup.string().required("Kiritilishi shart!"),
-            details: Yup.string().required("Kiritilishi shart!"),
-            endDate: Yup.date().required("Tugash sanasini kiriting!"),
-            maxBal: Yup.number().min(1).required("Kiritilishi shart!"),
+            tugash_vaqti: Yup.date().required("Tugash sanasini kiriting!"),
+            max_baxo: Yup.number().min(1).required("Kiritilishi shart!"),
         }),
         onSubmit: (values) => {
             console.log(values);
         },
     });
 
-    // const onDelete = (id) => {
-    //     const confrim = window.confirm("O'chirishni istaysizmi ?");
-    //     if (confrim) {
-    //         console.log(id);
-    //     }
-    // };
+    const onDelete = (id) => {
+        const confrim = window.confirm("O'chirishni istaysizmi ?");
+        if (confrim) {
+            handleDel(id)
+        }
+    };
+
+    const onEdit = (data) => {
+        setIsOpenModal(data);
+        formik.setValues({
+            max_baxo: data.max_baxo,
+            tugash_vaqti: data.tugash_vaqti,
+        });
+    };
+
+    const onCloseModal = () => {
+        setIsOpenModal(null);
+        formik.resetForm();
+    };
     return (
         <div className="relative z-10">
             <div
@@ -46,7 +49,7 @@ const TopshiriqlarKorishTable = (props) => {
             >
                 <div className="flex justify-end pl-4 pt-4 pr-4">
                     <button
-                        onClick={() => setIsOpenModal(false)}
+                        onClick={() => onCloseModal()}
                         className="btn btn-sm btn-error text-xl text-white"
                     >
                         X
@@ -57,116 +60,50 @@ const TopshiriqlarKorishTable = (props) => {
                         className="bg-white p-4 rounded-lg"
                         onSubmit={formik.handleSubmit}
                     >
-                        <div className="form-control mb-4">
-                            <label htmlFor="title" className="label">
-                                <span className="label-text">Sarlavha</span>
-                            </label>
-                            <input
-                                type="text"
-                                id="title"
-                                name="title"
-                                className="input input-bordered"
-                                placeholder="Sarlavha kiriting"
-                                {...formik.getFieldProps("title")}
-                            />
-                            {formik.touched.title && formik.errors.title ? (
-                                <span className="text-red-500 text-sm">
-                                    {formik.errors.title}
-                                </span>
-                            ) : null}
-                        </div>
-                        <div className="form-control mb-4">
-                            <label htmlFor="details" className="label">
-                                <span className="label-text">Batafsil</span>
-                            </label>
-                            <textarea
-                                id="details"
-                                name="details"
-                                rows="4"
-                                className="textarea textarea-bordered"
-                                placeholder="Batafsil ma'lumot kiriting"
-                                {...formik.getFieldProps("details")}
-                            />
-                            {formik.touched.details && formik.errors.details ? (
-                                <span className="text-red-500 text-sm">
-                                    {formik.errors.details}
-                                </span>
-                            ) : null}
-                        </div>
-                        {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4"> */}
-
-                        {/* </div> */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                            {["file1", "file2", "file3", "file4"].map(
-                                (file, index) => (
-                                    <div key={file} className="form-control">
-                                        <label htmlFor={file} className="label">
-                                            <span className="label-text">
-                                                Fayl {index + 1}
-                                            </span>
-                                        </label>
-                                        <input
-                                            type="file"
-                                            id={file}
-                                            name={file}
-                                            className="file-input file-input-bordered"
-                                            onChange={(event) =>
-                                                formik.setFieldValue(
-                                                    file,
-                                                    event.target.files[0]
-                                                )
-                                            }
-                                        />
-                                        {formik.touched[file] &&
-                                        formik.errors[file] &&
-                                        index === 0 ? (
-                                            <span className="text-red-500 text-sm">
-                                                {formik.errors[file]}
-                                            </span>
-                                        ) : null}
-                                    </div>
-                                )
-                            )}
-                        </div>
                         <div className="flex">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                                 <div className="form-control">
-                                    <label htmlFor="endDate" className="label">
+                                    <label
+                                        htmlFor="tugash_vaqti"
+                                        className="label"
+                                    >
                                         <span className="label-text">
                                             Tugash sanasi
                                         </span>
                                     </label>
                                     <input
                                         type="date"
-                                        id="endDate"
-                                        name="endDate"
+                                        id="tugash_vaqti"
+                                        name="tugash_vaqti"
                                         className="input input-bordered"
-                                        {...formik.getFieldProps("endDate")}
+                                        {...formik.getFieldProps(
+                                            "tugash_vaqti"
+                                        )}
                                     />
-                                    {formik.touched.endDate &&
-                                    formik.errors.endDate ? (
+                                    {formik.touched.tugash_vaqti &&
+                                    formik.errors.tugash_vaqti ? (
                                         <span className="text-red-500 text-sm">
-                                            {formik.errors.endDate}
+                                            {formik.errors.tugash_vaqti}
                                         </span>
                                     ) : null}
                                 </div>
                             </div>
                             <div className="form-control mb-4">
-                                <label htmlFor="maxBal" className="label">
+                                <label htmlFor="max_baxo" className="label">
                                     <span className="label-text">Max ball</span>
                                 </label>
                                 <input
                                     type="number"
-                                    id="maxBal"
+                                    id="max_baxo"
                                     min={`0`}
-                                    name="maxBal"
+                                    name="max_baxo"
                                     className="input input-bordered w-[100px]"
-                                    {...formik.getFieldProps("maxBal")}
+                                    {...formik.getFieldProps("max_baxo")}
                                 />
-                                {formik.touched.maxBal &&
-                                formik.errors.maxBal ? (
+                                {formik.touched.max_baxo &&
+                                formik.errors.max_baxo ? (
                                     <span className="text-red-500 text-sm">
-                                        {formik.errors.maxBal}
+                                        {formik.errors.max_baxo}
                                     </span>
                                 ) : null}
                             </div>
@@ -188,9 +125,7 @@ const TopshiriqlarKorishTable = (props) => {
                         <thead className="bg-base-200 sticky top-0 z-10 border-b-2">
                             <tr className="text-sm bg-gray-100">
                                 <th className="">№</th>
-                                <th className="">Nomi</th>
-                                <th className="">Kategorya</th>
-                                <th className="">Max bal</th>
+                                <th className="">Turi</th>
                                 <th className="">Boshlanish</th>
                                 <th className="">Tugash</th>
                                 <th className="">Tahrirlash</th>
@@ -198,7 +133,7 @@ const TopshiriqlarKorishTable = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {/* {data?.map((item, index) => (
+                            {data?.map((item, index) => (
                                 <tr
                                     key={item.id}
                                     className="hover:bg-[#ececec] border-b-[1px] border-gray-200"
@@ -206,27 +141,23 @@ const TopshiriqlarKorishTable = (props) => {
                                     <td className=" text-center">
                                         {index + 1}
                                     </td>
-                                    <td className="max-w-[500px]">
-                                        <div className="w-full px-4 line-clamp-1">
-                                            {item.title}
-                                        </div>
+                                    <td className=" text-center">
+                                        {item.majburiy_topshiriq_turi
+                                            .replace(/\b\w/g, (char) =>
+                                                char.toUpperCase()
+                                            )
+                                            .replace(/_/g, " ")}
                                     </td>
                                     <td className=" text-center">
-                                        {item.kategorya}
+                                        {item.boshlanish_vaqti}
                                     </td>
                                     <td className=" text-center">
-                                        {item.maxBal}
-                                    </td>
-                                    <td className=" text-center">
-                                        {item.start}
-                                    </td>
-                                    <td className=" text-center">
-                                        {item.finish}
+                                        {item.tugash_vaqti}
                                     </td>
                                     <td className=" text-center">
                                         <button
                                             className="btn btn-sm btn-info"
-                                            onClick={() => setIsOpenModal(true)}
+                                            onClick={() => onEdit(item)}
                                         >
                                             Tahrirlash
                                         </button>
@@ -240,7 +171,7 @@ const TopshiriqlarKorishTable = (props) => {
                                         </button>
                                     </td>
                                 </tr>
-                            ))} */}
+                            ))}
                         </tbody>
                     </table>
                 </div>

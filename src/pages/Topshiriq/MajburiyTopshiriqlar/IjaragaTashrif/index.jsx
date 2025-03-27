@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Calendar from "../../../../components/Calendar";
 import APIGetTutor from "../../../../services/getUser";
 import APISuperadminMajTop from "../../../../services/superadminMajTop";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Loading from "../../../../components/Loading";
 
 const IjaragaTashrif = () => {
     const [tutorsUID, setTutorsUID] = useState([]);
@@ -13,25 +15,95 @@ const IjaragaTashrif = () => {
     const getTutor = async () => {
         try {
             const res = await APIGetTutor.getTutor();
-            const newRes = [];
-            res.data.forEach((item) => newRes.push(`${item.id}`));
-            setTutorsUID(newRes);
+            if (res?.data) {
+                const newRes = res.data.map((item) => `${item.id}`);
+                setTutorsUID(newRes);
+                return newRes;
+            } else {
+                return [];
+            }
         } catch (err) {
             console.log(err);
+            return [];
         }
     };
 
-    const getMajTop = async () => {
+    const getMajTop = useCallback(async (yearOrContext, month) => {
+        let year = yearOrContext;
+        if (typeof yearOrContext === "object" && yearOrContext.queryKey) {
+            const currentDate = new Date();
+            year = currentDate.getFullYear();
+            month = currentDate.getMonth();
+        }
         try {
-            const res = await APISuperadminMajTop.get();
-            const newRes = res.data.filter(
-                (item) => item.majburiy_topshiriq_turi === pageKey
+            const startTime = `${year}-${String(month + 1).padStart(
+                2,
+                "0"
+            )}-01`;
+            const lastDay = new Date(year, month + 1, 0).getDate();
+            const endTime = `${year}-${String(month + 1).padStart(
+                2,
+                "0"
+            )}-${lastDay}`;
+            const res = await APISuperadminMajTop.getByMonth(
+                pageKey,
+                startTime,
+                endTime
             );
-            setDataTop(newRes);
+            if (res?.data) {
+                const newRes = res.data.filter(
+                    (item) => item.majburiy_topshiriq_turi === pageKey
+                );
+                setDataTop(newRes);
+                return newRes;
+            }
+            return [];
         } catch (err) {
             console.log(err);
+            return [];
         }
-    };
+    }, []);
+
+    // GetTutor
+    const { isLoading: loadingTutor, isError: errorTutor } = useQuery({
+        queryKey: ["getTutorsUID"],
+        queryFn: getTutor,
+    });
+
+    // GetMajTop
+    const {
+        isLoading: loadingMajTop,
+        isError: errorMajTop,
+        refetch: refetchMajTop,
+    } = useQuery({
+        queryKey: ["getMajTop"],
+        queryFn: () => {
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            return getMajTop(year, month);
+        },
+    });
+
+    const postMajTop = useMutation({
+        mutationFn: async (values) => {
+            if (tutorsUID?.length > 0) {
+                const data = {
+                    majburiy_topshiriq_turi: pageKey,
+                    topshiriq_users: tutorsUID,
+                    ...values,
+                };
+                try {
+                    await APISuperadminMajTop.post(data);
+                    refetchMajTop();
+                } catch (err) {
+                    console.log(err);
+                }
+            } else {
+                window.location.reload();
+            }
+        },
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -47,35 +119,18 @@ const IjaragaTashrif = () => {
             tugash_vaqti: Yup.date().required("Kiritilishi shart!"),
         }),
         onSubmit: async (values, { resetForm }) => {
-            if (tutorsUID?.length > 0) {
-                const data = {
-                    majburiy_topshiriq_turi: pageKey,
-                    topshiriq_users: tutorsUID,
-                    ...values,
-                };
-                try {
-                    await APISuperadminMajTop.post(data);
-                    getMajTop();
-                    resetForm();
-                } catch (err) {
-                    console.log(err);
-                }
-            } else {
-                window.location.reload();
+            try {
+                postMajTop.mutate(values);
+                resetForm();
+            } catch (err) {
+                console.log(err);
             }
         },
     });
 
-    useEffect(() => {
-        getTutor();
-    }, []);
-
-    useEffect(() => {
-        getMajTop();
-    }, []);
-
     return (
         <div className="bg-base-200 rounded shadow p-1 md:p-2 lg:p-4">
+            {(loadingTutor || loadingMajTop) && <Loading />}
             <h1 className="text-lg font-bold">Topshiriq yuborish:</h1>
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex justify-between gap-2">
@@ -171,7 +226,13 @@ const IjaragaTashrif = () => {
                 <h1 className="text-lg font-bold">
                     Jo'natilgan ma'lumotlar jadvali
                 </h1>
-                <Calendar holidays={dataTop} />
+                {!errorMajTop && !errorTutor ? (
+                    <Calendar holidays={dataTop} onMonthChange={getMajTop} />
+                ) : (
+                    <h1 className="text-[red] px-[auto]">
+                        Ma'lumot olishda hatolik!
+                    </h1>
+                )}
             </div>
         </div>
     );
