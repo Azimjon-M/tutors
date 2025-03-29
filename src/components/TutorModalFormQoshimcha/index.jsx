@@ -20,7 +20,7 @@ const TutorModalFormQoshimcha = ({ isOpen, onClose, task }) => {
   useEffect(() => {
     if (task) {
       setInitialValues({
-        title: task.title,
+        title: task.topshiriq.title,
         body: "",
         file1: "",
         file2: "",

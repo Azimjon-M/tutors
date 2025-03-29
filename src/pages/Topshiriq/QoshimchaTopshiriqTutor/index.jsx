@@ -27,8 +27,8 @@ function QoshimchaTopshiriqTutor() {
   }, []);
 
   const handleMore = (task) => {
+    setSelectedTask(task);    
     document.getElementById("my_modal_3").showModal();
-    setSelectedTask(task);
   };
 
   const handleUpload = (task) => {
@@ -130,12 +130,12 @@ function QoshimchaTopshiriqTutor() {
                 <div className="md:text-xl font-medium">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between">
                     <h4 className="text-gray-600 line-clamp-1">
-                      {task?.title}
+                      {task?.topshiriq?.title}
                     </h4>
                     <div className="flex items-center justify-end">
                       <button
                         className="flex items-center gap-1 px-4 py-1 rounded-md bg-green-500 text-white text-sm md:text-base font-semibold mr-3"
-                        onClick={() => handleMore(task)}
+                        onClick={() => handleMore(task?.topshiriq)}
                       >
                         Batafsil <MdReadMore className="inline text-xl" />
                       </button>
@@ -172,54 +172,60 @@ function QoshimchaTopshiriqTutor() {
                 ✕
               </button>
             </form>
-            <h3 className="font-bold text-lg">{selectedTask?.title}</h3>
-            <p className="py-4">{selectedTask?.body}</p>
-            <ul>
-              <li className={`${selectedTask?.file1 ? "" : "hidden"}`}>
-                1.{" "}
-                <a
-                  href={selectedTask?.file1}
-                  className="link italic"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Hujjat
-                </a>
-              </li>
-              <li className={`${selectedTask?.file2 ? "" : "hidden"}`}>
-                2.{" "}
-                <a
-                  href={selectedTask?.file2}
-                  className="link italic"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Hujjat
-                </a>
-              </li>
-              <li className={`${selectedTask?.file3 ? "" : "hidden"}`}>
-                3.{" "}
-                <a
-                  href={selectedTask?.file3}
-                  className="link italic"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Hujjat
-                </a>
-              </li>
-              <li className={`${selectedTask?.file4 ? "" : "hidden"}`}>
-                4.{" "}
-                <a
-                  href={selectedTask?.file4}
-                  className="link italic"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Hujjat
-                </a>
-              </li>
-            </ul>
+            {selectedTask ? (
+              <>
+                <h3 className="font-bold text-lg">{selectedTask.title}</h3>
+                <p className="py-4">{selectedTask.body}</p>
+                <ul>
+                  <li className={`${selectedTask.file1 ? "" : "hidden"}`}>
+                    1.{" "}
+                    <a
+                      href={selectedTask.file1}
+                      className="link italic"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Hujjat
+                    </a>
+                  </li>
+                  <li className={`${selectedTask.file2 ? "" : "hidden"}`}>
+                    2.{" "}
+                    <a
+                      href={selectedTask.file2}
+                      className="link italic"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Hujjat
+                    </a>
+                  </li>
+                  <li className={`${selectedTask.file3 ? "" : "hidden"}`}>
+                    3.{" "}
+                    <a
+                      href={selectedTask.file3}
+                      className="link italic"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Hujjat
+                    </a>
+                  </li>
+                  <li className={`${selectedTask.file4 ? "" : "hidden"}`}>
+                    4.{" "}
+                    <a
+                      href={selectedTask.file4}
+                      className="link italic"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Hujjat
+                    </a>
+                  </li>
+                </ul>
+              </>
+            ) : (
+              <p className="text-center">Ma'lumot yuklanmoqda...</p>
+            )}
           </div>
         </dialog>
       </div>
