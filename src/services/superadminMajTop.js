@@ -4,6 +4,8 @@ const endPoint = "topshiriq/superadmin_majburiy_topshiriq/";
 
 const get = () => axiosInstance.get(endPoint);
 
+const getByPage = (page) => axiosInstance.get(`${endPoint}?page=${page}`);
+
 const getbyId = (id) => axiosInstance.get(`${endPoint}${id}/`);
 
 const getByMonth = (typeMajTop, startTime, endTime) =>
@@ -21,6 +23,6 @@ const put = (id, item) => axiosInstance.put(`${endPoint}${id}/`, item);
 
 const del = (id) => axiosInstance.delete(`${endPoint}${id}/`);
 
-const APISuperadminMajTop = { get, getbyId, getByMonth, post, patch, put, del };
+const APISuperadminMajTop = { get, getbyId, getByMonth, getByPage, post, patch, put, del };
 
 export default APISuperadminMajTop;

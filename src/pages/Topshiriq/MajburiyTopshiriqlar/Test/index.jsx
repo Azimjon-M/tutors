@@ -53,13 +53,7 @@ const Test = () => {
                 startTime,
                 endTime
             );
-            if (res?.data) {
-                const newRes = res.data.filter(
-                    (item) => item.majburiy_topshiriq_turi === pageKey
-                );
-                setDataTop(newRes);
-                return newRes;
-            }
+            setDataTop(res.data.results)
             return [];
         } catch (err) {
             console.log(err);

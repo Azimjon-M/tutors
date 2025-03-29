@@ -16,7 +16,6 @@ const BahoTable = ({ data, taskDate, totalPages }) => {
 
     const handlePageChange = (page) => {
         setPaginationData((prev) => ({ ...prev, currentPage: page }));
-        console.log(`Page changed to: ${page}`);
     };
 
     const onRating = (item) => {

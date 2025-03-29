@@ -51,17 +51,17 @@ const TopshiriqlarniKorish = () => {
             <div className="md:flex">
                 {/* Chap menyu */}
                 <ul className="flex-column space-y-4 text-sm font-medium text-gray-500 dark:text-gray-400 md:me-4 mb-4 md:mb-0 p-3">
-                    {toglerButton.map((item) => (
-                        <li key={item.id}>
+                    {toglerButton?.map((item) => (
+                        <li key={item?.id}>
                             <button
-                                onClick={() => setActiveTab(item.tab)}
+                                onClick={() => setActiveTab(item?.tab)}
                                 className={`inline-flex items-center px-4 py-3 rounded-lg w-full whitespace-nowrap ${
-                                    activeTab === item.tab
+                                    activeTab === item?.tab
                                         ? "text-white bg-blue-700"
                                         : "hover:text-gray-900 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white"
                                 }`}
                             >
-                                {item.name}
+                                {item?.name}
                             </button>
                         </li>
                     ))}
