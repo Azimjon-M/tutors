@@ -70,7 +70,7 @@ const Kurslar = () => {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required"),
-    yonalish: Yup.string().required("Required"),
+    yonalish: Yup.string().required("Yo'nalish tanlash majburiy!"),
   });
 
   const formik = useFormik({
@@ -152,6 +152,9 @@ const Kurslar = () => {
                   </option>
                 ))}
               </select>
+              {formik.touched.yonalish && formik.errors.yonalish && (
+                <p className="text-red-500 text-sm">{formik.errors.yonalish}</p>
+              )}
               <div className="w-100 h-[10px]" />
               <label
                 htmlFor="name"
@@ -167,6 +170,12 @@ const Kurslar = () => {
                 className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}
                 type="text"
               />
+              {formik.touched.kursTartibRaqami &&
+                formik.errors.kursTartibRaqami && (
+                  <p className="text-red-500 text-sm">
+                    {formik.errors.kursTartibRaqami}
+                  </p>
+                )}
             </div>
             <button
               type="submit"

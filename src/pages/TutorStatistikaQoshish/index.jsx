@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import APIUsers from "../../services/users";
+// import APIUsers from "../../services/users";
 import APITalaba from "../../services/talaba";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -7,15 +7,13 @@ import { RiPencilFill } from "react-icons/ri";
 import { MdDeleteForever } from "react-icons/md";
 import { MdOutlinePersonAddAlt } from "react-icons/md";
 import CryptoJS from "crypto-js";
+import APIFakultet from "../../services/fakultet";
 
 const TutorStatistikaQoshish = () => {
+  const [dataKurslar, setDataKurslar] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [fakultetId, setFakultetId] = useState("");
-  const [yonalishId, setYonalishId] = useState("");
-  const [kursId, setKursId] = useState("");
+  const [fakId, setFakId] = useState("");
   const [guruhId, setGuruhId] = useState("");
-  const [dataUser, setDataUser] = useState([]);
-  const [dataTalabalar, setDataTalabalar] = useState([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
   const [selectedOption, setSelectedOption] = useState("");
   const [userId, setUserId] = useState(null);
@@ -32,43 +30,29 @@ const TutorStatistikaQoshish = () => {
   useEffect(() => {
     if (data) {
       setUserId(unShifredTxt(process.env.REACT_APP_SHIFRED_ID, data?.id));
+      setFakId(
+        unShifredTxt(process.env.REACT_APP_SHIFRED_FAKULTET, data?.fakultet)
+      );
     }
   }, [data]);
 
-  // Get User
-  const getUsers = useCallback(async () => {
+  const getYonalishByFakId = useCallback(async () => {
     setIsLoadingUsers(true);
     try {
-      const response = await APIUsers.getbyId(userId);
-      setDataUser(response.data);
+      const res = await APIFakultet.getbyFakId(fakId);
+      setDataKurslar(res?.data[0] || []);
     } catch (error) {
-      console.error("Fakultetlarni yuklashda xatolik:", error);
+      console.error("Ma'lumotlarni yuklashda xatolik:", error);
     } finally {
       setIsLoadingUsers(false);
     }
-  }, [userId]);
-
-  // Get User
-  const getTalabalar = useCallback(async () => {
-    setIsLoadingUsers(true);
-    try {
-      const response = await APITalaba.getbyTutor(userId);
-      setDataTalabalar(response.data);
-      
-    } catch (error) {
-      console.error("Fakultetlarni yuklashda xatolik:", error);
-    } finally {
-      setIsLoadingUsers(false);
-    }
-  }, [userId]);
-  console.log(dataTalabalar);
+  }, [fakId]);
 
   useEffect(() => {
     if (userId) {
-      getUsers();
-      getTalabalar();
+      getYonalishByFakId();
     }
-  }, [userId, getUsers, getTalabalar]);
+  }, [userId, getYonalishByFakId]);
 
   const validationSchema = Yup.object({
     ism: Yup.string().required("Ism kiritilishi shart"),
@@ -91,9 +75,6 @@ const TutorStatistikaQoshish = () => {
     onSubmit: async (values, { resetForm }) => {
       try {
         await APITalaba.post({
-          fakultet: fakultetId,
-          yonalish: yonalishId,
-          kurs: kursId,
           guruh: guruhId,
           tyutor: userId,
           ism: values.ism,
@@ -105,7 +86,7 @@ const TutorStatistikaQoshish = () => {
           iqdidorli_talaba: values.iqdidorli_talaba,
         });
         alert("Talaba muvaffaqiyatli qo'shildi!");
-        getTalabalar();
+        getYonalishByFakId();
         resetForm();
         closeModal();
       } catch (error) {
@@ -117,22 +98,19 @@ const TutorStatistikaQoshish = () => {
   // Tahrirlash
   const handleEdit = (talaba) => {
     setOpenModal(true);
-    getTalabalar();
+    getYonalishByFakId();
   };
 
   // O'chirish
   const handleDelete = async (id) => {
     alert("Chindan ham talabani o'chirmoqchimisiz?");
     await APITalaba.del(id);
-    getTalabalar();
+    getYonalishByFakId();
   };
 
   // Open modal
-  const handleAddTalaba = (guruh) => {
+  const handleAddTalaba = (yonalish, kurs, guruh) => {
     setGuruhId(guruh.id);
-    setKursId(guruh.kurs.id);
-    setYonalishId(guruh.kurs.yonalish.id);
-    setFakultetId(guruh.kurs.yonalish.fakultet.id);
     setOpenModal(true);
   };
 
@@ -140,9 +118,7 @@ const TutorStatistikaQoshish = () => {
   const closeModal = () => {
     setOpenModal(false);
     setGuruhId("");
-    setKursId("");
-    setYonalishId("");
-    setFakultetId("");
+    setFakId("");
     setSelectedOption("");
     formik.resetForm();
   };
@@ -156,78 +132,84 @@ const TutorStatistikaQoshish = () => {
         <div className="font-bold text-sky-500 text-center">Yuklanmoqda...</div>
       ) : (
         <div>
-          {dataUser?.guruh?.map((item) => (
-            <div
-              className="collapse bg-base-100 border border-base-300 mb-3"
-              key={item.id}
-            >
-              <input type="radio" name="my-accordion-1" defaultChecked />
-              <div className="collapse-title p-4 font-semibold flex items-center justify-between">
-                <div>
-                  {item?.kurs?.yonalish?.name}
-                  <div className="text-sm font-normal">
-                    {item?.kurs?.name}-kurs {item?.name}
+          {dataKurslar?.yonalishlar?.map((yonalish) =>
+            yonalish?.kurslar?.map((kurs) =>
+              kurs?.guruhlar?.map((guruh) => (
+                <div
+                  className="collapse bg-base-100 border border-base-300 mb-3"
+                  key={guruh.id}
+                >
+                  <input type="radio" name="my-accordion-1" defaultChecked />
+                  <div className="collapse-title p-4 font-semibold flex items-center justify-between">
+                    <div>
+                      {yonalish?.name}
+                      <div className="text-sm font-normal">
+                        {kurs?.name}-kurs {guruh?.name}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() =>
+                        handleAddTalaba(yonalish.id, kurs.id, guruh.id)
+                      }
+                      className="flex items-center font-semibold rounded-md bg-indigo-500 hover:bg-indigo-600 py-1 px-2 text-white z-10"
+                    >
+                      <MdOutlinePersonAddAlt className="mr-1" />
+                      Qo'shish
+                    </button>
+                  </div>
+                  <div className="collapse-content text-sm overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="table table-xs">
+                        <thead>
+                          <tr>
+                            <th>№</th>
+                            <th>F.I.Sh</th>
+                            <th>Jins</th>
+                            <th>To‘lov statusi</th>
+                            <th>Ijtimoiy himoya</th>
+                            <th>Ijtimoiy daraja</th>
+                            <th>Iqtidorli talaba</th>
+                            <th className="text-center">Amallar</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {guruh?.talabalar?.map((talaba, index) => (
+                            <tr key={talaba.id}>
+                              <th>{index + 1}</th>
+                              <td>
+                                {talaba.familya} {talaba.ism}
+                              </td>
+                              <td>{talaba.jins}</td>
+                              <td>{talaba.tolov_status}</td>
+                              <td>{talaba.ijtimoiy_ximoya}</td>
+                              <td>{talaba.ijtimoiy_daraja}</td>
+                              <td>{talaba.iqdidorli_talaba}</td>
+                              <td className="flex space-x-2 justify-center">
+                                <button
+                                  type="button"
+                                  className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
+                                  onClick={() => handleEdit(talaba)}
+                                >
+                                  <RiPencilFill />
+                                </button>
+                                <button
+                                  type="button"
+                                  className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
+                                  onClick={() => handleDelete(talaba.id)}
+                                >
+                                  <MdDeleteForever />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-                <button
-                  onClick={() => handleAddTalaba(item)}
-                  className="flex items-center font-semibold rounded-md bg-indigo-500 hover:bg-indigo-600 py-1 px-2 text-white z-10"
-                >
-                  <MdOutlinePersonAddAlt className="mr-1" />
-                  Qo'shish
-                </button>
-              </div>
-              <div className="collapse-content text-sm overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="table table-xs">
-                    <thead>
-                      <tr>
-                        <th>№</th>
-                        <th>F.I.Sh</th>
-                        <th>Jins</th>
-                        <th>To‘lov statusi</th>
-                        <th>Ijtimoiy himoya</th>
-                        <th>Ijtimoiy daraja</th>
-                        <th>Iqtidorli talaba</th>
-                        <th className="text-center">Amallar</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {dataTalabalar?.map((talaba, index) => (
-                        <tr key={talaba.id}>
-                          <th>{index + 1}</th>
-                          <td>
-                            {talaba.familya} {talaba.ism}
-                          </td>
-                          <td>{talaba.jins}</td>
-                          <td>{talaba.tolov_status}</td>
-                          <td>{talaba.ijtimoiy_ximoya}</td>
-                          <td>{talaba.ijtimoiy_daraja}</td>
-                          <td>{talaba.iqdidorli_talaba}</td>
-                          <td className="flex space-x-2 justify-center">
-                            <button
-                              type="button"
-                              className="p-2 rounded-lg text-white border border-teal-500 bg-teal-500 hover:bg-teal-600 active:bg-teal-100 active:border-teal-600 active:text-teal-600"
-                              onClick={() => handleEdit(talaba)}
-                            >
-                              <RiPencilFill />
-                            </button>
-                            <button
-                              type="button"
-                              className="p-2 rounded-lg text-white border border-red-500 bg-red-500 hover:bg-red-600 active:bg-red-100 active:border-red-600 active:text-red-600"
-                              onClick={() => handleDelete(talaba.id)}
-                            >
-                              <MdDeleteForever />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          ))}
+              ))
+            )
+          )}
         </div>
       )}
 

@@ -108,7 +108,11 @@ const TopshiriqlarQoshishZamdekan = () => {
               if (values.file2) formData.append("file2", values.file2);
               if (values.file3) formData.append("file3", values.file3);
               if (values.file4) formData.append("file4", values.file4);
-              await APITopshiriq.patch(createdDataId, formData);
+              try {
+                await APITopshiriq.patch(createdDataId, formData);
+              } catch (err) {
+                console.error(err);
+              }
             }
             alert("Muvaffaqiyatli qo'shildi.!");
           }

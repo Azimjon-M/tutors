@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import APITopshiriq from "../../../services/adminQoshimchaTopshiriq.js";
+import APITopshiriq from "../../../services/qoshimchaTopshiriqTutor.js";
 import laptopGirl from "../../../assets/fon/laptop-girl.png";
 
 // import { MdOutlineCloudDownload } from "react-icons/md";
