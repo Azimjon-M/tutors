@@ -44,7 +44,7 @@ const QoshimchaTopshiriq = () => {
         onGetDataTime();
     }, []);
 
-    return data?.cont ? (
+    return data?.count ? (
         <TopshiriqlarKorishTable
             data={data}
             handleDel={handleDel}

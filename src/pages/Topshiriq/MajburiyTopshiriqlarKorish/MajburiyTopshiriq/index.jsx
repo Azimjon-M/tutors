@@ -44,12 +44,14 @@ const MajburiyTopshiriq = () => {
         onGetDataTime();
     }, []);
 
-    return (
+    return data?.count ? (
         <TopshiriqlarKorishTable
             data={data}
             handleDel={handleDel}
             handleGet={onGetDataTime}
         />
+    ) : (
+        <div className="text-center py-4 text-[red] font-medium">Ma'lumot Kiritilmagan!</div>
     );
 };
 

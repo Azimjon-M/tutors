@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import Pagination from "../Pagination";
 
 const TopshiriqlarKorishTable = ({ data, handleDel, handleGet }) => {
+    console.log(data);
+    
     const [isOpenModal, setIsOpenModal] = useState(null);
     // for Pagination state
     const [paginationData, setPaginationData] = useState({
@@ -151,24 +153,29 @@ const TopshiriqlarKorishTable = ({ data, handleDel, handleGet }) => {
                             <tbody>
                                 {data?.results?.map((item, index) => (
                                     <tr
-                                        key={item.id}
+                                        key={item?.id}
                                         className="hover:bg-[#ececec] border-b-[1px] border-gray-200"
                                     >
                                         <td className=" text-center">
                                             {index + 1}
                                         </td>
-                                        <td className=" text-center">
-                                            {item.majburiy_topshiriq_turi
-                                                .replace(/\b\w/g, (char) =>
+                                        <td>
+                                        {
+                                            item?.majburiy_topshiriq_turi ? (
+                                                item?.majburiy_topshiriq_turi?.replace(/\b\w/g, (char) =>
                                                     char.toUpperCase()
                                                 )
-                                                .replace(/_/g, " ")}
+                                                .replace(/_/g, " ")
+                                            ) : (
+                                                <span>Tursiz!</span>
+                                            )
+                                        }
                                         </td>
                                         <td className=" text-center">
-                                            {item.boshlanish_vaqti}
+                                            {item?.boshlanish_vaqti}
                                         </td>
                                         <td className=" text-center">
-                                            {item.tugash_vaqti}
+                                            {item?.tugash_vaqti}
                                         </td>
                                         <td className=" text-center">
                                             <button
@@ -182,7 +189,7 @@ const TopshiriqlarKorishTable = ({ data, handleDel, handleGet }) => {
                                             <button
                                                 className="btn btn-sm btn-error"
                                                 onClick={() =>
-                                                    onDelete(item.id)
+                                                    onDelete(item?.id)
                                                 }
                                             >
                                                 O'chirish
