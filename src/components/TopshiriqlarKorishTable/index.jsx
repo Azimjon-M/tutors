@@ -10,7 +10,6 @@ const TopshiriqlarKorishTable = ({ data, handleDel, handleGet }) => {
         totalPages: data?.numberOfData,
         currentPage: data?.count,
     });
-    // console.log(data);
 
     const formik = useFormik({
         initialValues: {
@@ -198,11 +197,13 @@ const TopshiriqlarKorishTable = ({ data, handleDel, handleGet }) => {
             </div>
 
             <div className="py-4">
-                <Pagination
-                    currentPage={paginationData?.currentPage}
-                    totalPages={data?.numberOfData}
-                    onPageChange={handlePageChange}
-                />
+                {data && (
+                    <Pagination
+                        currentPage={paginationData?.currentPage}
+                        totalPages={data?.numberOfData}
+                        onPageChange={handlePageChange}
+                    />
+                )}
             </div>
         </div>
     );

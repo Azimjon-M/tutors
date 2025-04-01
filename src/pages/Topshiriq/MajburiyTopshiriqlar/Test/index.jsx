@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import Calendar from "../../../../components/Calendar";
 
 import APIGetTutor from "../../../../services/getUser";
-import APISuperadminMajTop from "../../../../services/superadminMajTop";
+import APISuperadminMajTop from "../../../../services/superadminMajTopKorish";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Loading from "../../../../components/Loading";
 
