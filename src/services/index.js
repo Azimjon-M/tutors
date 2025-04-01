@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((request) => {
-    if (data && data?.token) {
+    if (data?.token) {
         request.headers.Authorization = `Bearer ${Decryption(
             data?.token,
             process.env.REACT_APP_ENCRYPTION_KEY
