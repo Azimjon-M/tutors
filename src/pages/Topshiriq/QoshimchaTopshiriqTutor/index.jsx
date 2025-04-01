@@ -174,7 +174,7 @@ function QoshimchaTopshiriqTutor() {
             </form>
             {selectedTask ? (
               <>
-                <h3 className="font-bold text-lg">{selectedTask.title}</h3>
+                <h3 className="font-bold text-lg">{selectedTask?.title}</h3>
                 <p className="py-4">{selectedTask.body}</p>
                 <ul>
                   <li className={`${selectedTask.file1 ? "" : "hidden"}`}>
