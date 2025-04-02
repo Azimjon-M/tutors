@@ -1,8 +1,6 @@
 import React from "react";
 
 const Pagination = ({ currentPage = 1, totalPages, onPageChange }) => {
-    // console.log(currentPage, totalPages);
-
     const maxVisiblePages = 5; // Bir vaqtning o'zida ko'rinadigan sahifalar
 
     // Faol sahifalar ro'yxatini hisoblash
@@ -46,7 +44,7 @@ const Pagination = ({ currentPage = 1, totalPages, onPageChange }) => {
                 <button
                     className="btn btn-sm btn-outline"
                     onClick={() => onPageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
+                    disabled={currentPage === totalPages || !totalPages}
                 >
                     »
                 </button>

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import MajburiyTopshiriq from "./MajburiyTopshiriq";
 import OzTashabbusliTopshiriq from "./OzTashabbusliTopshiriq";
 import QoshimchaTopshiriqTutor from "./QoshimchaTopshiriq";
-import SoxagaOidTopshiriq from "./SoxagaOidTopshiriq"
+import SoxagaOidTopshiriq from "./SoxagaOidTopshiriq";
 
 const TopshiriqlarniKorish = () => {
     const [activeTab, setActiveTab] = useState("majTop");
@@ -12,13 +12,15 @@ const TopshiriqlarniKorish = () => {
             case "majTop":
                 return <MajburiyTopshiriq />;
             case "soxOidTop":
-                return <OzTashabbusliTopshiriq />;
+                return <SoxagaOidTopshiriq />;
             case "qoshTop":
                 return <QoshimchaTopshiriqTutor />;
             case "ozTashTop":
-                return <SoxagaOidTopshiriq />;
+                return <OzTashabbusliTopshiriq />;
             default:
-                return <p className="m-4 text-lg font-medium">Tabni tanlang...</p>;
+                return (
+                    <p className="m-4 text-lg font-medium">Tabni tanlang...</p>
+                );
         }
     };
 
