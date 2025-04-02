@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import APIUsers from "../../services/users";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useGeolocated } from "react-geolocated";
 import * as Yup from "yup";
+import APIMajburiyTopshiriq from "../../services/majburiyTopshiriq";
 
-const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
+const TutorModalFormTTJIjara = ({ isOpen, onClose, task, roleUser }) => {
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(null);
   const [location, setLocation] = useState("");
@@ -16,26 +16,39 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
 
   const initialValues = {
     title: "",
-    first_name: "",
-    last_name: "",
-    role: roleUser,
-    fakultet: "",
-    password: "",
+    body: "",
+    file1: "",
+    file2: "",
     is_active: true,
-    location: "",
   };
 
   const validationSchema = Yup.object({
     title: Yup.string().required("Sarlavha majburiy"),
-    first_name: Yup.string().required("Ism majburiy"),
-    last_name: Yup.string().required("Familiya majburiy"),
-    password: Yup.string()
-      .min(6, "Parol kamida 6 ta belgi bo'lishi kerak")
-      .required("Parol majburiy"),
-    fakultet: Yup.string().required("Fakultet majburiy"),
-    role: Yup.string()
-      .oneOf(["superadmin", "admin", "tutor"], "Noto'g'ri rol tanlangan")
-      .required("Rol majburiy"),
+    body: Yup.string().required("Tavsif majburiy"),
+    file1: Yup.mixed()
+      .required("Rasm majburiy")
+      .test(
+        "fileType",
+        "Faqat JPG, PNG va JPEG formatdagi rasmlarga ruxsat berilgan",
+        (value) => {
+          return (
+            value &&
+            ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
+          );
+        }
+      ),
+    file2: Yup.mixed()
+      .required("Rasm majburiy")
+      .test(
+        "fileType",
+        "Faqat JPG, PNG va JPEG formatdagi rasmlarga ruxsat berilgan",
+        (value) => {
+          return (
+            value &&
+            ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
+          );
+        }
+      ),
     is_active: Yup.boolean(),
   });
 
@@ -46,11 +59,11 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
   }, [coords]);
 
   useEffect(() => {
-    if (info) {
+    if (task) {
       setEdit(true);
-      setId(info.id);
+      setId(task.id);
     }
-  }, [info]);
+  }, [task]);
 
   const handleSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
@@ -61,7 +74,9 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
     });
 
     try {
-      edit ? await APIUsers.patch(id, formData) : await APIUsers.post(formData);
+      edit
+        ? await APIMajburiyTopshiriq.patch(id, formData)
+        : await APIMajburiyTopshiriq.post(formData);
       resetForm();
       setEdit(false);
       onClose();
@@ -84,7 +99,7 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
         </h2>
         <Formik
           enableReinitialize
-          initialValues={info || initialValues}
+          initialValues={task || initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -112,20 +127,20 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
 
               <div className="mb-4">
                 <label
-                  htmlFor="last_name"
+                  htmlFor="body"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Tavsif
                 </label>
                 <Field
                   as="textarea"
-                  id="last_name"
-                  name="last_name"
+                  id="body"
+                  name="body"
                   rows="4"
                   className="w-full px-3 py-2 border rounded-lg bg-gray-50"
                 />
                 <ErrorMessage
-                  name="last_name"
+                  name="body"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
@@ -134,20 +149,20 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label
-                    htmlFor="rasm1"
+                    htmlFor="file1"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Rasm 1
                   </label>
                   <input
                     type="file"
-                    id="rasm1"
+                    id="file1"
                     accept="image/*"
                     capture="environment"
                     onChange={(event) => {
                       const file = event.target.files[0];
                       if (file && file.type.startsWith("image/")) {
-                        setFieldValue("rasm1", file);
+                        setFieldValue("file1", file);
                       } else {
                         alert("Faqat rasmlar yuklash mumkin!");
                         event.target.value = "";
@@ -164,20 +179,20 @@ const TutorModalFormTTJIjara = ({ isOpen, onClose, info, roleUser }) => {
                 </div>
                 <div>
                   <label
-                    htmlFor="rasm2"
+                    htmlFor="file2"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Rasm 2
                   </label>
                   <input
                     type="file"
-                    id="rasm2"
+                    id="file2"
                     accept="image/*"
                     capture="environment"
                     onChange={(event) => {
                       const file = event.target.files[0];
                       if (file && file.type.startsWith("image/")) {
-                        setFieldValue("rasm2", file);
+                        setFieldValue("file2", file);
                       } else {
                         alert("Faqat rasmlar yuklash mumkin!");
                         event.target.value = "";

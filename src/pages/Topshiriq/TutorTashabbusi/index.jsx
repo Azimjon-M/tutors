@@ -134,7 +134,7 @@ const TutorTashabbusi = () => {
           </h2>
           <div
             className={`text-red-500 text-xl italic text-center my-5 ${
-              tashabbuslar?.length && "hidden"
+              tashabbuslar?.results?.length && "hidden"
             }`}
           >
             Tashabbuslar mavjud emas.!
@@ -143,13 +143,13 @@ const TutorTashabbusi = () => {
         {/* 📌 Tashabbuslar */}
         <div
           className={`${
-            tashabbuslar?.length
+            tashabbuslar?.results?.length
               ? "border border-gray-300 space-y-3 rounded-md shadow-md shadow-gray-200 mt-5 p-3 mx-3"
               : "hidden"
           }`}
         >
           {tashabbuslar &&
-            tashabbuslar.map((tashabbus) => (
+            tashabbuslar.results.map((tashabbus) => (
               <div
                 className="collapse collapse-arrow rounded-md bg-white"
                 key={tashabbus.id}
@@ -340,7 +340,7 @@ const TutorTashabbusi = () => {
                   </label>
                   <Field
                     type="file"
-                    ref={fileInputRef}
+                    innerRef={fileInputRef}
                     id="file3"
                     name="file3"
                     className={`w-full block text-gray-700 outline-none bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg focus:shadow-md focus:border-blue-300`}

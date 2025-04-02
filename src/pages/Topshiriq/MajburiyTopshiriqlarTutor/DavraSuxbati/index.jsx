@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import laptopGirl from "../../../../assets/fon/laptop-girl.png";
 
 import { MdOutlineCloudDownload } from "react-icons/md";
@@ -6,9 +6,28 @@ import { MdOutlineCloudDownload } from "react-icons/md";
 import rasm1 from "../../../../assets/fon/university-events.jpg";
 import rasm2 from "../../../../assets/fon/university-events-two.jpg";
 import TutorModalFormCom from "../../../../components/TutorModalFormCom";
+import APIMajburiyTopshiriq from "../../../../services/majburiyTopshiriq";
 
 function DavraSuxbati() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tasks, setTasks] = useState([]);
+
+  // 📌 GET - Barcha topshiriqlarni olish
+  const getTasks = async () => {
+    try {
+      const response = await APIMajburiyTopshiriq.getActiveByTur(
+        "davra_suhbati"
+      );
+      setTasks(response.data);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
+
+  useEffect(() => {
+    getTasks();
+  }, []);
+  console.log(tasks);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -30,7 +49,10 @@ function DavraSuxbati() {
               Platformaga topshiriqlarni o'z vaqtida yuklashingizni so'raymiz,
               vaqtingiz chegaralangan!
             </p>
-            <button onClick={handleOpenModal} className="w-full font-semibold rounded-md bg-indigo-500 hover:bg-indigo-600 mt-5 py-1 text-white">
+            <button
+              onClick={handleOpenModal}
+              className="w-full font-semibold rounded-md bg-indigo-500 hover:bg-indigo-600 mt-5 py-1 text-white"
+            >
               Yuklash{" "}
               <span className="text-sm bg-indigo-200 text-indigo-600 px-2 rounded-full">
                 1/2
