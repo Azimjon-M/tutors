@@ -1,28 +1,48 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import laptopGirl from "../../../../assets/fon/laptop-girl.png";
 import TutorModalFormTTJIjara from "../../../../components/TutorModalFormTTJIjara";
 import APIMajburiyTopshiriq from "../../../../services/majburiyTopshiriq";
+import CryptoJS from "crypto-js";
 
 function TTJgaTashrifTutor() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [username, setUsername] = useState(null);
+  const data = JSON.parse(localStorage.getItem("data"));
+
+  const unShifredTxt = (key, content) => {
+    const res = CryptoJS.AES.decrypt(content, key)
+      .toString(CryptoJS.enc.Utf8)
+      .trim()
+      .replace(/^"|"$/g, "");
+    return res;
+  };
+
+  useEffect(() => {
+    if (data) {
+      setUsername(
+        unShifredTxt(process.env.REACT_APP_SHIFRED_USERNAME, data?.username)
+      );
+    }
+  }, [data]);
 
   // 📌 GET - Barcha topshiriqlarni olish
-  const getTasks = async () => {
+  const getTasks = useCallback(async () => {
     try {
       const response = await APIMajburiyTopshiriq.getActiveByTur(
-        "ttjga_tashrif"
+        "ttjga_tashrif",
+        username
       );
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
-  };
+  }, [username]);
 
   useEffect(() => {
     getTasks();
-  }, []);
+  }, [getTasks]);
 
   const handleOpenModal = (task) => {
     setSelectedTask(task);
